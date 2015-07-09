@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout
+    android:id="@+id/container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="@dimen/elevation"
+    android:paddingTop="?attr/actionBarSize">
+
+    <!--Padding for ViewPager must be set outside the ViewPager itself
+        because with padding, EdgeEffect of ViewPager become strange.
+        -->
+    <FrameLayout
+        android:id="@+id/pager_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/tab_height">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"/>
+    </FrameLayout>
+
+    <com.google.samples.apps.iosched.ui.widget.SlidingTabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="match_parent"
+        android:elevation="@dimen/elevation"
+        android:layout_height="@dimen/tab_height"/>
+
+</com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout>

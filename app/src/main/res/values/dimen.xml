@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="elevation">5dp</dimen>
+    <dimen name="statusbarHeight">25dp</dimen>
+    <dimen name="drawer_icon_size">25dp</dimen>
+
+    <dimen name="tab_height">48dp</dimen>
+
+</resources>

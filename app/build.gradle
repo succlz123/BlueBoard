@@ -1,26 +1,74 @@
+buildscript {
+    repositories {
+        maven {
+            url "http://127.0.0.1:8081/nexus/content/groups/public/"
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.1'
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "http://127.0.0.1:8081/nexus/content/groups/public/"
+        }
+    }
+//    repositories {
+//        jcenter()
+//    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
+
     defaultConfig {
-        applicationId 'org.succlz123.axbtube.app'
-        minSdkVersion 16
+        applicationId "org.succlz123.axbtube.app"
+        minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
+
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.1.0'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.android.support:design:22.2.0'
+
+    compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+    compile('com.mikepenz:materialdrawer:3.0.9@aar') {
+        transitive = true
+    }
+
+    compile 'com.squareup.okhttp:okhttp:2.4.0'//okhttp
+
+    compile 'it.neokree:MaterialNavigationDrawer:1.3.3'
+
+
+    compile 'com.melnykov:floatingactionbutton:1.3.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+
 }

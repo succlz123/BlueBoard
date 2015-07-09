@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/scroll"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/main_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="130dp">
+        </android.support.v4.view.ViewPager>
+
+        <include layout="@layout/fragment_recommend_hot"/>
+
+        <include layout="@layout/fragment_recommend_bgm"/>
+
+        <include layout="@layout/fragment_recommend_douga"/>
+
+        <include layout="@layout/fragment_recommend_music"/>
+
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

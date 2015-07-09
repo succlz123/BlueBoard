@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 必须要的shap的类型 -->
+<shape  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+    <!-- 填充editView的颜色 -->
+    <solid android:color="@color/white"/>
+    <!-- 设置圆角的弧度，radius半径越大，editView的边角越圆 -->
+    <corners android:topLeftRadius="2dp"
+             android:bottomLeftRadius="2dp"
+             android:topRightRadius="2dp"
+             android:bottomRightRadius="2dp"/>
+</shape>
+

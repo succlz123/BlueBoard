@@ -1,0 +1,52 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--Toolbar颜色 也是多任务切换的标题颜色-->
+        <item name="colorPrimary">@color/pink_base</item>
+        <!--状态栏颜色-->
+        <item name="colorPrimaryDark">@color/pink_base</item>
+        <!--下划线 提示等一些组件的 着色-->
+        <item name="colorAccent">@color/pink_base_dark</item>
+        <!--android底色-->
+        <item name="android:windowBackground">@color/window_background</item>
+
+
+        <!-- 底部导航栏颜色 -->
+        <item name="android:navigationBarColor">@color/gray</item>
+        <!--返回键样式-->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
+        <!--状态栏颜色-->
+        <item name="android:statusBarColor">@color/pink_base_dark</item>
+        <!--ActionMode出现时 覆盖ActionBar-->
+        <item name="windowActionModeOverlay">true</item>
+        <!--<item name="android:fitsSystemWindows">true</item>-->
+    </style>
+
+    <!--DrawerToggle配置-->
+    <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <!--<style name="Animation" parent="@android:style/Animation">-->
+    <!--&lt;!&ndash;窗体进入动画&ndash;&gt;-->
+    <!--<item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>-->
+    <!--&lt;!&ndash;窗体退出动画&ndash;&gt;-->
+    <!--<item name="android:windowExitAnimation">@android:anim/slide_in_left</item>-->
+    <!--</style>-->
+
+    <!--侧滑透明-->
+    <style name="TranslucentTheme" parent="AppTheme">
+        <!--theme透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!--状态栏透明 DrawerLayout-->
+    <style name="MainActivityTheme" parent="AppTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+</resources>

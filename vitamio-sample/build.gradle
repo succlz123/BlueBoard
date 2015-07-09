@@ -9,8 +9,8 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "org.succlz123.testxx"
-        minSdkVersion 16
+        applicationId "org.succlz123.axbtube"
+        minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
