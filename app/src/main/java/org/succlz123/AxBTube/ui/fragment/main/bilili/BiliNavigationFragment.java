@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.fragment;
+package org.succlz123.AxBTube.ui.fragment.main.bilili;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,19 +9,20 @@ import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
 
+
 /**
- * Created by fashi on 2015/7/8.
+ * Created by fashi on 2015/5/2.
  */
-public class shouye extends Fragment {
+public class BiliNavigationFragment extends Fragment {
 	private View mView;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.fengqu, container, false);
-
-
-
-		return mView;
+		mView = inflater.inflate(R.layout.fragment_navigation, container, false);
+  		return mView;
 	}
+
+
+
 }

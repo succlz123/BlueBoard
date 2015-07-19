@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.fragment;
+package org.succlz123.AxBTube.ui.fragment.main.bilili;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,16 +13,13 @@ import org.succlz123.AxBTube.R;
 /**
  * Created by fashi on 2015/5/2.
  */
-public class NavigationFragment extends Fragment {
+public class BiliBangumiFragment extends Fragment {
 	private View mView;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.fragment_navigation, container, false);
-  		return mView;
+		mView = inflater.inflate(R.layout.fragment_bangumi, container, false);
+		return mView;
 	}
-
-
-
 }

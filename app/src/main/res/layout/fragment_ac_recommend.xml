@@ -13,7 +13,7 @@
         android:paddingTop="10dp">
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/main_viewpager"
+            android:id="@+id/viewpager_banner"
             android:layout_width="match_parent"
             android:layout_height="130dp">
         </android.support.v4.view.ViewPager>
@@ -25,7 +25,6 @@
         <include layout="@layout/fragment_recommend_douga"/>
 
         <include layout="@layout/fragment_recommend_music"/>
-
 
     </LinearLayout>
 

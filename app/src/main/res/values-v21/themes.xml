@@ -1,0 +1,25 @@
+<resources>
+
+    <style name="MDTheme" parent="AppTheme">
+        <!--状态栏颜色-->
+        <item name="android:statusBarColor">@color/pink_base_dark</item>
+        <!--底部导航栏透明-->
+        <item name="android:windowTranslucentNavigation">true</item>
+
+
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+    </style>
+
+    <!--状态栏透明 DrawerLayout-->
+    <style name="MainActivityTheme" parent="MDTheme">
+        <!--drawablelayout覆盖在toolbar上-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!--状态栏透明-->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

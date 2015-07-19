@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout
-    android:id="@+id/container"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:elevation="@dimen/elevation"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
-    <!--Padding for ViewPager must be set outside the ViewPager itself
-        because with padding, EdgeEffect of ViewPager become strange.
-        -->
-    <FrameLayout
-        android:id="@+id/pager_wrapper"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/pink_base"
+            app:tabIndicatorColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/translucence_white">
+
+        </android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/tab_height">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"/>
-    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
 
-    <com.google.samples.apps.iosched.ui.widget.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
-        android:layout_width="match_parent"
-        android:elevation="@dimen/elevation"
-        android:layout_height="@dimen/tab_height"/>
-
-</com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout>

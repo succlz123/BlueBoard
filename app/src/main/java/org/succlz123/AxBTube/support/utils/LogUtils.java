@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.utils;
+package org.succlz123.AxBTube.support.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
