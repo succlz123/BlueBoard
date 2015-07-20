@@ -5,5 +5,5 @@
     <dimen name="drawer_icon_size">25dp</dimen>
 
     <dimen name="tab_height">48dp</dimen>
-
+    <dimen name="shape">3dp</dimen>
 </resources>
