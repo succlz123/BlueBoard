@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity {
 		View headerView = inflater.inflate(R.layout.drawer_header, mDrawerLayout, false);
 		headerView.setLayoutParams(new AbsListView.LayoutParams(
 				AbsListView.LayoutParams.MATCH_PARENT,
-				GlobalUtils.dip2px(this, DRAWER_LAYOUT_HEADER_VIEW_HEIGHT_DPI)));
+				GlobalUtils.dip2pix(this, DRAWER_LAYOUT_HEADER_VIEW_HEIGHT_DPI)));
 		mLvLeftMenu.addHeaderView(headerView);
 		mLvLeftMenu.setAdapter(new MenuItemAdapter(this));
 	}

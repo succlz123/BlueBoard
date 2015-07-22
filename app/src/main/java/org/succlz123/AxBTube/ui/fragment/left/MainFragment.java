@@ -56,6 +56,7 @@ public class MainFragment extends BaseFragment {
 			AcMainFragmentAdapter adapter = new AcMainFragmentAdapter(getFragmentManager());
 			//给ViewPager设置适配器
 			mViewPager.setAdapter(adapter);
+//			mViewPager.setOffscreenPageLimit(4);
 			//关联TabLayout和ViewPager
 			mTabLayout.setupWithViewPager(mViewPager);
 		}

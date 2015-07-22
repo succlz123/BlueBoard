@@ -12,8 +12,10 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 
 import java.text.ParseException;
@@ -42,6 +44,7 @@ public class GlobalUtils {
 	 */
 	public static boolean hasSDCard() {
 		String status = Environment.getExternalStorageState();
+
 		return status.equals(Environment.MEDIA_MOUNTED);
 	}
 
@@ -66,6 +69,7 @@ public class GlobalUtils {
 				}
 			}
 		}
+
 		return netstate;
 	}
 
@@ -78,6 +82,7 @@ public class GlobalUtils {
 	public static DisplayMetrics getScreenDisplayMetrics(Activity context) {
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+
 		return metric;
 	}
 
@@ -87,8 +92,9 @@ public class GlobalUtils {
 	 * @param context
 	 * @param dpValue
 	 */
-	public static int dip2px(Context context, float dpValue) {
+	public static int dip2pix(Context context, float dpValue) {
 		float scale = context.getResources().getDisplayMetrics().density;
+
 		return (int) (dpValue * scale + 0.5f);
 	}
 
@@ -98,8 +104,9 @@ public class GlobalUtils {
 	 * @param context
 	 * @param pxValue
 	 */
-	public static int px2dip(Context context, float pxValue) {
+	public static int pix2dip(Context context, float pxValue) {
 		float scale = context.getResources().getDisplayMetrics().density;
+
 		return (int) (pxValue / scale + 0.5f);
 	}
 
@@ -141,6 +148,7 @@ public class GlobalUtils {
 		TypedArray a = context.obtainStyledAttributes(typedValue.data, textSizeAttr);
 		int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
 		a.recycle();
+
 		return actionBarSize;
 	}
 
@@ -179,8 +187,9 @@ public class GlobalUtils {
 	 * @return
 	 */
 	public static String getAndroidId(Context context) {
-		String androidId = Settings.Secure.getString(context.getContentResolver(),
-				Settings.Secure.ANDROID_ID);
+		String androidId = Settings.Secure.getString(context.getContentResolver()
+				, Settings.Secure.ANDROID_ID);
+
 		return androidId;
 	}
 
@@ -190,6 +199,7 @@ public class GlobalUtils {
 	public static String getCurrentDate() {
 		Date d = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日");
+
 		return sf.format(d);
 	}
 
@@ -199,6 +209,7 @@ public class GlobalUtils {
 	public static String getDateToString(long time) {
 		Date d = new Date(time);
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日");
+
 		return sf.format(d);
 	}
 
@@ -213,6 +224,49 @@ public class GlobalUtils {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+
 		return date.getTime();
+	}
+
+	/**
+	 * 获取layoutInflater
+	 *
+	 * @return
+	 */
+	public static LayoutInflater getLayoutInflater() {
+		LayoutInflater inflater = (LayoutInflater) MyApplication.getInstance().getApplicationContext()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		return inflater;
+	}
+
+	/**
+	 * 字符串拼接 by StringBuilder
+	 *
+	 * @param strings
+	 * @return
+	 */
+	public static String getStringByStringBuilder(String... strings) {
+		StringBuilder builder = new StringBuilder();
+		for (String string : strings) {
+			builder.append(string);
+		}
+
+		return builder.toString();
+	}
+
+	/**
+	 * 字符串拼接 by StringBuffer
+	 *
+	 * @param strings
+	 * @return
+	 */
+	public static String getStringByStringBuffer(String... strings) {
+		StringBuffer builder = new StringBuffer();
+		for (String string : strings) {
+			builder.append(string);
+		}
+
+		return builder.toString();
 	}
 }

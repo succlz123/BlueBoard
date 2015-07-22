@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_margin="7dp"
+        android:layout_margin="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -43,19 +40,21 @@
         android:orientation="horizontal">
 
         <include
+            android:id="@+id/cardview_recommend_hot_1"
             layout="@layout/ac_cardview_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginEnd="3.5dp"
+            android:layout_marginEnd="2.5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"/>
 
         <include
+            android:id="@+id/cardview_recommend_hot_2"
             layout="@layout/ac_cardview_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3.5dp"
-            android:layout_marginEnd="7dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="2.5dp"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -63,25 +62,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <include
+            android:id="@+id/cardview_recommend_hot_3"
             layout="@layout/ac_cardview_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginEnd="3.5dp"
+            android:layout_marginEnd="2.5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"/>
 
         <include
+            android:id="@+id/cardview_recommend_hot_4"
             layout="@layout/ac_cardview_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3.5dp"
-            android:layout_marginEnd="7dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="2.5dp"
             android:layout_weight="1"/>
 
     </LinearLayout>
 
-</LinearLayout>
+</merge>

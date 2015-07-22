@@ -11,15 +11,30 @@
         android:paddingBottom="7dp"
         android:paddingTop="7dp">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager_banner"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/ac_viewpager_banner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:id="@+id/ac_viewpager_dots"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|right"
+                android:orientation="horizontal"/>
+
+        </FrameLayout>
 
         <!--热门-->
         <include layout="@layout/ac_recommend_hot"/>
+
+
         <!--娱乐-->
         <include layout="@layout/ac_recommend_music"/>
         <!--动画-->

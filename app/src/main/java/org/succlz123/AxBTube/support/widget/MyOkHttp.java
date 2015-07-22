@@ -26,9 +26,7 @@ public class MyOkHttp {
 
 	public String getJson(String url) {
 		OkHttpClient okHttpClient = new OkHttpClient();
-
 		Request request = new Request.Builder().url(url).build();
-
 		try {
 			Response response = okHttpClient.newCall(request).execute();
 			if (response.isSuccessful()) {

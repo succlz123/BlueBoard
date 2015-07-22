@@ -10,6 +10,8 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.okhttp.OkHttpClient;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by fashi on 2015/7/6.
  */
@@ -34,6 +36,9 @@ public class MyApplication extends Application {
 		//由android系统帮你实例化的
 		instance = this;
 		refWatcher = LeakCanary.install(instance);
+
+		ButterKnife.setDebug(BuildConfig.DEBUG);
+
 
 		ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
 				.newBuilder(instance, new OkHttpClient())
