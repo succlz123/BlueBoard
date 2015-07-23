@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void initViews() {
-		mLvLeftMenu = (ListView) findViewById(R.id.lv_left_menu);
+//		mLvLeftMenu = (ListView) findViewById(R.id.lv_left_menu);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	}
 

@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/ac_cardview_pic"
+        <ImageView
+            android:id="@+id/ac_card_view_pic"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_centerInParent="true"

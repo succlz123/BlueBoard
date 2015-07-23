@@ -15,7 +15,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
-import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 
 import java.text.ParseException;
@@ -28,13 +27,23 @@ import java.util.Date;
 public class GlobalUtils {
 
 	/**
-	 * Toast显示
+	 * 显示Toast 时间为short
 	 *
 	 * @param context
 	 * @param tip
 	 */
-	public static void showToast(Context context, String tip) {
+	public static void showToastShort(Context context, String tip) {
 		Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
+	}
+
+	/**
+	 * 显示Toast 时间为long
+	 *
+	 * @param context
+	 * @param tip
+	 */
+	public static void showToastLong(Context context, String tip) {
+		Toast.makeText(context, tip, Toast.LENGTH_LONG).show();
 	}
 
 	/**
@@ -44,33 +53,7 @@ public class GlobalUtils {
 	 */
 	public static boolean hasSDCard() {
 		String status = Environment.getExternalStorageState();
-
 		return status.equals(Environment.MEDIA_MOUNTED);
-	}
-
-	/**
-	 * 检查网络
-	 *
-	 * @param context
-	 * @return
-	 */
-	public static boolean checkNetState(Context context) {
-		boolean netstate = false;
-		ConnectivityManager connectivity = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectivity != null) {
-			NetworkInfo[] info = connectivity.getAllNetworkInfo();
-			if (info != null) {
-				for (int i = 0; i < info.length; i++) {
-					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-						netstate = true;
-						break;
-					}
-				}
-			}
-		}
-
-		return netstate;
 	}
 
 	/**
@@ -82,7 +65,6 @@ public class GlobalUtils {
 	public static DisplayMetrics getScreenDisplayMetrics(Activity context) {
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
-
 		return metric;
 	}
 
@@ -94,7 +76,6 @@ public class GlobalUtils {
 	 */
 	public static int dip2pix(Context context, float dpValue) {
 		float scale = context.getResources().getDisplayMetrics().density;
-
 		return (int) (dpValue * scale + 0.5f);
 	}
 
@@ -106,7 +87,6 @@ public class GlobalUtils {
 	 */
 	public static int pix2dip(Context context, float pxValue) {
 		float scale = context.getResources().getDisplayMetrics().density;
-
 		return (int) (pxValue / scale + 0.5f);
 	}
 
@@ -148,7 +128,6 @@ public class GlobalUtils {
 		TypedArray a = context.obtainStyledAttributes(typedValue.data, textSizeAttr);
 		int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
 		a.recycle();
-
 		return actionBarSize;
 	}
 
@@ -176,7 +155,6 @@ public class GlobalUtils {
 		sb.append("\nSimState = " + tm.getSimState());
 		sb.append("\nSubscriberId(IMSI) = " + tm.getSubscriberId());
 		sb.append("\nVoiceMailNumber = " + tm.getVoiceMailNumber());
-
 		return sb.toString();
 	}
 
@@ -187,9 +165,8 @@ public class GlobalUtils {
 	 * @return
 	 */
 	public static String getAndroidId(Context context) {
-		String androidId = Settings.Secure.getString(context.getContentResolver()
-				, Settings.Secure.ANDROID_ID);
-
+		String androidId
+				= Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
 		return androidId;
 	}
 
@@ -199,7 +176,6 @@ public class GlobalUtils {
 	public static String getCurrentDate() {
 		Date d = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日");
-
 		return sf.format(d);
 	}
 
@@ -209,7 +185,6 @@ public class GlobalUtils {
 	public static String getDateToString(long time) {
 		Date d = new Date(time);
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日");
-
 		return sf.format(d);
 	}
 
@@ -224,7 +199,6 @@ public class GlobalUtils {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		return date.getTime();
 	}
 
@@ -233,10 +207,9 @@ public class GlobalUtils {
 	 *
 	 * @return
 	 */
-	public static LayoutInflater getLayoutInflater() {
-		LayoutInflater inflater = (LayoutInflater) MyApplication.getInstance().getApplicationContext()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+	public static LayoutInflater getLayoutInflater(Context context) {
+		LayoutInflater inflater
+				= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater;
 	}
 
@@ -251,7 +224,6 @@ public class GlobalUtils {
 		for (String string : strings) {
 			builder.append(string);
 		}
-
 		return builder.toString();
 	}
 
@@ -266,7 +238,104 @@ public class GlobalUtils {
 		for (String string : strings) {
 			builder.append(string);
 		}
-
 		return builder.toString();
+	}
+
+	/**
+	 * 判断是否有网络连接
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static boolean isNetworkConnected(Context context) {
+		if (context != null) {
+			ConnectivityManager connectivityManager
+					= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+			if (networkInfo != null) {
+				return networkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 检查网络
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static boolean checkNetState(Context context) {
+		boolean netstate = false;
+		ConnectivityManager connectivity = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity != null) {
+			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+			if (info != null) {
+				for (int i = 0; i < info.length; i++) {
+					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+						netstate = true;
+						break;
+					}
+				}
+			}
+		}
+		return netstate;
+	}
+
+	/**
+	 * 判断WIFI网络是否可用
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static boolean isWifiConnected(Context context) {
+		if (context != null) {
+			ConnectivityManager connectivityManager
+					= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo wiFiNetworkInfo
+					= connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			if (wiFiNetworkInfo != null) {
+				return wiFiNetworkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 判断移动网络是否可用
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static boolean isMobileConnected(Context context) {
+		if (context != null) {
+			ConnectivityManager connectivityManager
+					= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mobileNetworkInfo
+					= connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			if (mobileNetworkInfo != null) {
+				return mobileNetworkInfo.isAvailable();
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 获取当前网络连接的类型信息
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static int getConnectedType(Context context) {
+		if (context != null) {
+			ConnectivityManager connectivityManager
+					= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+			if (networkInfo != null && networkInfo.isAvailable()) {
+				return networkInfo.getType();
+			}
+		}
+		return -1;
 	}
 }

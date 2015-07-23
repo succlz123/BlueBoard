@@ -40,21 +40,25 @@
         android:orientation="horizontal">
 
         <include
-            android:id="@+id/cardview_recommend_hot_1"
-            layout="@layout/ac_cardview_recommend"
+            android:id="@+id/card_view_recommend_hot_1"
+            layout="@layout/ac_card_view_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2.5dp"
             android:layout_marginStart="5dp"
             android:layout_weight="1"/>
 
         <include
-            android:id="@+id/cardview_recommend_hot_2"
-            layout="@layout/ac_cardview_recommend"
+            android:id="@+id/card_view_recommend_hot_2"
+            layout="@layout/ac_card_view_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="2.5dp"
+            android:layout_marginEnd="2.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2.5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -67,20 +71,24 @@
 
         <include
             android:id="@+id/cardview_recommend_hot_3"
-            layout="@layout/ac_cardview_recommend"
+            layout="@layout/ac_card_view_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2.5dp"
             android:layout_marginStart="5dp"
             android:layout_weight="1"/>
 
         <include
             android:id="@+id/cardview_recommend_hot_4"
-            layout="@layout/ac_cardview_recommend"
+            layout="@layout/ac_card_view_recommend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="2.5dp"
+            android:layout_marginEnd="2.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2.5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"/>
 
     </LinearLayout>
