@@ -1,60 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<FrameLayout
+    android:id="@+id/ac_recommend_banner"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="170dp">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/ac_viewpager_banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
+        android:id="@+id/ac_viewpager_dots"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp">
+        android:gravity="bottom|right"
+        android:orientation="horizontal"/>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/ac_viewpager_banner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <LinearLayout
-                android:id="@+id/ac_viewpager_dots"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|right"
-                android:orientation="horizontal"/>
-
-        </FrameLayout>
-
-        <!--热门-->
-        <include layout="@layout/ac_recommend_hot"/>
-
-
-        <!--娱乐-->
-        <include layout="@layout/ac_recommend_music"/>
-        <!--动画-->
-        <include layout="@layout/ac_recommend_douga"/>
-        <!--音乐-->
-        <include layout="@layout/ac_recommend_music"/>
-        <!--舞蹈-->
-        <include layout="@layout/ac_recommend_music"/>
-        <!--游戏-->
-        <include layout="@layout/ac_recommend_music"/>
-        <!--影视-->
-        <include layout="@layout/ac_recommend_music"/>
-        <!--科技-->
-        <include layout="@layout/ac_recommend_music"/>
-        <!--体育-->
-        <include layout="@layout/ac_recommend_music"/>
-
-        <!--<include layout="@layout/ac_recommend_bgm"/>-->
-
-    </LinearLayout>
-
-
-</android.support.v4.widget.NestedScrollView>
+</FrameLayout>

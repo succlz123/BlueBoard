@@ -52,4 +52,6 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:7.0.1'
 
+    compile 'com.marshalchen.ultimaterecyclerview:library:0.3.11'
+
 }
