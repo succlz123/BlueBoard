@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.fragment.left;
+package org.succlz123.AxBTube.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,32 +16,38 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
+import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.MainActivity;
-import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 import org.succlz123.AxBTube.ui.fragment.main.acfun.AcRecommendFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliBangumiFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliNavigationFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliRecommendFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliTimeFragment;
-import org.succlz123.AxBTube.support.utils.ViewUtils;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by fashi on 2015/7/8.
  */
 public class MainFragment extends BaseFragment {
 	public static final String FRAGMENT_TAG = "main_fragment";
-	private View mView;
-	private TabLayout mTabLayout;
-	private ViewPager mViewPager;
-	private Toolbar mToolbar;
 	private DrawerLayout mDrawerLayout;
 
+	@Bind(R.id.tab_layout)
+	TabLayout mTabLayout;
+
+	@Bind(R.id.viewpager)
+	ViewPager mViewPager;
+
+	@Bind(R.id.toolbar)
+	Toolbar mToolbar;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.fragment_main, container, false);
-		initViews();
+		View view = inflater.inflate(R.layout.fragment_main, container, false);
+		ButterKnife.bind(this, view);
 
 		Activity activity = getActivity();
 		if (activity instanceof AppCompatActivity) {
@@ -53,6 +59,7 @@ public class MainFragment extends BaseFragment {
 		if (mTabLayout != null && mViewPager != null) {
 			//设置tab模式,可以滚动
 			mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+//			mTabLayout.setTabTextColors();
 			AcMainFragmentAdapter adapter = new AcMainFragmentAdapter(getFragmentManager());
 			//给ViewPager设置适配器
 			mViewPager.setAdapter(adapter);
@@ -61,13 +68,7 @@ public class MainFragment extends BaseFragment {
 			mTabLayout.setupWithViewPager(mViewPager);
 		}
 
-		return mView;
-	}
-
-	private void initViews() {
-		mViewPager = (ViewPager) mView.findViewById(R.id.viewpager);
-		mToolbar = (Toolbar) mView.findViewById(R.id.toolbar);
-		mTabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
+		return view;
 	}
 
 	private static class AcMainFragmentAdapter extends FragmentStatePagerAdapter {

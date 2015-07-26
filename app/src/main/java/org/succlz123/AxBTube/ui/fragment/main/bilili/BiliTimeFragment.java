@@ -18,7 +18,7 @@ public class BiliTimeFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.fragment_time, container, false);
+		mView = inflater.inflate(R.layout.ac_fragment_wenzhang, container, false);
  		return mView;
 	}
 

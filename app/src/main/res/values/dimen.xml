@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="elevation">5dp</dimen>
+
+    <dimen name="layout_elevation">1dp</dimen>
+
     <dimen name="statusBarHeight">25dp</dimen>
     <dimen name="drawer_icon_size">25dp</dimen>
 

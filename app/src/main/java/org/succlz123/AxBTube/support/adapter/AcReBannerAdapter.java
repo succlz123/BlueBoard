@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.fragment.adapter;
+package org.succlz123.AxBTube.support.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,7 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcBanner;
+import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
 import java.util.ArrayList;
@@ -26,30 +26,16 @@ import java.util.List;
 /**
  * Created by chinausky on 2015/7/24.
  */
-public class AcRecommendBannerAdapter extends PagerAdapter {
+public class AcReBannerAdapter extends PagerAdapter {
 	private List<View> mViewItems = new ArrayList<>();
 	private int mVpTotalNum;
-	private List<ImageView> mDotsImageViews = new ArrayList<>();
+	private List<ImageView> mDotsIvs = new ArrayList<>();
 
-//	/*viewPager的滚动监听*/
-//	@Nullable
-//	@OnPageChange(value = R.id.ac_viewpager_banner , callback = OnPageChange.Callback.PAGE_SELECTED)
-//	public void onViewpagerSelected(int position) {
-//		int VpNum = (position % mVpTotalNum);
-//		for (ImageView iv : mDotsImageViews) {
-//			if (VpNum == (int) iv.getTag()) {
-//				iv.setSelected(true);
-//			} else {
-//				iv.setSelected(false);
-//			}
-//		}
-//	}
-
-	public AcRecommendBannerAdapter(AcBanner acBanner, ViewPager viewPager, LinearLayout dots) {
+	public AcReBannerAdapter(AcReBanner acReBanner, ViewPager viewPager, LinearLayout dots) {
 		super();
 		Context context = MyApplication.getInstance().getApplicationContext();
 		Resources resources = context.getResources();
-		List<AcBanner.DataEntity.ListEntity> bannerInfo = acBanner.getData().getList();
+		List<AcReBanner.DataEntity.ListEntity> bannerInfo = acReBanner.getData().getList();
 		mVpTotalNum = bannerInfo.size();
 
 		int dotsPx = GlobalUtils.dip2pix(context, 7);
@@ -67,7 +53,7 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
 				@Override
 				public void onPageSelected(int position) {
 					int VpNum = (position % mVpTotalNum);
-					for (ImageView iv : mDotsImageViews) {
+					for (ImageView iv : mDotsIvs) {
 						if (VpNum == (int) iv.getTag()) {
 							iv.setSelected(true);
 						} else {
@@ -86,18 +72,19 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
 				String url = bannerInfo.get(i).getCover();
 				Uri uri = Uri.parse(url);
 				//新建圆点
-				ImageView dotsImageView = new ImageView(context);
-				dotsImageView.setLayoutParams(layoutParams);
-				dotsImageView.setTag(i);
-				dotsImageView.setImageResource(R.drawable.banner_dots_selector);
+				ImageView dotsIv = new ImageView(context);
+				dotsIv.setLayoutParams(layoutParams);
+				dotsIv.setTag(i);
+				dotsIv.setImageResource(R.drawable.banner_dots_selector);
 				//默认第一个着色
 				if (i == 0) {
-					dotsImageView.setSelected(true);
+					dotsIv.setSelected(true);
 				}
-				mDotsImageViews.add(dotsImageView);
-				//在linearLayout上添加圆点
-				dots.addView(dotsImageView, i);
-
+				mDotsIvs.add(dotsIv);
+				//在linearLayout上添加圆点 防止每次回收时重新刷新导致添加过多的圆点
+				if (dots.getChildCount() < mVpTotalNum) {
+					dots.addView(dotsIv, i);
+				}
 				//viewPager的itemView
 				SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
 				GenericDraweeHierarchy vpGdh = new GenericDraweeHierarchyBuilder(resources)

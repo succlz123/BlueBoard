@@ -7,12 +7,12 @@ import java.util.List;
 /**
  * Created by fashi on 2015/7/19.
  */
-public class AcBanner {
+public class AcReBanner {
 
-	public static AcBanner parseJson(String json) {
+	public static AcReBanner parseJson(String json) {
 		Gson gson = new Gson();
 		
-		return gson.fromJson(json, AcBanner.class);
+		return gson.fromJson(json, AcReBanner.class);
 	}
 
 	/**

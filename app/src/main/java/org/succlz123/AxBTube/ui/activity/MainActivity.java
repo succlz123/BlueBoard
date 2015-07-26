@@ -5,30 +5,27 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ListView;
 
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.ui.fragment.left.MainFragment;
-import org.succlz123.AxBTube.support.utils.GlobalUtils;
+import org.succlz123.AxBTube.ui.fragment.MainFragment;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity {
 	private final static int DRAWER_LAYOUT_HEADER_VIEW_HEIGHT_DPI = 180;
+
+	@Bind(R.id.drawer_layout)
 	public DrawerLayout mDrawerLayout;
-	private ListView mLvLeftMenu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		initViews();
-//		setDrawerLayout();
-
+		ButterKnife.bind(this);
 
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		if (navigationView != null) {
@@ -42,21 +39,6 @@ public class MainActivity extends BaseActivity {
 			ft.commitAllowingStateLoss();
 			fm.executePendingTransactions();
 		}
-	}
-
-	private void initViews() {
-//		mLvLeftMenu = (ListView) findViewById(R.id.lv_left_menu);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-	}
-
-	private void setDrawerLayout() {
-		LayoutInflater inflater = LayoutInflater.from(this);
-		View headerView = inflater.inflate(R.layout.drawer_header, mDrawerLayout, false);
-		headerView.setLayoutParams(new AbsListView.LayoutParams(
-				AbsListView.LayoutParams.MATCH_PARENT,
-				GlobalUtils.dip2pix(this, DRAWER_LAYOUT_HEADER_VIEW_HEIGHT_DPI)));
-		mLvLeftMenu.addHeaderView(headerView);
-		mLvLeftMenu.setAdapter(new MenuItemAdapter(this));
 	}
 
 	private void setupDrawerContent(NavigationView navigationView) {
