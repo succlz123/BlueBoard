@@ -19,7 +19,7 @@ public class BiliNavigationFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.ac_fragment_navigation, container, false);
+		mView = inflater.inflate(R.layout.ac_fragment_main_navigation, container, false);
   		return mView;
 	}
 

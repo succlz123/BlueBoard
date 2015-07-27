@@ -16,7 +16,6 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity {
-	private final static int DRAWER_LAYOUT_HEADER_VIEW_HEIGHT_DPI = 180;
 
 	@Bind(R.id.drawer_layout)
 	public DrawerLayout mDrawerLayout;

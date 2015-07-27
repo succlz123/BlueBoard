@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.fragment.main.acfun;
+package org.succlz123.AxBTube.ui.fragment.acfun.main;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.support.adapter.AcReRecyclerViewAdapter;
-import org.succlz123.AxBTube.support.asynctask.GetAcReAnimation;
-import org.succlz123.AxBTube.support.asynctask.GetAcReBanner;
-import org.succlz123.AxBTube.support.asynctask.GetAcReHot;
+import org.succlz123.AxBTube.support.adapter.acfun.AcReRecyclerViewAdapter;
+import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReAnimation;
+import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReBanner;
+import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReHot;
+import org.succlz123.AxBTube.ui.activity.acfun.AcPartitionActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
@@ -24,13 +25,13 @@ import butterknife.ButterKnife;
  * Created by fashi on 2015/7/19.
  */
 public class AcRecommendFragment extends BaseFragment {
-	@Bind(R.id.ac_re_recycler_view)
+	@Bind(R.id.ac_fragment_recommend_recycler_view)
 	RecyclerView mRecyclerView;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.ac_fragment_re, container, false);
+		View view = inflater.inflate(R.layout.ac_fragment_main_recommend, container, false);
 		ButterKnife.bind(this, view);
 //		mRecyclerView.setHasFixedSize(true);
 		GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
@@ -50,6 +51,12 @@ public class AcRecommendFragment extends BaseFragment {
 		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 		AcReRecyclerViewAdapter adapter = new AcReRecyclerViewAdapter();
+		adapter.setOnItemClickListener(new AcReRecyclerViewAdapter.OnItemClickListener() {
+			@Override
+			public void onItemClick(View view, int position) {
+				AcPartitionActivity.startActivity(getActivity(), position);
+			}
+		});
 
 		//横幅
 		GetAcReBanner GetAcReBanner = new GetAcReBanner(adapter);

@@ -1,14 +1,16 @@
-package org.succlz123.AxBTube.support.adapter;
+package org.succlz123.AxBTube.support.adapter.acfun;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,9 +21,10 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReAnimation;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
-import org.succlz123.AxBTube.support.asynctask.GetAcReAnimation;
-import org.succlz123.AxBTube.support.asynctask.GetAcReBanner;
-import org.succlz123.AxBTube.support.asynctask.GetAcReHot;
+import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReAnimation;
+import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReBanner;
+import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReHot;
+import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
 import butterknife.Bind;
@@ -58,14 +61,24 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 		notifyDataSetChanged();
 	}
 
+	public interface OnItemClickListener {
+		void onItemClick(View view, int position);
+	}
+
+	private OnItemClickListener mOnItemClickListener;
+
+	public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+		this.mOnItemClickListener = onItemClickListener;
+	}
+
 	//首页横幅
 	public class ViewPagerViewHolder extends RecyclerView.ViewHolder {
 		@Nullable
 		@Bind(R.id.ac_viewpager_banner)
-		public ViewPager viewPager;
+		public ViewPager vpBanner;
 		@Nullable
 		@Bind(R.id.ac_viewpager_dots)
-		public LinearLayout dotsLinearLayout;
+		public LinearLayout llDots;
 
 		public ViewPagerViewHolder(View itemView) {
 			super(itemView);
@@ -76,8 +89,12 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 	//分区标题
 	public class NavigationTitleViewHolder extends RecyclerView.ViewHolder {
 		@Nullable
-		@Bind(R.id.ac_recommend_navigation_title)
-		public TextView navigationTitle;
+		@Bind(R.id.ac_fragment_re_partition_title_tv)
+		public TextView tvPartitionTitle;
+
+		@Nullable
+		@Bind(R.id.ac_fragment_re_partition_title_btn)
+		public Button btnPartitionMore;
 
 		public NavigationTitleViewHolder(View itemView) {
 			super(itemView);
@@ -96,6 +113,9 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
 		@Bind(R.id.ac_card_view_img)
 		public SimpleDraweeView imgCover;
+
+		@Bind(R.id.ac_fragment_re_card_view)
+		public CardView cardView;
 
 		public CardViewViewHolder(View itemView) {
 			super(itemView);
@@ -116,11 +136,11 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View viewPage
-				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_re_viewpager, parent, false);
+				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_viewpager, parent, false);
 		View title
-				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_re_title, parent, false);
+				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_par_title, parent, false);
 		View cardView
-				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_re_cardview, parent, false);
+				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_cardview, parent, false);
 		if (viewType == TYPE_VIEW_PAGER) {
 			return new ViewPagerViewHolder(viewPage);
 		} else if (viewType == TYPE_NAVIGATION_TITLE) {
@@ -132,23 +152,40 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 	}
 
 	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 		if (holder instanceof ViewPagerViewHolder) {
 			//放置指示圆点
-			LinearLayout dotsLinearLayout = ((ViewPagerViewHolder) holder).dotsLinearLayout;
-			ViewPager viewPager = ((ViewPagerViewHolder) holder).viewPager;
+			LinearLayout dotsLinearLayout = ((ViewPagerViewHolder) holder).llDots;
+			ViewPager viewPager = ((ViewPagerViewHolder) holder).vpBanner;
 			if (acReBanner != null) {
 				AcReBannerAdapter adapter = new AcReBannerAdapter(acReBanner, viewPager, dotsLinearLayout);
 				viewPager.setAdapter(adapter);
 			}
 		} else if (holder instanceof NavigationTitleViewHolder) {
-			TextView navigationTitle = ((NavigationTitleViewHolder) holder).navigationTitle;
-			navigationTitle.setText(getTitleText(position));
+			TextView tvPartitionTitle = ((NavigationTitleViewHolder) holder).tvPartitionTitle;
+			Button btnPartitionMore = ((NavigationTitleViewHolder) holder).btnPartitionMore;
+			tvPartitionTitle.setText(AcString.getTitle(position));
+			if (mOnItemClickListener != null) {
+				btnPartitionMore.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mOnItemClickListener.onItemClick(v, position);
+					}
+				});
+			}
 		} else if (holder instanceof CardViewViewHolder) {
 			ImageView imgCover = ((CardViewViewHolder) holder).imgCover;
 			TextView tvTitle = ((CardViewViewHolder) holder).tvTitle;
 			TextView tvSubTitle = ((CardViewViewHolder) holder).tvSubTitle;
-
+			CardView cardView = ((CardViewViewHolder) holder).cardView;
+			if (mOnItemClickListener != null) {
+				cardView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mOnItemClickListener.onItemClick(v, position);
+					}
+				});
+			}
 			if (position == 2 | position == 3 | position == 4 | position == 5 && acReHot != null) {
 				AcReHot.DataEntity.PageEntity.ListEntity entity
 						= acReHot.getData().getPage().getList().get(position - 2);
@@ -160,7 +197,7 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 				imgCover.setTag(url);
 			} else if (position == 7 | position == 8 && acReAnimation != null) {
 				AcReAnimation.DataEntity.PageEntity.ListEntity entity =
-						acReAnimation.getData().getPage().getList().get(position - 7);
+						acReAnimation.getData().getPage().getList().get(position - 5);
 				String url = entity.getCover();
 				Uri uri = Uri.parse(url);
 				imgCover.setImageURI(uri);
@@ -169,7 +206,7 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 //						= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 //				int margin = GlobalUtils.dip2pix(tvTitle.getContext(), 7);
 //				layoutParams.setMargins(margin, margin, margin, margin);
-//				tvTitle.setLayoutParams(layoutParams);
+//				tvParitionTitle.setLayoutParams(layoutParams);
 //				tvSubTitle.setVisibility(View.GONE);
 			} else {
 				imgCover.setImageDrawable(null);
@@ -186,35 +223,12 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 	}
 
 	//根据position判断是否显示分区标题
-
 	public boolean getTitleType(int position) {
 		if (position == 1 | position == 6 | position == 9 | position == 12
 				| position == 15 | position == 18 | position == 21 | position == 24) {
 			return true;
 		}
 		return false;
-	}
-
-	//根据position来显示标题
-	public String getTitleText(int position) {
-		if (position == 1) {
-			return "热门焦点";
-		} else if (position == 6) {
-			return "动画";
-		} else if (position == 9) {
-			return "娱乐";
-		} else if (position == 12) {
-			return "音乐";
-		} else if (position == 15) {
-			return "游戏";
-		} else if (position == 18) {
-			return "科技";
-		} else if (position == 21) {
-			return "体育";
-		} else if (position == 24) {
-			return "影视";
-		}
-		return null;
 	}
 
 	public static class MyDecoration extends RecyclerView.ItemDecoration {

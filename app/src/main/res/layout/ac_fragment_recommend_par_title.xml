@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/ac_recommend_navigation_title"
+        android:id="@+id/ac_fragment_re_partition_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -24,6 +24,7 @@
         android:layout_weight="1"/>
 
     <Button
+        android:id="@+id/ac_fragment_re_partition_title_btn"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

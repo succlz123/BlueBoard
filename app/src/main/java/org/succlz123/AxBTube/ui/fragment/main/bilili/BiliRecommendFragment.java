@@ -25,7 +25,7 @@ public class BiliRecommendFragment extends BaseFragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.ac_fragment_re_viewpager, container, false);
+		mView = inflater.inflate(R.layout.ac_fragment_recommend_viewpager, container, false);
 		initViews();
 
 		String Url = BiliApi.BASE + BiliApi.DEVICE
@@ -41,7 +41,7 @@ public class BiliRecommendFragment extends BaseFragment {
 	}
 
 	private void initViews() {
-		mViewPager = (ViewPager) mView.findViewById(R.id.viewpager);
+		mViewPager = (ViewPager) mView.findViewById(R.id.fragment_main_viewpager);
 	}
 
 	private class RecommendAdapter extends PagerAdapter {

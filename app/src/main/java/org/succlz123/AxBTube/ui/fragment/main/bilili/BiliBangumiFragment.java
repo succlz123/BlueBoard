@@ -19,7 +19,7 @@ public class BiliBangumiFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.ac_fragment_bangumi, container, false);
+		mView = inflater.inflate(R.layout.ac_fragment_main_bangumi, container, false);
 		return mView;
 	}
 }

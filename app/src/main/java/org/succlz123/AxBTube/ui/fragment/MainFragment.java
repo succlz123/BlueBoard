@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.MainActivity;
-import org.succlz123.AxBTube.ui.fragment.main.acfun.AcRecommendFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.main.AcRecommendFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliBangumiFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliNavigationFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliRecommendFragment;
@@ -34,10 +34,10 @@ public class MainFragment extends BaseFragment {
 	public static final String FRAGMENT_TAG = "main_fragment";
 	private DrawerLayout mDrawerLayout;
 
-	@Bind(R.id.tab_layout)
+	@Bind(R.id.fragment_main_tab_layout)
 	TabLayout mTabLayout;
 
-	@Bind(R.id.viewpager)
+	@Bind(R.id.fragment_main_viewpager)
 	ViewPager mViewPager;
 
 	@Bind(R.id.toolbar)

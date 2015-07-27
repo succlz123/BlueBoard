@@ -8,8 +8,7 @@
         <item name="colorPrimaryDark">@color/pink_base</item>
         <!--下划线 提示等一些组件的 着色-->
         <item name="colorAccent">@color/pink_base_dark</item>
-        <!--底部导航栏透明-->
-        <item name="android:windowTranslucentNavigation">true</item>
+
         <!--android底色-->
         <!--<item name="android:windowBackground">@color/window_background</item>-->
 
@@ -32,10 +31,5 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <!--状态栏透明 DrawerLayout-->
-    <style name="MainActivityTheme" parent="AppTheme">
-        <!--状态栏透明-->
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
 
 </resources>

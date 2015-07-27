@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.RecyclerView
-    android:id="@+id/ac_re_recycler_view"
+    android:id="@+id/ac_fragment_partition_recycler_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

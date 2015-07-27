@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.support.adapter;
+package org.succlz123.AxBTube.support.adapter.acfun;
 
 import android.content.Context;
 import android.content.res.Resources;

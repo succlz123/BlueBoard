@@ -28,7 +28,6 @@ public class ViewUtils {
 		if (actionBar != null) {
 			actionBar.setHomeButtonEnabled(true);
 			actionBar.setDisplayHomeAsUpEnabled(true);
-
 		}
 	}
 
