@@ -21,9 +21,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReAnimation;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
-import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReAnimation;
-import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReBanner;
-import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReHot;
+import org.succlz123.AxBTube.support.callback.GetReResult;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
@@ -34,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by fashi on 2015/7/26.
  */
 public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-		implements GetAcReBanner.GetReBannerResult, GetAcReHot.GetReHotResult, GetAcReAnimation.GetReAnimationResult {
+		implements GetReResult {
 	private static final int TYPE_VIEW_PAGER = 0;
 	private static final int TYPE_NAVIGATION_TITLE = 1;
 	private static final int TYPE_CARD_VIEW = 2;
@@ -154,10 +152,10 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 		if (holder instanceof ViewPagerViewHolder) {
-			//放置指示圆点
-			LinearLayout dotsLinearLayout = ((ViewPagerViewHolder) holder).llDots;
-			ViewPager viewPager = ((ViewPagerViewHolder) holder).vpBanner;
 			if (acReBanner != null) {
+				//放置指示圆点
+				LinearLayout dotsLinearLayout = ((ViewPagerViewHolder) holder).llDots;
+				ViewPager viewPager = ((ViewPagerViewHolder) holder).vpBanner;
 				AcReBannerAdapter adapter = new AcReBannerAdapter(acReBanner, viewPager, dotsLinearLayout);
 				viewPager.setAdapter(adapter);
 			}
@@ -202,12 +200,6 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 				Uri uri = Uri.parse(url);
 				imgCover.setImageURI(uri);
 				tvTitle.setText(entity.getTitle());
-//				LinearLayout.LayoutParams layoutParams
-//						= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//				int margin = GlobalUtils.dip2pix(tvTitle.getContext(), 7);
-//				layoutParams.setMargins(margin, margin, margin, margin);
-//				tvParitionTitle.setLayoutParams(layoutParams);
-//				tvSubTitle.setVisibility(View.GONE);
 			} else {
 				imgCover.setImageDrawable(null);
 				tvTitle.setText(null);

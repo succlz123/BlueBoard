@@ -15,7 +15,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.BaseActivity;
-import org.succlz123.AxBTube.ui.fragment.acfun.partition.AcPartitionFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.other.AcPartitionFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

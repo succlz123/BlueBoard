@@ -1,6 +1,5 @@
 package org.succlz123.AxBTube.ui.fragment.acfun.main;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,15 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
+import org.succlz123.AxBTube.bean.acfun.AcReBanner;
+import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.support.adapter.acfun.AcReRecyclerViewAdapter;
-import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReAnimation;
-import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReBanner;
-import org.succlz123.AxBTube.support.asynctask.acfun.GetAcReHot;
+import org.succlz123.AxBTube.support.helper.acfun.AcApi;
+import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.activity.acfun.AcPartitionActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by fashi on 2015/7/19.
@@ -27,6 +31,7 @@ import butterknife.ButterKnife;
 public class AcRecommendFragment extends BaseFragment {
 	@Bind(R.id.ac_fragment_recommend_recycler_view)
 	RecyclerView mRecyclerView;
+
 
 	@Nullable
 	@Override
@@ -50,27 +55,58 @@ public class AcRecommendFragment extends BaseFragment {
 		mRecyclerView.setLayoutManager(manager);
 		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-		AcReRecyclerViewAdapter adapter = new AcReRecyclerViewAdapter();
-		adapter.setOnItemClickListener(new AcReRecyclerViewAdapter.OnItemClickListener() {
+
+		AcReRecyclerViewAdapter recyclerViewAdapter = new AcReRecyclerViewAdapter();
+		recyclerViewAdapter.setOnItemClickListener(new AcReRecyclerViewAdapter.OnItemClickListener() {
 			@Override
 			public void onItemClick(View view, int position) {
 				AcPartitionActivity.startActivity(getActivity(), position);
 			}
 		});
 
-		//横幅
-		GetAcReBanner GetAcReBanner = new GetAcReBanner(adapter);
-		GetAcReBanner.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		//热门焦点
-		GetAcReHot getAcReHot = new GetAcReHot(adapter);
-		getAcReHot.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		//动画
-		GetAcReAnimation getAcReAnimation = new GetAcReAnimation(adapter);
-		getAcReAnimation.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		RestAdapter restAdapter = new RestAdapter
+				.Builder()
+				.setEndpoint(AcString.URL_BASE)
+				.build();
+		//首页横幅
+		getAcReBanner(restAdapter, recyclerViewAdapter);
+		//首页热门焦点
+		getAcReHot(restAdapter, recyclerViewAdapter);
 
-		mRecyclerView.setAdapter(adapter);
+
+		mRecyclerView.setAdapter(recyclerViewAdapter);
 		mRecyclerView.addItemDecoration(new AcReRecyclerViewAdapter.MyDecoration());
 		return view;
+	}
+
+	private void getAcReHot(RestAdapter restAdapter, final AcReRecyclerViewAdapter recyclerViewAdapter) {
+		AcApi.getAcReHot acReHot = restAdapter.create(AcApi.getAcReHot.class);
+
+		acReHot.onResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
+			@Override
+			public void success(AcReHot acReHot, Response response) {
+				recyclerViewAdapter.onAcReHotResult(acReHot);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+			}
+		});
+	}
+
+	private void getAcReBanner(RestAdapter restAdapter, final AcReRecyclerViewAdapter recyclerViewAdapter) {
+		AcApi.getAcReBanner acReBanner = restAdapter.create(AcApi.getAcReBanner.class);
+
+		acReBanner.onResult(AcApi.getAcReBannerUrl(), new Callback<AcReBanner>() {
+			@Override
+			public void success(AcReBanner acReBanner, Response response) {
+				recyclerViewAdapter.onReBannerResult(acReBanner);
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+			}
+		});
 	}
 
 }

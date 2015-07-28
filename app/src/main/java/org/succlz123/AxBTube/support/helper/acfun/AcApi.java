@@ -1,88 +1,108 @@
 package org.succlz123.AxBTube.support.helper.acfun;
 
-import org.succlz123.AxBTube.support.utils.GlobalUtils;
+import org.succlz123.AxBTube.bean.acfun.AcReBanner;
+import org.succlz123.AxBTube.bean.acfun.AcReHot;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit.http.GET;
+import retrofit.http.QueryMap;
 
 /**
  * Created by fashi on 2015/7/19.
  */
 public class AcApi {
-	/*请求基础url*/
-	public static final String URL_BASE = "http://api.acfun.tv/apiserver";
-	/*请求首页banner*/
-	public static final String RECOMMEND_BANNER = "/recommend/list";
-	/*请求首页数据*/
-	public static final String RECOMMEND_PAGE = "/recommend/page";
-	/*请求分区数据*/
-	public static final String CONTENT_CHANNEL = "/content/channel";
-	/*动画区数据*/
-	public static final String ANIMATION = "&channelIds=106,107,108,109,67,120";
-	/*应用版本 ?app_version=118*/
-	public static final String APP_VERSION = "?app_version=118";
-	/*请求响应的设备系统 &sys_name=android*/
-	public static final String SYS_NAME = "&sys_name=android";
-	/*android版本 &sys_version=5.1.1*/
-	public static final String SYS_VERSION = "&sys_version=";
-	/*应用市场 &market=m360*/
-	public static final String MARKET = "&market=github";
-	/*请求响应的设备分辨率 &resolution=1080x1766*/
-	public static final String RESOLUTION = "&resolution=";
-	/*请求页数*/
-	public static final String PAGE_SIZE = "&pageSize=10";
-
-	public static final String PAGE_NO = "&pageNo=1";
-	public static final String ORDER_BY = "&orderBy=5";
-	public static final String RANGE = "&range=604800000";
-
-
 	/**
-	 * http://api.acfun.tv/apiserver/
-	 * recommend/list
-	 * ?app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
-	 *
-	 * @return
+	 * @return 都有而且不用改变的url参数
 	 */
-	public static String getAcReBanner() {
-		String url = GlobalUtils.getStringByStringBuilder(
-				URL_BASE, RECOMMEND_BANNER, APP_VERSION, SYS_NAME, SYS_VERSION, RESOLUTION);
-		url = url.replace(SYS_VERSION, SYS_VERSION + "5.1.1");
-		url = url.replace(RESOLUTION, RESOLUTION + "1080x1766");
-
-		return url;
+	public static HashMap getBaseMap() {
+		HashMap map = new HashMap();
+		map.put(AcString.APP_VERSION, AcString.APP_NUM);
+		map.put(AcString.SYS_NAME, AcString.SYS_NAME_ANDROID);
+		map.put(AcString.SYS_VERSION, AcString.SYS_VERSION_ANDROID);
+		map.put(AcString.RESOLUTION, AcString.RESOLUTION_WIDTH_HEIGHT);
+		return map;
 	}
 
 	/**
-	 * http://api.acfun.tv/apiserver/
-	 * recommend/page
+	 * http://api.acfun.tv/apiserver
+	 * /recommend/list
+	 * ?app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+	 *
+	 * @return 首页横幅
+	 */
+	public static HashMap getAcReBannerUrl() {
+		HashMap map = getBaseMap();
+		return map;
+	}
+
+	public interface getAcReBanner {
+		@GET(AcString.RECOMMEND_LIST)
+		void onResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReBanner> cb);
+	}
+
+	/**
+	 * http://api.acfun.tv/apiserver
+	 * /recommend/page
 	 * ?pageSize=10&pageNo=1
 	 * &app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
 	 *
-	 * @return
+	 * @return 热门焦点
 	 */
-	public static String getAcReHot() {
-		String url = GlobalUtils.getStringByStringBuilder(
-				URL_BASE, RECOMMEND_PAGE, APP_VERSION, PAGE_SIZE, PAGE_NO, SYS_NAME, SYS_VERSION, RESOLUTION);
-		url = url.replace(SYS_VERSION, SYS_VERSION + "5.1.1");
-		url = url.replace(RESOLUTION, RESOLUTION + "1080x1766");
+	public static HashMap getAcReHotUrl() {
+		HashMap<String, String> map = getBaseMap();
+		map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM);
+		map.put(AcString.PAGE_NO, AcString.PAGE_NO_NUM);
 
-		return url;
+		return map;
 	}
+
+	public interface getAcReHot {
+		@GET(AcString.RECOMMEND_PAGE)
+		void onResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReHot> cb);
+	}
+
+//	/**
+//	 * http://api.acfun.tv/apiserver/
+//	 * content/channel
+//	 * ?channelIds=106,107,108,109,67,120
+//	 * &pageSize=20&pageNo=1
+//	 * &orderBy=5
+//	 * &range=604800000
+//	 * &app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+//	 *
+//	 * @return 动画区
+//	 */
+//	public static String getAcReAnimation() {
+//
+//	}
+
 
 	/**
-	 * http://api.acfun.tv/apiserver/
-	 * content/channel
-	 * ?channelIds=106,107,108,109,67,120
+	 * http://api.acfun.tv/apiserver
+	 * /content/channel
+	 * ?channelIds=67
 	 * &pageSize=20&pageNo=1
-	 * &orderBy=5&range=604800000
+	 * &orderBy=7
+	 * &range=604800000
 	 * &app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
 	 *
-	 * @return
+	 * @return 新番连载
 	 */
-	public static String getAcReEntertainment() {
-		String url = GlobalUtils.getStringByStringBuilder(
-				URL_BASE, CONTENT_CHANNEL, APP_VERSION, ANIMATION, PAGE_SIZE, PAGE_NO, ORDER_BY, RANGE, SYS_NAME, SYS_VERSION, RESOLUTION);
-		url = url.replace(SYS_VERSION, SYS_VERSION + "5.1.1");
-		url = url.replace(RESOLUTION, RESOLUTION + "1080x1766");
+	public static HashMap getAcAnimationBangumiUrl(String orderBy, String range) {
+		HashMap map = getBaseMap();
+		map.put(AcString.CHANNEL_IDS, AcString.BANGUMI);
+		map.put(AcString.PAGE_SIZE, AcString.PAGE_NO_NUM);
+		map.put(AcString.ORDER_BY, orderBy);
+		map.put(AcString.RANGE, range);
 
-		return url;
+		return map;
 	}
+
+	public interface getAcAnimationBangumi {
+		@GET(AcString.CONTENT_CHANNEL)
+		void onResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReHot> cb);
+	}
+
 }

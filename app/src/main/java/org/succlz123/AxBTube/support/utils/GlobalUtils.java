@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -12,7 +13,9 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.succlz123.AxBTube.R;
@@ -20,6 +23,8 @@ import org.succlz123.AxBTube.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by fashi on 2015/7/6.
@@ -57,7 +62,7 @@ public class GlobalUtils {
 	}
 
 	/**
-	 * 得到屏幕信息
+	 * 通过activity得到屏幕信息
 	 *
 	 * @param context
 	 * @return
@@ -66,6 +71,22 @@ public class GlobalUtils {
 		DisplayMetrics metric = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metric);
 		return metric;
+	}
+
+	/**
+	 * 通过WINDOW_SERVICE获取display对象
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static String getScreenWidthxHeight(Context context) {
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
+		return width + "x" + height;
 	}
 
 	/**
@@ -242,6 +263,35 @@ public class GlobalUtils {
 	}
 
 	/**
+	 * 高效拼接url
+	 *
+	 * @param params
+	 * @return
+	 */
+	public static String getUrl(HashMap<String, String> params) {
+		String url = null;
+		if (params != null) {
+			Iterator<String> it = params.keySet().iterator();
+			StringBuffer sb = null;
+			while (it.hasNext()) {
+				String key = it.next();
+				String value = params.get(key);
+				if (sb == null) {
+					sb = new StringBuffer();
+					sb.append("?");
+				} else {
+					sb.append("&");
+				}
+				sb.append(key);
+				sb.append("=");
+				sb.append(value);
+			}
+			url = sb.toString();
+		}
+		return url;
+	}
+
+	/**
 	 * 判断是否有网络连接
 	 *
 	 * @param context
@@ -338,4 +388,12 @@ public class GlobalUtils {
 		}
 		return -1;
 	}
+
+//	public static String getHandSetInfo() {
+//		String handSetInfo =
+//				"手机型号:" + android.os.Build.MODEL
+//						+ ",系统版本:" + android.os.Build.VERSION.RELEASE;
+//		return handSetInfo;
+//
+//	}
 }

@@ -1,7 +1,8 @@
-package org.succlz123.AxBTube.ui.fragment.acfun.partition;
+package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -26,8 +28,8 @@ public class AcPartitionFragment extends BaseFragment {
 		return fragment;
 	}
 
-//	@Bind(R.id.ac_fragment_partition_recycler_view)
-//	RecyclerView mRecyclerView;
+	@Bind(R.id.ac_fragment_partition_recycler_view)
+	RecyclerView mRecyclerView;
 
 	private String ids;
 
@@ -39,18 +41,18 @@ public class AcPartitionFragment extends BaseFragment {
 		ids = getArguments().getString(AcString.AC_CHANNEL_IDS);
 
 
-//		GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
-//		manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-//
-//			@Override
-//			public int getSpanSize(int position) {
-//				if (position == 0 | position == 1 | position == 6 | position == 9 | position == 12
-//						| position == 15 | position == 18 | position == 21 | position == 24) {
-//					return 2;
-//				}
-//				return 1;
-//			}
-//		});
+		GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+		manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+			@Override
+			public int getSpanSize(int position) {
+				if (position == 0 | position == 1 | position == 6 | position == 9 | position == 12
+						| position == 15 | position == 18 | position == 21 | position == 24) {
+					return 2;
+				}
+				return 1;
+			}
+		});
 //
 //		mRecyclerView.setLayoutManager(manager);
 //		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
