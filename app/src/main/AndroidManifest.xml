@@ -35,6 +35,10 @@
             android:name=".ui.activity.acfun.AcPartitionActivity">
         </activity>
 
+        <activity
+            android:name=".ui.activity.acfun.AcContentActivity">
+        </activity>
+
     </application>
 
 </manifest>

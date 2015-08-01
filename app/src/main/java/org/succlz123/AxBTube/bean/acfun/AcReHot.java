@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * Created by chinausky on 2015/7/22.
+ * Created by succlz123 on 2015/7/22.
  */
 public class AcReHot {
 
