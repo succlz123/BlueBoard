@@ -1,5 +1,6 @@
 package org.succlz123.AxBTube.support.helper.acfun;
 
+import org.succlz123.AxBTube.bean.acfun.AcContent;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
@@ -118,4 +119,22 @@ public class AcApi {
     }
 
 
+    /**
+     * http://api.acfun.tv/apiserver
+     * /content/info?contentId=2069095
+     * &version=2&app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+     *
+     * @return 视频具体信息
+     */
+    public static HashMap getAcContentUrl(String contentId) {
+        HashMap map = getBaseMap();
+        map.put(AcString.VERSION,AcString.VERSION_NUM);
+        map.put(AcString.CONTENT_ID,contentId);
+        return map;
+    }
+
+    public interface getAcContent {
+        @GET(AcString.CONTENT_INFO)
+        void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContent> cb);
+    }
 }

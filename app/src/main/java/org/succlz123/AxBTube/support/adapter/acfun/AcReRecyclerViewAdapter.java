@@ -22,7 +22,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
-import org.succlz123.AxBTube.support.callback.GetReResult;
+import org.succlz123.AxBTube.support.callback.GetAcRecommentHttpResult;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by fashi on 2015/7/26.
  */
 public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements GetReResult {
+        implements GetAcRecommentHttpResult {
     private static final int TYPE_VIEW_PAGER = 0;
     private static final int TYPE_NAVIGATION_TITLE = 1;
     private static final int TYPE_CARD_VIEW = 2;
@@ -205,13 +205,13 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View viewPage
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_viewpager, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_recommend_viewpager, parent, false);
         View title
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_par_title, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_recommend_partition_title, parent, false);
         View cardView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_cardview, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_recommend_cardview_hot, parent, false);
         View cardViewOther
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_fragment_recommend_cardview_other, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_recommend_cardview_other, parent, false);
         if (viewType == TYPE_VIEW_PAGER) {
             return new ViewPagerViewHolder(viewPage);
         } else if (viewType == TYPE_NAVIGATION_TITLE) {
@@ -363,6 +363,7 @@ public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         tvSubTitleOtherRight.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
     }
 
+    //统一处理
     public void setCardViewOtherOnClickListener(CardView cardViewOther, final int position, final String contentId) {
         if (mOnItemClickListener != null) {
             cardViewOther.setOnClickListener(new View.OnClickListener() {

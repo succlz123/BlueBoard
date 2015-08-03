@@ -27,7 +27,7 @@ public class AcPartitionActivity extends BaseActivity {
 
     public static void startActivity(Context activity, int position) {
         Intent intent = new Intent(activity, AcPartitionActivity.class);
-        intent.putExtra(AcString.AC_PARTITION_URL, position);
+        intent.putExtra(AcString.CHANNEL_IDS, position);
         activity.startActivity(intent);
     }
 
@@ -47,7 +47,7 @@ public class AcPartitionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_activity_partition);
         ButterKnife.bind(this);
-        mPosition = getIntent().getIntExtra(AcString.AC_PARTITION_URL, 0);
+        mPosition = getIntent().getIntExtra(AcString.CHANNEL_IDS, 0);
 
         String title = AcString.getTitle(mPosition);
         mToolbar.setTitle(title);
@@ -65,11 +65,11 @@ public class AcPartitionActivity extends BaseActivity {
         }
     }
 
-    private static class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
-        private static final String[] ANIMATION_TITLES = new String[]{
+    private class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
+        private String[] ANIMATION_TITLES = new String[]{
                 "新番连载", "旧番补档", "动画短片", "MAD.AMV", "MAD.3D", "国产动画"};
 
-        private static final String[] ENTERTAINMENT_TITLES = new String[]{
+        private String[] ENTERTAINMENT_TITLES = new String[]{
                 "生活娱乐", "鬼畜调教", "萌宠", "美食", "原创"};
 
         private int mPosition;

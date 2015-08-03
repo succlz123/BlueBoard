@@ -7,8 +7,6 @@ import org.succlz123.AxBTube.support.utils.GlobalUtils;
  * Created by succlz123 on 2015/7/27.
  */
 public class AcString {
-    public static final String AC_PARTITION_URL = "partitionUrl";
-    public static final String AC_CHANNEL_IDS = "channelIds";
 
     public static final String TITLE_HOT = "热门焦点";
     public static final String TITLE_ANIMATION = "动画";
@@ -18,6 +16,8 @@ public class AcString {
     public static final String TITLE_SCIENCE = "科学";
     public static final String TITLE_SPORT = "体育";
     public static final String TITLE_TV = "影视";
+
+    public static final String[] CONTENT_VIEW_PAGER_TITLE = new String[]{"视频详情", "评论列表"};
 
     public static String getTitle(int position) {
         switch (position) {
@@ -49,9 +49,13 @@ public class AcString {
     public static final String RECOMMEND_PAGE = "/recommend/page";
     /*请求分区数据*/
     public static final String CONTENT_CHANNEL = "/content/channel";
+    /*请求视频数据*/
+    public static final String CONTENT_INFO = "/content/info";
 
     /*各分区id*/
     public static final String CHANNEL_IDS = "channelIds";
+    /*视频id*/
+    public static final String CONTENT_ID = "contentId";
 
     /*动画区数据*/
     public static final String ANIMATION = "106,107,108,109,67,120";
@@ -84,6 +88,9 @@ public class AcString {
     /*应用版本 ?app_version=118*/
     public static final String APP_VERSION = "app_version";
     public static final String APP_NUM = "118";
+    /*? &version=2*/
+    public static final String VERSION = "version";
+    public static final String VERSION_NUM = "2";
     /*请求响应的设备系统 sys_name=android*/
     public static final String SYS_NAME = "sys_name";
     public static final String SYS_NAME_ANDROID = "android";

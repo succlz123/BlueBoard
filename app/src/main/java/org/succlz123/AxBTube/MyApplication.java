@@ -10,42 +10,45 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.okhttp.OkHttpClient;
 
+import org.succlz123.AxBTube.support.helper.acfun.AcString;
+
 import butterknife.ButterKnife;
+import retrofit.RestAdapter;
 
 /**
  * Created by fashi on 2015/7/6.
  */
 public class MyApplication extends Application {
 
-	private static MyApplication instance;
+    private static MyApplication instance;
 
-	public static MyApplication getInstance() {
-		return instance;
-	}
+    public static MyApplication getInstance() {
+        return instance;
+    }
 
-	private RefWatcher refWatcher;
+    private RefWatcher refWatcher;
 
-	public static RefWatcher getRefWatcher(Context context) {
-		MyApplication application = (MyApplication) context.getApplicationContext();
-		return application.refWatcher;
-	}
+    public static RefWatcher getRefWatcher(Context context) {
+        MyApplication application = (MyApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		//由android系统帮你实例化的
-		instance = this;
-		refWatcher = LeakCanary.install(instance);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        //由android系统帮你实例化的
+        instance = this;
 
-		ButterKnife.setDebug(BuildConfig.DEBUG);
+        refWatcher = LeakCanary.install(instance);
 
+        ButterKnife.setDebug(BuildConfig.DEBUG);
 
-		ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
-				.newBuilder(instance, new OkHttpClient())
-				.build();
-		Fresco.initialize(instance, config);
+        ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
+                .newBuilder(instance, new OkHttpClient())
+                .build();
+        Fresco.initialize(instance, config);
 
-	}
+    }
 
 
 }

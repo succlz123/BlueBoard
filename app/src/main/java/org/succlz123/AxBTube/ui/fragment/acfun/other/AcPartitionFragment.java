@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
  */
 public class AcPartitionFragment extends BaseFragment {
 
-	public static AcPartitionFragment newInstance(String ids) {
+	public static AcPartitionFragment newInstance(String channelIds) {
 		AcPartitionFragment fragment = new AcPartitionFragment();
 		Bundle bundle = new Bundle();
-		bundle.putString(AcString.AC_CHANNEL_IDS, ids);
+		bundle.putString(AcString.CHANNEL_IDS, channelIds);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -31,14 +31,14 @@ public class AcPartitionFragment extends BaseFragment {
 	@Bind(R.id.ac_fragment_partition_recycler_view)
 	RecyclerView mRecyclerView;
 
-	private String ids;
+	private String mChannelIds;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.ac_fragment_partition, container, false);
 		ButterKnife.bind(this, view);
-		ids = getArguments().getString(AcString.AC_CHANNEL_IDS);
+		mChannelIds = getArguments().getString(AcString.CHANNEL_IDS);
 
 
 		GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);

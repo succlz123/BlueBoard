@@ -9,7 +9,7 @@
     </style>
 
     <!--状态栏透明 DrawerLayout-->
-    <style name="MainActivityTheme" parent="MDTheme">
+    <style name="TranslucentStatusTheme" parent="MDTheme">
         <!--drawablelayout覆盖在toolbar上-->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <!--状态栏透明-->

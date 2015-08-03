@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
+import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.AcReRecyclerViewAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
@@ -71,21 +71,19 @@ public class AcRecommendFragment extends BaseFragment {
             }
         });
 
-        RestAdapter restAdapter = new RestAdapter
-                .Builder()
-                .setEndpoint(AcString.URL_BASE)
-                .build();
-
         //加载首页recommend数据
-        getAcRecommend(restAdapter, recyclerViewAdapter);
+        getAcRecommend(recyclerViewAdapter);
 
         mRecyclerView.setAdapter(recyclerViewAdapter);
         mRecyclerView.addItemDecoration(new AcReRecyclerViewAdapter.MyDecoration());
         return view;
     }
 
-    private void getAcRecommend(RestAdapter restAdapter, final AcReRecyclerViewAdapter recyclerViewAdapter) {
+    private void getAcRecommend(final AcReRecyclerViewAdapter recyclerViewAdapter) {
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
+
         AcApi.getAcRecommend acRecommend = restAdapter.create(AcApi.getAcRecommend.class);
+
         //首页横幅
         acRecommend.onAcReBannerResult(AcApi.getAcReBannerUrl(), new Callback<AcReBanner>() {
             @Override
@@ -97,6 +95,7 @@ public class AcRecommendFragment extends BaseFragment {
             public void failure(RetrofitError error) {
             }
         });
+
         //首页热门焦点
         acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
             @Override
@@ -108,6 +107,7 @@ public class AcRecommendFragment extends BaseFragment {
             public void failure(RetrofitError error) {
             }
         });
+
         //动画区
         acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.ANIMATION, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
             @Override
@@ -120,6 +120,7 @@ public class AcRecommendFragment extends BaseFragment {
 
             }
         });
+
         //娱乐区
         acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.FUN, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
             @Override
@@ -132,6 +133,7 @@ public class AcRecommendFragment extends BaseFragment {
 
             }
         });
+
         //音乐区
         acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.MUSIC, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
             @Override
@@ -144,6 +146,7 @@ public class AcRecommendFragment extends BaseFragment {
 
             }
         });
+
         //游戏区
         acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.GAME, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
             @Override
@@ -180,6 +183,7 @@ public class AcRecommendFragment extends BaseFragment {
 
             }
         });
+
         //影视区
         acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.TV, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
             @Override

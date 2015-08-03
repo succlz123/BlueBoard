@@ -23,7 +23,7 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/MainActivityTheme">
+            android:theme="@style/TranslucentStatusTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -36,6 +36,7 @@
         </activity>
 
         <activity
+            android:theme="@style/TranslucentStatusTheme"
             android:name=".ui.activity.acfun.AcContentActivity">
         </activity>
 

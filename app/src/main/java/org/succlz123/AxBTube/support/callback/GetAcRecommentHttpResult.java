@@ -7,7 +7,7 @@ import org.succlz123.AxBTube.bean.acfun.AcReHot;
 /**
  * Created by succlz123 on 2015/7/28.
  */
-public interface GetReResult {
+public interface GetAcRecommentHttpResult {
 
     void onReBannerResult(AcReBanner result);
 
