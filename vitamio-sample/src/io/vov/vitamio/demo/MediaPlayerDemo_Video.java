@@ -78,7 +78,7 @@ public class MediaPlayerDemo_Video extends Activity implements OnBufferingUpdate
 				/*
 				 * TODO: Set the path variable to a local media file path.
 				 */
-				path = "http://cn-tj1-dx.acgvideo.com/vg5/d/e7/3923898-1.flv";
+				path = "http://g3.letv.cn/vod/v2/MTQxLzE2Lzg2L2JjbG91ZC8xMjM5NjYvdmVyXzAwXzIyLTMyMDAwODcwNS1hdmMtMjMwMTc5LWFhYy0xMjgwMDQtMzA4MzQxLTE0MzA3MjM4LTM0MmU3NjRlMzc5MjVmZDgwMTYwNjYyYjkxMDZmMzkyLTE0MzI4ODkzNzY2NjYubXA0?b=371&mmsid=31444533&tm=1438670273&key=511b88609b81eeff2abe47acde767b1b&platid=2&splatid=206&playid=0&tss=no&vtype=21&cvid=1184904436514&payff=0&pip=db7caa75e198ede6a7d957f186e4b28f&tag=mobile&sign=bcloud_123966&termid=2&pay=0&ostype=android&hwtype=un";
 				if (path == "") {
 					// Tell the user to provide a media file URL.
 					Toast.makeText(MediaPlayerDemo_Video.this, "Please edit MediaPlayerDemo_Video Activity, " + "and set the path variable to your media file path." + " Your media file must be stored on sdcard.", Toast.LENGTH_LONG).show();

@@ -17,6 +17,12 @@ public class AcString {
     public static final String TITLE_SPORT = "体育";
     public static final String TITLE_TV = "影视";
 
+    public static final String VIDEO_ID = "videoId";
+    public static final String DANMAKU_ID = "danmakuId";
+    public static final String SOURCE_ID = "sourceId";
+    public static final String SOURCE_TYPE = "sourceType";
+
+
     public static final String[] CONTENT_VIEW_PAGER_TITLE = new String[]{"视频详情", "评论列表"};
 
     public static String getTitle(int position) {
@@ -123,4 +129,28 @@ public class AcString {
     public static final String ONE_WEEK = "604800000";
     public static final String ONE_MONTH = "2592000000";
     public static final String THREE_MONTH = "7776000000";
+
+    /*乐视tv*/
+    /*请求基础url*/
+    public static final String LETV_URL_BASE = "http://api.letvcloud.com";
+    public static final String LETV_URL_GPC = "/gpc.php";
+
+    public static final String UU = "uu";
+    public static final String UU_STRING = "2d8c027396";
+
+    public static final String VU = "vu";
+
+    public static final String CF = "cf";
+    public static final String CF_TYPE = "android";
+
+    public static final String FORMAT = "format";
+    public static final String FORMAT_TYPE = "json";
+
+    public static final String SIGN = "sign";
+    public static final String SIGNXXXXX = "signxxxxx";
+
+    public static final String LETV_VER = "ver";
+    public static final String LETV_VER_NUM = "2.0";
+
+
 }

@@ -22,7 +22,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
-import org.succlz123.AxBTube.support.callback.GetAcRecommentHttpResult;
+import org.succlz123.AxBTube.support.callback.GetAcRecommendHttpResult;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by fashi on 2015/7/26.
  */
 public class AcReRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements GetAcRecommentHttpResult {
+        implements GetAcRecommendHttpResult {
     private static final int TYPE_VIEW_PAGER = 0;
     private static final int TYPE_NAVIGATION_TITLE = 1;
     private static final int TYPE_CARD_VIEW = 2;

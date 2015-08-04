@@ -40,6 +40,19 @@
             android:name=".ui.activity.acfun.AcContentActivity">
         </activity>
 
+
+        <!-- Don't forgot InitActivity -->
+        <activity
+            android:name="io.vov.vitamio.activity.InitActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+             android:name=".ui.activity.VideoPlayActivity" android:screenOrientation="landscape">
+        </activity>
+
     </application>
 
 </manifest>

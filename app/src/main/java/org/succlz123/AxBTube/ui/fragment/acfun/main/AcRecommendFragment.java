@@ -16,7 +16,7 @@ import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.AcReRecyclerViewAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
-import org.succlz123.AxBTube.ui.activity.acfun.AcContentActivity;
+import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
 import org.succlz123.AxBTube.ui.activity.acfun.AcPartitionActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
@@ -66,7 +66,11 @@ public class AcRecommendFragment extends BaseFragment {
                     AcPartitionActivity.startActivity(getActivity(), position);
                 } else {
                     //启动视频信息页面
-                    AcContentActivity.startActivity(getActivity(), contentId);
+                    VideoPlayActivity.startActivity(getActivity(),
+                            "123",
+                            "321",
+                            "311043eae0", "letv");
+//                    AcContentActivity.startActivity(getActivity(), contentId);
                 }
             }
         });

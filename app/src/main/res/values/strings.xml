@@ -9,11 +9,11 @@
 
     <string name="click">点击</string>
     <string name="reply">回复</string>
-    <!--<string name="open">打开</string>-->
-    <!--<string name="close">关闭</string>-->
-    <!--<string name="open">打开</string>-->
-    <!--<string name="close">关闭</string>-->
-    <!--<string name="open">打开</string>-->
+    <string name="stows">收藏</string>
+    <string name="uid">UID</string>
+    <string name="up">UP主</string>
+    <string name="gongyou">共有</string>
+    <string name="geshipin">个视频</string>
     <!--<string name="close">关闭</string>-->
     <!--<string name="open">打开</string>-->
     <!--<string name="close">关闭</string>-->

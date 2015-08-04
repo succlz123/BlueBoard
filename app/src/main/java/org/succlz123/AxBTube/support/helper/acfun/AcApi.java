@@ -1,6 +1,7 @@
 package org.succlz123.AxBTube.support.helper.acfun;
 
 import org.succlz123.AxBTube.bean.acfun.AcContent;
+import org.succlz123.AxBTube.bean.acfun.AcContentVideo;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
@@ -128,13 +129,41 @@ public class AcApi {
      */
     public static HashMap getAcContentUrl(String contentId) {
         HashMap map = getBaseMap();
-        map.put(AcString.VERSION,AcString.VERSION_NUM);
-        map.put(AcString.CONTENT_ID,contentId);
+        map.put(AcString.VERSION, AcString.VERSION_NUM);
+        map.put(AcString.CONTENT_ID, contentId);
         return map;
     }
 
     public interface getAcContent {
         @GET(AcString.CONTENT_INFO)
         void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContent> cb);
+    }
+
+    /**
+     * http://api.letvcloud.com/gpc.php
+     * ?uu=2d8c027396
+     * &vu=311043eae0
+     * &cf=android
+     * &format=json
+     * &ver=2.0
+     * &sign=signxxxxx
+     * &app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+     *
+     * @return 视频
+     */
+    public static HashMap getAcContentVideoUrl(String sourceId) {
+        HashMap map = getBaseMap();
+        map.put(AcString.UU, AcString.UU_STRING);
+        map.put(AcString.CF, AcString.CF_TYPE);
+        map.put(AcString.FORMAT, AcString.FORMAT_TYPE);
+        map.put(AcString.LETV_VER, AcString.LETV_VER_NUM);
+        map.put(AcString.SIGN, AcString.SIGNXXXXX);
+        map.put(AcString.VU, sourceId);
+        return map;
+    }
+
+    public interface getAcContentVideo {
+        @GET(AcString.LETV_URL_GPC)
+        void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContentVideo> cb);
     }
 }
