@@ -102,7 +102,7 @@ public class AcContentActivity extends BaseActivity {
                             VideoPlayActivity.startActivity(AcContentActivity.this,
                                     String.valueOf(videoId),
                                     String.valueOf(danmakuId),
-                                    "311043eae0", "letv");
+                                    "f3f977bbf7", "letv");
                         }
                     });
                     mCollapsingToolbarLayout.setTitle("AC" + title);

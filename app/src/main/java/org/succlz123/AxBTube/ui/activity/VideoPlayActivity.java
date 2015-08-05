@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -15,11 +15,14 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentVideo;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
-import io.vov.vitamio.LibsChecker;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.MediaPlayer.OnBufferingUpdateListener;
 import io.vov.vitamio.MediaPlayer.OnInfoListener;
+import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 import retrofit.Callback;
@@ -41,60 +44,52 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
         activity.startActivity(intent);
     }
 
-    private String videoId;
-    private String danmakuId;
-    private String sourceId;
-    private String sourceType;
+    private String mVideoId;
+    private String mDanmakuId;
+    private String mSourceId;
+    private String mSourceType;
 
+    private boolean mIsVitamioReady;
 
+    @Bind(R.id.buffer)
+    VideoView mVideoView;
 
-    private Uri uri;
-    private VideoView mVideoView;
-    private ProgressBar pb;
-    private TextView downloadRateView, loadRateView;
+    @Bind(R.id.probar)
+    ProgressBar pb;
+
+    @Bind(R.id.download_rate)
+    TextView downloadRateView;
+
+    @Bind(R.id.load_rate)
+    TextView loadRateView;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        if (!LibsChecker.checkVitamioLibs(this))
-            return;
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        //检查播放器有没有初始化
+        if (!Vitamio.isInitialized(VideoPlayActivity.this)) {
+            mIsVitamioReady = Vitamio.initialize(this, this.getResources().getIdentifier("libarm", "raw", this.getPackageName()));
+        } else {
+            mIsVitamioReady = true;
+        }
+        //全屏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.videobuffer);
+        ButterKnife.bind(this);
+        //初始化传递过来的参数,如视频id
+        initDate();
 
-        videoId = getIntent().getStringExtra(AcString.VIDEO_ID);
-        danmakuId = getIntent().getStringExtra(AcString.DANMAKU_ID);
-        sourceId = getIntent().getStringExtra(AcString.SOURCE_ID);
-        sourceType = getIntent().getStringExtra(AcString.SOURCE_TYPE);
-
-
-        if (sourceType != null) {
-            if (TextUtils.equals(sourceType, "letv")) {
+        if (mSourceType != null && mIsVitamioReady) {
+            if (TextUtils.equals(mSourceType, "letv")) {
                 RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.LETV_URL_BASE).build();
                 AcApi.getAcContentVideo acContentVideo = restAdapter.create(AcApi.getAcContentVideo.class);
-                acContentVideo.onContentResult(AcApi.getAcContentVideoUrl(sourceId), new Callback<AcContentVideo>() {
+                acContentVideo.onContentResult(AcApi.getAcContentVideoUrl(mSourceId), new Callback<AcContentVideo>() {
 
                     @Override
                     public void success(AcContentVideo acContentVideo, Response response) {
-                        String base64 = acContentVideo.getData().getVideo_list().getVideo_1().getMain_url();
-                        byte[] result = Base64.decode(base64, Base64.DEFAULT);
-                        String path = new String(result);
-                        uri = Uri.parse(path);
-
-                        mVideoView.setVideoURI(uri);
-                        mVideoView.setMediaController(new MediaController(VideoPlayActivity.this));
-                        mVideoView.requestFocus();
-                        mVideoView.setOnInfoListener(VideoPlayActivity.this);
-                        mVideoView.setOnBufferingUpdateListener(VideoPlayActivity.this);
-                        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mediaPlayer) {
-                                // optional need Vitamio 4.0
-                                mediaPlayer.setPlaybackSpeed(1.0f);
-                            }
-                        });
+                        String base64Url = acContentVideo.getData().getVideo_list().getVideo_4().getMain_url();
+                        String path = GlobalUtils.decodeByBase64(base64Url);
+                        setVideoView(path);
                     }
 
                     @Override
@@ -102,14 +97,57 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
 
                     }
                 });
+            } else if (TextUtils.equals(mSourceType, "youku")) {
+
+            } else if (TextUtils.equals(mSourceType, "tudou")) {
+
+            } else if (TextUtils.equals(mSourceType, "qq")) {
+
+            } else if (TextUtils.equals(mSourceType, "sina")) {
+
             }
         }
 
-        mVideoView = (VideoView) findViewById(R.id.buffer);
-        pb = (ProgressBar) findViewById(R.id.probar);
-        downloadRateView = (TextView) findViewById(R.id.download_rate);
-        loadRateView = (TextView) findViewById(R.id.load_rate);
     }
+
+    private void setVideoView(String path) {
+        Uri uri = Uri.parse(path);
+        mVideoView.setVideoURI(uri);
+
+        mVideoView.setMediaController(new MediaController(VideoPlayActivity.this));
+        mVideoView.requestFocus();
+        mVideoView.setKeepScreenOn(true);
+        //在有警告或错误信息时调用。例如：开始缓冲、缓冲结束、下载速度变化。
+        mVideoView.setOnInfoListener(VideoPlayActivity.this);
+        //在网络视频流缓冲变化时调用。
+        mVideoView.setOnBufferingUpdateListener(VideoPlayActivity.this);
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setPlaybackSpeed(1.0f);
+            }
+        });
+    }
+
+    private void initDate() {
+        mVideoId = getIntent().getStringExtra(AcString.VIDEO_ID);
+        mDanmakuId = getIntent().getStringExtra(AcString.DANMAKU_ID);
+        mSourceId = getIntent().getStringExtra(AcString.SOURCE_ID);
+        mSourceType = getIntent().getStringExtra(AcString.SOURCE_TYPE);
+    }
+
+    private class xx extends MediaController {
+
+        public xx(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public xx(Context context) {
+            super(context);
+        }
+
+    }
+
 
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
@@ -117,7 +155,7 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
             case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                 if (mVideoView.isPlaying()) {
                     mVideoView.pause();
-                    pb.setVisibility(View.VISIBLE);
+                    pb.setVisibility(View.GONE);
                     downloadRateView.setText("");
                     loadRateView.setText("");
                     downloadRateView.setVisibility(View.VISIBLE);

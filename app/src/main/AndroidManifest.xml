@@ -36,8 +36,8 @@
         </activity>
 
         <activity
-            android:theme="@style/TranslucentStatusTheme"
-            android:name=".ui.activity.acfun.AcContentActivity">
+            android:name=".ui.activity.acfun.AcContentActivity"
+            android:theme="@style/TranslucentStatusTheme">
         </activity>
 
 
@@ -47,10 +47,13 @@
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <activity
-             android:name=".ui.activity.VideoPlayActivity" android:screenOrientation="landscape">
+            android:name=".ui.activity.VideoPlayActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:process=":vitamio"
+            android:screenOrientation="landscape">
         </activity>
 
     </application>

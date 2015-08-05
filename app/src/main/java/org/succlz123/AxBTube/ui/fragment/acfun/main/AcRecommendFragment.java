@@ -69,7 +69,7 @@ public class AcRecommendFragment extends BaseFragment {
                     VideoPlayActivity.startActivity(getActivity(),
                             "123",
                             "321",
-                            "311043eae0", "letv");
+                            "1abb7d6886", "letv");
 //                    AcContentActivity.startActivity(getActivity(), contentId);
                 }
             }
