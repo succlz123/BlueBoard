@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -63,6 +65,9 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
     @Bind(R.id.load_rate)
     TextView loadRateView;
 
+    @Bind(R.id.video_play_content)
+    FrameLayout mFrameLayout;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -74,7 +79,7 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
         }
         //全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.videobuffer);
+        setContentView(R.layout.activity_video_play);
         ButterKnife.bind(this);
         //初始化传递过来的参数,如视频id
         initDate();
@@ -113,8 +118,8 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
     private void setVideoView(String path) {
         Uri uri = Uri.parse(path);
         mVideoView.setVideoURI(uri);
-
-        mVideoView.setMediaController(new MediaController(VideoPlayActivity.this));
+        MediaController mediaController = new MyMediaController(VideoPlayActivity.this);
+        mVideoView.setMediaController(mediaController);
         mVideoView.requestFocus();
         mVideoView.setKeepScreenOn(true);
         //在有警告或错误信息时调用。例如：开始缓冲、缓冲结束、下载速度变化。
@@ -136,18 +141,24 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
         mSourceType = getIntent().getStringExtra(AcString.SOURCE_TYPE);
     }
 
-    private class xx extends MediaController {
+    private class MyMediaController extends MediaController {
 
-        public xx(Context context, AttributeSet attrs) {
+        public MyMediaController(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
-        public xx(Context context) {
+        public MyMediaController(Context context) {
             super(context);
         }
 
-    }
+        @Override
+        protected View makeControllerView() {
+            LayoutInflater inflater = GlobalUtils.getLayoutInflater(VideoPlayActivity.this);
+            View view = inflater.inflate(R.layout.video_play_media_controller, mFrameLayout, false);
 
+            return view;
+        }
+    }
 
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {

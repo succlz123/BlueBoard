@@ -18,7 +18,9 @@
     <color name="translucence_white">#80FFFFFF</color>
     <color name="window_background">#FFF5F5F5</color>
     <color name="translucence">#08000000</color>
-    <color name="banner_title">#30000000</color>
+
+    <color name="video_play_media_controller">#80000000</color>
+    <color name="touming">#00000000</color>
 
     <!--白色-->
     <color name="white">#FFFFFF</color>
