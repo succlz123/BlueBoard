@@ -2,18 +2,28 @@ package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
+import org.succlz123.AxBTube.bean.acfun.AcReHot;
+import org.succlz123.AxBTube.bean.acfun.AcReOther;
+import org.succlz123.AxBTube.support.adapter.acfun.AcPartitionRecyclerViewAdapter;
+import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by chinausky on 2015/7/27.
@@ -31,7 +41,13 @@ public class AcPartitionFragment extends BaseFragment {
 	@Bind(R.id.ac_fragment_partition_recycler_view)
 	RecyclerView mRecyclerView;
 
+	private static final int TYPE_RECOMMEND_HOT = 0;
+	private static final int TYPE_HOT = 1;
+	private static final int TYPE_LAST_POST = 2;
+
 	private String mChannelIds;
+	private boolean mIsPrepared;
+	private AcPartitionRecyclerViewAdapter mAdapter;
 
 	@Nullable
 	@Override
@@ -39,53 +55,102 @@ public class AcPartitionFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.ac_fragment_partition, container, false);
 		ButterKnife.bind(this, view);
 		mChannelIds = getArguments().getString(AcString.CHANNEL_IDS);
-
+		mIsPrepared = true;
 
 		GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
 		manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
 			@Override
 			public int getSpanSize(int position) {
-				if (position == 0 | position == 1 | position == 6 | position == 9 | position == 12
-						| position == 15 | position == 18 | position == 21 | position == 24) {
-					return 2;
+				if (position == 1 | position == 2 | position == 3 | position == 4) {
+					return 1;
 				}
-				return 1;
+				return 2;
 			}
 		});
-//
-//		mRecyclerView.setLayoutManager(manager);
-//		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//
-//		AcPartitionRecyclerViewAdapter adapter = new AcPartitionRecyclerViewAdapter();
-////		adapter.setOnItemClickListener(new AcReRecyclerViewAdapter.OnItemClickListener() {
-////			@Override
-////			public void onItemClick(View view, int position) {
-////				AcPartitionActivity.startActivity(getActivity(), position);
-////			}
-////		});
-//
-//
-//		mRecyclerView.setAdapter(adapter);
-//		mRecyclerView.addItemDecoration(new AcReRecyclerViewAdapter.MyDecoration());
+
+		mRecyclerView.setLayoutManager(manager);
+		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+		mAdapter = new AcPartitionRecyclerViewAdapter();
+		mRecyclerView.setAdapter(mAdapter);
+		mRecyclerView.addItemDecoration(new AcPartitionRecyclerViewAdapter.PartitionDecoration());
+//		mAdapter.setOnItemClickListener(new AcRecommendRecyclerViewAdapter.OnItemClickListener() {
+//			@Override
+//			public void onItemClick(View view, int position) {
+//				AcPartitionActivity.startActivity(getActivity(), position);
+//			}
+//		});
+
+		lazyLoad();
+
 		return view;
 	}
 
-	public class AcPartitionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
-		@Override
-		public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-			return null;
+	@Override
+	protected void lazyLoad() {
+		if (!mIsPrepared || !isVisible) {
+			return;
+		} else {
+			if (TextUtils.equals(mChannelIds, "1") && mAdapter.getmAcReHot() == null) {
+				getHttpResult(TYPE_RECOMMEND_HOT);
+			}
+			if (mAdapter.getmAcHot() == null) {
+				getHttpResult(TYPE_HOT);
+			}
+			if (mAdapter.getmAcLastPost() == null) {
+				getHttpResult(TYPE_LAST_POST);
+			}
 		}
+	}
 
-		@Override
-		public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+	private void getHttpResult(int type) {
+		RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
+		AcApi.getAcPartition acPartition = restAdapter.create(AcApi.getAcPartition.class);
+		AcApi.getAcRecommend acRecommend = restAdapter.create(AcApi.getAcRecommend.class);
+		//热门焦点
+		if (type == TYPE_RECOMMEND_HOT) {
+			acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
+				@Override
+				public void success(AcReHot acReHot, Response response) {
+					mAdapter.onHotResult(acReHot);
+				}
 
+				@Override
+				public void failure(RetrofitError error) {
+				}
+			});
 		}
+		//人气最旺
+		if (type == TYPE_HOT) {
+			acPartition.onResult(AcApi.getAcPartitionUrl(mChannelIds, AcString.POPULARITY, AcString.ONE_WEEK), new Callback<AcReOther>() {
+				@Override
+				public void success(AcReOther acReOther, Response response) {
+					if (acReOther.getData().getPage().getList().size() > 1) {
+						mAdapter.onPartitionHotResult(acReOther);
+					}
+				}
 
-		@Override
-		public int getItemCount() {
-			return 0;
+				@Override
+				public void failure(RetrofitError error) {
+
+				}
+			});
+		}
+		//最新发布
+		if (type == TYPE_LAST_POST) {
+			acPartition.onResult(AcApi.getAcPartitionUrl(mChannelIds, AcString.TIME_ORDER, AcString.ONE_WEEK), new Callback<AcReOther>() {
+				@Override
+				public void success(AcReOther acReOther, Response response) {
+					if (acReOther.getData().getPage().getList().size() > 1) {
+						mAdapter.onPartitionLastPostResult(acReOther);
+					}
+				}
+
+				@Override
+				public void failure(RetrofitError error) {
+
+				}
+			});
 		}
 	}
 }

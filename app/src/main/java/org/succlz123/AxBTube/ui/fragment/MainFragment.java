@@ -20,7 +20,7 @@ import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.MainActivity;
 import org.succlz123.AxBTube.ui.fragment.acfun.main.AcRecommendFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliBangumiFragment;
-import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliNavigationFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.main.AcNavigationFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliRecommendFragment;
 import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliTimeFragment;
 
@@ -42,6 +42,11 @@ public class MainFragment extends BaseFragment {
 
 	@Bind(R.id.toolbar)
 	Toolbar mToolbar;
+
+	@Override
+	protected void lazyLoad() {
+
+	}
 
 	@Nullable
 	@Override
@@ -85,7 +90,7 @@ public class MainFragment extends BaseFragment {
 				case 0:
 					return new AcRecommendFragment();
 				case 1:
-					return new BiliNavigationFragment();
+					return new AcNavigationFragment();
 				case 2:
 					return new BiliBangumiFragment();
 				case 3:
@@ -119,7 +124,7 @@ public class MainFragment extends BaseFragment {
 				case 0:
 					return new BiliRecommendFragment();
 				case 1:
-					return new BiliNavigationFragment();
+					return new AcNavigationFragment();
 				case 2:
 					return new BiliBangumiFragment();
 				case 3:

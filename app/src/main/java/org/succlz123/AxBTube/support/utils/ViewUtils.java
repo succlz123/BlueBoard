@@ -47,7 +47,7 @@ public class ViewUtils {
 				};
 		drawerToggle.syncState();
 		drawerLayout.setDrawerListener(drawerToggle);
-		drawerLayout.setScrimColor(MyApplication.getInstance()
+		drawerLayout.setScrimColor(MyApplication.getsInstance()
 				.getApplicationContext().getResources().getColor(R.color.shadow_white));
 	}
 }

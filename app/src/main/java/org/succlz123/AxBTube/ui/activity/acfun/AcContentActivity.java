@@ -22,7 +22,7 @@ import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.BaseActivity;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
-import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentCommentFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentReplyFragment;
 import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentInfoFragment;
 
 import butterknife.Bind;
@@ -135,7 +135,7 @@ public class AcContentActivity extends BaseActivity {
                 case 0:
                     return AcContentInfoFragment.newInstance();
                 case 1:
-                    return AcContentCommentFragment.newInstance();
+                    return AcContentReplyFragment.newInstance();
             }
             return null;
         }

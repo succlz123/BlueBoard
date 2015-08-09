@@ -34,6 +34,11 @@ public class AcContentInfoFragment extends BaseFragment {
 
     private AcContentInfoRecyclerViewAdapter mAdapter;
 
+    @Override
+    protected void lazyLoad() {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

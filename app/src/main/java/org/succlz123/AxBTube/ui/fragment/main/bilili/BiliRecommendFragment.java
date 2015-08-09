@@ -2,6 +2,7 @@ package org.succlz123.AxBTube.ui.fragment.main.bilili;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.support.helper.bilibili.BiliApi;
-import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.support.utils.LogUtils;
 
@@ -18,7 +18,7 @@ import org.succlz123.AxBTube.support.utils.LogUtils;
 /**
  * Created by fashi on 2015/5/2.
  */
-public class BiliRecommendFragment extends BaseFragment {
+public class BiliRecommendFragment extends Fragment {
 	private View mView;
 	private ViewPager mViewPager;
 

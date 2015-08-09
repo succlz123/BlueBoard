@@ -120,8 +120,8 @@ public class AcContentInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
                 tvTitle.setText(title);
                 tvDescription.setText(Html.fromHtml(description));
-                tvClick.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + click);
-                tvStows.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.stows) + " " + stows);
+                tvClick.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + click);
+                tvStows.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.stows) + " " + stows);
             }
         } else if (holder instanceof UpViewHolder) {
             SimpleDraweeView simpleDraweeView = ((UpViewHolder) holder).simpleDraweeView;
@@ -135,18 +135,18 @@ public class AcContentInfoRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                 Uri uri = Uri.parse(userImg);
                 simpleDraweeView.setImageURI(uri);
                 tvName.setText(username);
-                tvLevel.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.uid) + " " + userId);
+                tvLevel.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.uid) + " " + userId);
             }
         } else if (holder instanceof VideoViewHolder) {
             TextView tvVideo = ((VideoViewHolder) holder).tvVideo;
             LinearLayout llVideo = ((VideoViewHolder) holder).llVideo;
             if (mAcContent != null) {
                 if (position == 2) {
-                    tvVideo.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.gongyou)
+                    tvVideo.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.gongyou)
                             + mAcContent.getData().getFullContent().getVideos().size()
-                            + MyApplication.getInstance().getApplicationContext().getString(R.string.geshipin));
+                            + MyApplication.getsInstance().getApplicationContext().getString(R.string.geshipin));
                     llVideo.setBackgroundColor(
-                            MyApplication.getInstance().getApplicationContext().getResources()
+                            MyApplication.getsInstance().getApplicationContext().getResources()
                                     .getColor(R.color.window_background));
                 } else {
                     tvVideo.setText((position - 2)

@@ -4,26 +4,22 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.okhttp.OkHttpClient;
 
-import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.support.config.FrescoConfig;
 
 import butterknife.ButterKnife;
-import retrofit.RestAdapter;
 
 /**
  * Created by fashi on 2015/7/6.
  */
 public class MyApplication extends Application {
 
-    private static MyApplication instance;
+    private static MyApplication sInstance;
 
-    public static MyApplication getInstance() {
-        return instance;
+    public static MyApplication getsInstance() {
+        return sInstance;
     }
 
     private RefWatcher refWatcher;
@@ -37,16 +33,13 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         //由android系统帮你实例化的
-        instance = this;
+        sInstance = this;
 
-        refWatcher = LeakCanary.install(instance);
+        refWatcher = LeakCanary.install(sInstance);
 
         ButterKnife.setDebug(BuildConfig.DEBUG);
 
-        ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
-                .newBuilder(instance, new OkHttpClient())
-                .build();
-        Fresco.initialize(instance, config);
+        Fresco.initialize(sInstance, FrescoConfig.getImagePipelineConfig(sInstance));
 
     }
 
