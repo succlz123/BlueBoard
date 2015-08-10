@@ -31,7 +31,7 @@ public class AcContentReplyFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.ac_fragment_content_comment, container, false);
+        View view = inflater.inflate(R.layout.ac_fragment_content_reply, container, false);
         ButterKnife.bind(this, view);
 
         return view;

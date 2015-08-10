@@ -14,6 +14,8 @@
     <string name="up">UP主</string>
     <string name="gongyou">共有</string>
     <string name="geshipin">个视频</string>
+    <string name="the_most_popular">人气最旺</string>
+    <string name="latest_release">最新发布</string>
     <!--<string name="close">关闭</string>-->
     <!--<string name="open">打开</string>-->
     <!--<string name="close">关闭</string>-->
@@ -140,6 +142,4 @@
     <!--<string name="open">打开</string>-->
     <!--<string name="close">关闭</string>-->
     <!--<string name="open">打开</string>-->
-    <!--<string name="close">关闭</string>-->
-    <!--<string name="open">打开</string>-->
- </resources>
+</resources>

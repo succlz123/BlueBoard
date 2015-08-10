@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.support.adapter.acfun;
+package org.succlz123.AxBTube.support.adapter.acfun.recyclerview;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -21,6 +21,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
+import org.succlz123.AxBTube.support.adapter.acfun.AcRecommendBannerAdapter;
 import org.succlz123.AxBTube.support.callback.GetAcRecommendHttpResult;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * Created by fashi on 2015/7/26.
  */
-public class AcRecommendRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 		implements GetAcRecommendHttpResult {
 	private static final int TYPE_VIEW_PAGER = 0;
 	private static final int TYPE_NAVIGATION_TITLE = 1;
@@ -103,14 +104,14 @@ public class AcRecommendRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 		notifyDataSetChanged();
 	}
 
-	public interface OnItemClickListener {
-		void onItemClick(View view, int position, String contentId);
+	public interface OnClickListener {
+		void onClick(View view, int position, String contentId);
 	}
 
-	private OnItemClickListener mOnItemClickListener;
+	private OnClickListener mOnClickListener;
 
-	public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-		this.mOnItemClickListener = onItemClickListener;
+	public void setOnClickListener(OnClickListener onClickListener) {
+		this.mOnClickListener = onClickListener;
 	}
 
 	//首页横幅
@@ -235,11 +236,11 @@ public class AcRecommendRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 			Button btnPartitionMore = ((NavigationTitleVH) holder).btnPartitionMore;
 
 			tvPartitionTitle.setText(AcString.getTitle(position));
-			if (mOnItemClickListener != null) {
+			if (mOnClickListener != null) {
 				btnPartitionMore.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						mOnItemClickListener.onItemClick(v, position, null);
+						mOnClickListener.onClick(v, position, null);
 					}
 				});
 			}
@@ -262,11 +263,11 @@ public class AcRecommendRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
 				final String contentId = entity.getSpecialId();
 
-				if (mOnItemClickListener != null) {
+				if (mOnClickListener != null) {
 					cardViewHot.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							mOnItemClickListener.onItemClick(v, position, contentId);
+							mOnClickListener.onClick(v, position, contentId);
 						}
 					});
 				}
@@ -360,11 +361,11 @@ public class AcRecommendRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
 	//统一处理
 	public void setCardViewOtherOnClickListener(CardView cardViewOther, final int position, final String contentId) {
-		if (mOnItemClickListener != null) {
+		if (mOnClickListener != null) {
 			cardViewOther.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					mOnItemClickListener.onItemClick(v, position, contentId);
+					mOnClickListener.onClick(v, position, contentId);
 				}
 			});
 		}

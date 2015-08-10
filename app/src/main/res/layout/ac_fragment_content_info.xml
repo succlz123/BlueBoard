@@ -4,8 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:clipToPadding="false"
+    android:paddingBottom="@dimen/recycle_view_bottom"
+    android:paddingLeft="@dimen/recycle_view_margin"
+    android:paddingRight="@dimen/recycle_view_margin"
+    android:paddingTop="@dimen/recycle_view_margin"
     android:scrollbars="none">
 
 </android.support.v7.widget.RecyclerView>

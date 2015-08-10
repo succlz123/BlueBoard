@@ -38,7 +38,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:cardview-v7:+'
 
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:design:+'
     compile 'com.android.support:percent:+'
 
     compile 'com.squareup.okhttp:okhttp:2.4.0'//okhttp

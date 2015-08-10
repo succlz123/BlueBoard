@@ -13,7 +13,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
-import org.succlz123.AxBTube.support.adapter.acfun.AcRecommendRecyclerViewAdapter;
+import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcRecommendRvAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.activity.acfun.AcContentActivity;
@@ -31,13 +31,9 @@ import retrofit.client.Response;
  * Created by fashi on 2015/7/19.
  */
 public class AcRecommendFragment extends BaseFragment {
+
     @Bind(R.id.ac_fragment_recommend_recycler_view)
     RecyclerView mRecyclerView;
-
-    @Override
-    protected void lazyLoad() {
-
-    }
 
     @Nullable
     @Override
@@ -62,19 +58,15 @@ public class AcRecommendFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        AcRecommendRecyclerViewAdapter recyclerViewAdapter = new AcRecommendRecyclerViewAdapter();
-        recyclerViewAdapter.setOnItemClickListener(new AcRecommendRecyclerViewAdapter.OnItemClickListener() {
+        AcRecommendRvAdapter recyclerViewAdapter = new AcRecommendRvAdapter();
+        recyclerViewAdapter.setOnClickListener(new AcRecommendRvAdapter.OnClickListener() {
             @Override
-            public void onItemClick(View view, int position, String contentId) {
+            public void onClick(View view, int position, String contentId) {
                 if (contentId == null) {
                     //启动分区页面
                     AcPartitionActivity.startActivity(getActivity(), position);
                 } else {
                     //启动视频信息页面
-//                    VideoPlayActivity.startActivity(getActivity(),
-//                            "123",
-//                            "321",
-//                            "1abb7d6886", "letv");
                     AcContentActivity.startActivity(getActivity(), contentId);
                 }
             }
@@ -84,11 +76,16 @@ public class AcRecommendFragment extends BaseFragment {
         getAcRecommend(recyclerViewAdapter);
 
         mRecyclerView.setAdapter(recyclerViewAdapter);
-        mRecyclerView.addItemDecoration(new AcRecommendRecyclerViewAdapter.RecommendDecoration());
+        mRecyclerView.addItemDecoration(new AcRecommendRvAdapter.RecommendDecoration());
         return view;
     }
 
-    private void getAcRecommend(final AcRecommendRecyclerViewAdapter recyclerViewAdapter) {
+    @Override
+    protected void lazyLoad() {
+
+    }
+
+    private void getAcRecommend(final AcRecommendRvAdapter recyclerViewAdapter) {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
 
         AcApi.getAcRecommend acRecommend = restAdapter.create(AcApi.getAcRecommend.class);

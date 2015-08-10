@@ -46,13 +46,6 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
         activity.startActivity(intent);
     }
 
-    private String mVideoId;
-    private String mDanmakuId;
-    private String mSourceId;
-    private String mSourceType;
-
-    private boolean mIsVitamioReady;
-
     @Bind(R.id.buffer)
     VideoView mVideoView;
 
@@ -67,6 +60,12 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
 
     @Bind(R.id.video_play_content)
     FrameLayout mFrameLayout;
+
+    private String mVideoId;
+    private String mDanmakuId;
+    private String mSourceId;
+    private String mSourceType;
+    private boolean mIsVitamioReady;
 
     @Override
     public void onCreate(Bundle icicle) {

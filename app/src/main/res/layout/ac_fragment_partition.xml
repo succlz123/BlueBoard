@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:paddingBottom="33dp"
-    android:paddingLeft="7dp"
-    android:paddingRight="7dp"
+    android:paddingBottom="66dp"
+    android:paddingLeft="@dimen/recycle_view_margin"
+    android:paddingRight="@dimen/recycle_view_margin"
     android:scrollbars="none">
 
 </android.support.v7.widget.RecyclerView>

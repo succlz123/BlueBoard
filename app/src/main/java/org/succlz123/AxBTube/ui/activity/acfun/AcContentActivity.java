@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,13 +15,15 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContent;
+import org.succlz123.AxBTube.support.adapter.acfun.fragment.AcContentFmAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.BaseActivity;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
-import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentReplyFragment;
 import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentInfoFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentReplyFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,7 +59,7 @@ public class AcContentActivity extends BaseActivity {
     ViewPager mViewPager;
 
     private String mContentId;
-    private AcContentFragmentAdapter mAdapter;
+    private AcContentFmAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +68,11 @@ public class AcContentActivity extends BaseActivity {
         ButterKnife.bind(this);
         mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);
 
-        ViewUtils.setToolbar(AcContentActivity.this, mToolbar);
+        ViewUtils.setToolbar(AcContentActivity.this, mToolbar,true);
 
         if (mTabLayout != null && mViewPager != null) {
             mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-            mAdapter = new AcContentFragmentAdapter(getSupportFragmentManager());
+            mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
             mViewPager.setAdapter(mAdapter);
             mViewPager.setOffscreenPageLimit(2);
             mTabLayout.setupWithViewPager(mViewPager);
@@ -80,37 +80,41 @@ public class AcContentActivity extends BaseActivity {
 
         if (mContentId != null) {
             RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
-
             AcApi.getAcContent acContent = restAdapter.create(AcApi.getAcContent.class);
 
             acContent.onContentResult(AcApi.getAcContentUrl(mContentId), new Callback<AcContent>() {
                 @Override
                 public void success(final AcContent acContent, Response response) {
-                    String url = acContent.getData().getFullContent().getCover();
-                    int title = acContent.getData().getFullContent().getContentId();
-                    Uri uri = Uri.parse(url);
-                    mTitleImg.setImageURI(uri);
+                    //如果请求的视频被删除
+                    if (acContent.getStatus() == 404) {
+                        GlobalUtils.showToastShort(AcContentActivity.this, acContent.getMsg());
+                    }else {
+                        String url = acContent.getData().getFullContent().getCover();
+                        int title = acContent.getData().getFullContent().getContentId();
+                        //加载标题图片并点击播放默认第一个视频
+                        mTitleImg.setImageURI(Uri.parse(url));
+                        mTitleImg.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AcContent.DataEntity.FullContentEntity.VideosEntity videosEntity
+                                        = acContent.getData().getFullContent().getVideos().get(0);
 
-                    mTitleImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            int videoId = acContent.getData().getFullContent().getVideos().get(0).getVideoId();
-                            int danmakuId = acContent.getData().getFullContent().getVideos().get(0).getDanmakuId();
-                            String sourceId = acContent.getData().getFullContent().getVideos().get(0).getSourceId();
-                            String sourceType = acContent.getData().getFullContent().getVideos().get(0).getType();
+                                VideoPlayActivity.startActivity(AcContentActivity.this,
+                                        String.valueOf(videosEntity.getVideoId()),
+                                        String.valueOf(videosEntity.getDanmakuId()),
+                                        videosEntity.getSourceId(),
+                                        videosEntity.getType());
+                            }
+                        });
+                        mCollapsingToolbarLayout.setTitle("AC" + title);
+                        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
 
-                            VideoPlayActivity.startActivity(AcContentActivity.this,
-                                    String.valueOf(videoId),
-                                    String.valueOf(danmakuId),
-                                    "f3f977bbf7", "letv");
-                        }
-                    });
-                    mCollapsingToolbarLayout.setTitle("AC" + title);
-                    mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
+                        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                            if (fragment instanceof AcContentInfoFragment) {
+                                ((AcContentInfoFragment) fragment).onAcContentResult(acContent);
+                            } else if (fragment instanceof AcContentReplyFragment) {
 
-                    for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                        if (fragment instanceof AcContentInfoFragment) {
-                            ((AcContentInfoFragment) fragment).onAcContentResult(acContent);
+                            }
                         }
                     }
                 }
@@ -120,34 +124,6 @@ public class AcContentActivity extends BaseActivity {
 
                 }
             });
-        }
-    }
-
-    private class AcContentFragmentAdapter extends FragmentStatePagerAdapter {
-
-        public AcContentFragmentAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return AcContentInfoFragment.newInstance();
-                case 1:
-                    return AcContentReplyFragment.newInstance();
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return AcString.CONTENT_VIEW_PAGER_TITLE[position];
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.activity.acfun;
+package org.succlz123.AxBTube.support.widget;
 
 import android.content.Context;
 import android.graphics.Rect;

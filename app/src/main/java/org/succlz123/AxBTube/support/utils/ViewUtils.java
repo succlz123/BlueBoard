@@ -17,20 +17,41 @@ import org.succlz123.AxBTube.R;
 public class ViewUtils {
 
 	/**
-	 * 显示Toolbar
+	 * 显示Toolbar 默认标题
 	 *
 	 * @param context
 	 * @param toolbar
 	 */
-	public static void setToolbar(AppCompatActivity context, Toolbar toolbar) {
+	public static void setToolbar(AppCompatActivity context, Toolbar toolbar, Boolean WithHomeButton) {
 		context.setSupportActionBar(toolbar);
-		ActionBar actionBar = context.getSupportActionBar();
-		if (actionBar != null) {
-			actionBar.setHomeButtonEnabled(true);
-			actionBar.setDisplayHomeAsUpEnabled(true);
+		if (WithHomeButton) {
+			ActionBar actionBar = context.getSupportActionBar();
+			if (actionBar != null) {
+				actionBar.setHomeButtonEnabled(true);
+				actionBar.setDisplayHomeAsUpEnabled(true);
+			}
 		}
 	}
 
+	/**
+	 * 显示Toolbar 添加自定义标题
+	 *
+	 * @param context
+	 * @param toolbar
+	 */
+	public static void setToolbar(AppCompatActivity context, Toolbar toolbar, Boolean WithHomeButton, String title) {
+		if (title != null) {
+			toolbar.setTitle(title);
+		}
+		context.setSupportActionBar(toolbar);
+		if (WithHomeButton) {
+			ActionBar actionBar = context.getSupportActionBar();
+			if (actionBar != null) {
+				actionBar.setHomeButtonEnabled(true);
+				actionBar.setDisplayHomeAsUpEnabled(true);
+			}
+		}
+	}
 
 	public static void setDrawerToggle(Activity context, DrawerLayout drawerLayout, Toolbar toolbar) {
 		ActionBarDrawerToggle drawerToggle =

@@ -28,19 +28,18 @@ public class MainActivity extends BaseActivity {
 
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		if (navigationView != null) {
-			setupDrawerContent(navigationView);
+			setUpDrawerContent(navigationView);
 		}
 
 		FragmentManager fm = getSupportFragmentManager();
-		if (fm.findFragmentByTag(MainFragment.FRAGMENT_TAG) == null) {
-			FragmentTransaction ft = fm.beginTransaction();
-			ft.add(R.id.fragment_content, new MainFragment(), MainFragment.FRAGMENT_TAG);
+ 			FragmentTransaction ft = fm.beginTransaction();
+			ft.add(R.id.fragment_content, new MainFragment());
 			ft.commitAllowingStateLoss();
 			fm.executePendingTransactions();
-		}
+
 	}
 
-	private void setupDrawerContent(NavigationView navigationView) {
+	private void setUpDrawerContent(NavigationView navigationView) {
 		navigationView.setNavigationItemSelectedListener(
 				new NavigationView.OnNavigationItemSelectedListener() {
 					@Override

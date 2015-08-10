@@ -22,6 +22,9 @@ public class AcString {
 	public static final String SOURCE_ID = "sourceId";
 	public static final String SOURCE_TYPE = "sourceType";
 
+	public static final String[] MAIN_TITLES = new String[]{
+			"首页推荐", "分区导航", "新番专题", "文章专区"};
+
 	public static final String[] CONTENT_VIEW_PAGER_TITLE = new String[]{"视频详情", "评论列表"};
 
 	public static String getTitle(int position) {
