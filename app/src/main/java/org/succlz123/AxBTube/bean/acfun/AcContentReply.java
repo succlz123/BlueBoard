@@ -174,6 +174,16 @@ public class AcContentReply {
             private int avatarFrame;
             private int deep;
 
+            private Entity quoteComment;
+
+            public void setQuoteComment(Entity quoteComment){
+                this.quoteComment=quoteComment;
+            }
+
+            public Entity getQuoteComment(){
+                return this.quoteComment;
+            }
+
             public void setQuoteId(int quoteId) {
                 this.quoteId = quoteId;
             }

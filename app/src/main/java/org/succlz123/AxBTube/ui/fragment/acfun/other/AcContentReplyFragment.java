@@ -16,6 +16,10 @@ import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
@@ -98,8 +102,27 @@ public class AcContentReplyFragment extends BaseFragment {
                 new Callback<AcContentReply>() {
 
                     @Override
-                    public void success(AcContentReply acContentReply, Response response) {
-                        mAdapter.setContentReply(acContentReply);
+                    public void success(AcContentReply mAcContentReply, Response response) {
+
+                        ArrayList<AcContentReply.DataEntity.Entity> comments = new ArrayList<>();
+                        List<Integer> commentIds = mAcContentReply.getData().getPage().getList();
+                        HashMap<String, AcContentReply.DataEntity.Entity> commentIdMap = mAcContentReply.getData().getPage().getMap();
+
+                        for (Integer id : commentIds) {
+                            comments.add(commentIdMap.get("c" + String.valueOf(id)));
+                        }
+
+                        for (AcContentReply.DataEntity.Entity comment : comments) {
+                            AcContentReply.DataEntity.Entity currentComment = comment;
+                            int quoteId = currentComment.getQuoteId();
+                            while (quoteId != 0 && currentComment.getQuoteComment() == null) {
+                                AcContentReply.DataEntity.Entity quoteComment = commentIdMap.get("c" + quoteId);
+                                currentComment.setQuoteComment(quoteComment);
+                                currentComment = quoteComment;
+                                quoteId = currentComment.getQuoteId();
+                            }
+                        }
+                        mAdapter.setContentReply(comments);
                     }
 
                     @Override
