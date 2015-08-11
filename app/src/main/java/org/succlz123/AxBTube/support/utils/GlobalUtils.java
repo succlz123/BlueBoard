@@ -21,6 +21,9 @@ import android.widget.Toast;
 
 import org.succlz123.AxBTube.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -215,7 +218,7 @@ public class GlobalUtils {
      */
     public static String getDateToString(long time) {
         Date d = new Date(time);
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
         return sf.format(d);
     }
@@ -435,5 +438,22 @@ public class GlobalUtils {
         return result;
     }
 
+    /**
+     * inputStream 转成 string
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static String inputStream2String(InputStream in) throws IOException {
+        byte[] buf = new byte[1024];
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        for (int i; (i = in.read(buf)) != -1; ) {
+            baos.write(buf, 0, i);
+        }
+
+        return baos.toString("UTF-8");
+    }
 
 }

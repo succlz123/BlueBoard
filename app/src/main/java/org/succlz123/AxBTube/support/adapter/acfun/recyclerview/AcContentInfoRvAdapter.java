@@ -14,7 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcContent;
+import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,7 +26,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private static final int CONTENT_INFO_TITLE_INFO = 0;
     private static final int CONTENT_INFO_VIDEO_ITEM = 1;
 
-    private AcContent mAcContent;
+    private AcContentInfo mAcContentInfo;
     private OnClickListener mOnClickListener;
 
     public interface OnClickListener {
@@ -37,8 +37,8 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.mOnClickListener = onClickListener;
     }
 
-    public void setContentInfo(AcContent acContent) {
-        this.mAcContent = acContent;
+    public void setContentInfo(AcContentInfo acContentInfo) {
+        this.mAcContentInfo = acContentInfo;
         notifyDataSetChanged();
     }
 
@@ -104,8 +104,8 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (mAcContent != null) {
-            final AcContent.DataEntity.FullContentEntity contentEntity = mAcContent.getData().getFullContent();
+        if (mAcContentInfo != null) {
+            final AcContentInfo.DataEntity.FullContentEntity contentEntity = mAcContentInfo.getData().getFullContent();
 
             if (holder instanceof TitleInfoViewHolder) {
                 ((TitleInfoViewHolder) holder).tvTitle
@@ -135,8 +135,8 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     });
                 }
             } else if (holder instanceof VideoItemViewHolder) {
-                if (mAcContent != null) {
-                    final AcContent.DataEntity.FullContentEntity.VideosEntity videosEntity
+                if (mAcContentInfo != null) {
+                    final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
                             = contentEntity.getVideos().get(position - 1);
 
                     ((VideoItemViewHolder) holder).tvVideo
@@ -163,8 +163,8 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        if (mAcContent != null) {
-            return mAcContent.getData().getFullContent().getVideos().size() + 1;
+        if (mAcContentInfo != null) {
+            return mAcContentInfo.getData().getFullContent().getVideos().size() + 1;
         }
         return 0;
     }

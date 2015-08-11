@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcContent;
+import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentInfoRvAdapter;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
@@ -26,12 +26,12 @@ public class AcContentInfoFragment extends BaseFragment {
 
     public static AcContentInfoFragment newInstance() {
         AcContentInfoFragment fragment = new AcContentInfoFragment();
-        Bundle bundle = new Bundle();
-        fragment.setArguments(bundle);
+//        Bundle bundle = new Bundle();
+//        fragment.setArguments(bundle);
         return fragment;
     }
 
-    @Bind(R.id.ac_fragment_content_info_recycler_view)
+    @Bind(R.id.ac_fragment_content_reply_recycler_view)
     RecyclerView mRecyclerView;
 
     private boolean mIsPrepared;
@@ -67,9 +67,8 @@ public class AcContentInfoFragment extends BaseFragment {
         return view;
     }
 
-    public void onAcContentResult(AcContent acContent) {
-        mAdapter.setContentInfo(acContent);
-
+    public void onAcContentResult(AcContentInfo acContentInfo) {
+        mAdapter.setContentInfo(acContentInfo);
     }
 
     @Override

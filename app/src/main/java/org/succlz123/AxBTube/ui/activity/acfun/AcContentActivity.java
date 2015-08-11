@@ -14,7 +14,7 @@ import android.view.View;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcContent;
+import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.support.adapter.acfun.fragment.AcContentFmAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
@@ -66,38 +66,37 @@ public class AcContentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_activity_content);
         ButterKnife.bind(this);
+
         mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);
 
-        ViewUtils.setToolbar(AcContentActivity.this, mToolbar,true);
+        ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
 
-        if (mTabLayout != null && mViewPager != null) {
-            mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-            mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
-            mViewPager.setAdapter(mAdapter);
-            mViewPager.setOffscreenPageLimit(2);
-            mTabLayout.setupWithViewPager(mViewPager);
-        }
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setOffscreenPageLimit(2);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         if (mContentId != null) {
-            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
-            AcApi.getAcContent acContent = restAdapter.create(AcApi.getAcContent.class);
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
+            AcApi.getAcContentInfo acContent = restAdapter.create(AcApi.getAcContentInfo.class);
 
-            acContent.onContentResult(AcApi.getAcContentUrl(mContentId), new Callback<AcContent>() {
+            acContent.onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
                 @Override
-                public void success(final AcContent acContent, Response response) {
+                public void success(final AcContentInfo acContentInfo, Response response) {
                     //如果请求的视频被删除
-                    if (acContent.getStatus() == 404) {
-                        GlobalUtils.showToastShort(AcContentActivity.this, acContent.getMsg());
-                    }else {
-                        String url = acContent.getData().getFullContent().getCover();
-                        int title = acContent.getData().getFullContent().getContentId();
+                    if (acContentInfo.getStatus() == 404) {
+                        GlobalUtils.showToastShort(AcContentActivity.this, acContentInfo.getMsg());
+                    } else {
+                        String url = acContentInfo.getData().getFullContent().getCover();
+                        int title = acContentInfo.getData().getFullContent().getContentId();
                         //加载标题图片并点击播放默认第一个视频
                         mTitleImg.setImageURI(Uri.parse(url));
                         mTitleImg.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                AcContent.DataEntity.FullContentEntity.VideosEntity videosEntity
-                                        = acContent.getData().getFullContent().getVideos().get(0);
+                                AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
+                                        = acContentInfo.getData().getFullContent().getVideos().get(0);
 
                                 VideoPlayActivity.startActivity(AcContentActivity.this,
                                         String.valueOf(videosEntity.getVideoId()),
@@ -111,9 +110,11 @@ public class AcContentActivity extends BaseActivity {
 
                         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                             if (fragment instanceof AcContentInfoFragment) {
-                                ((AcContentInfoFragment) fragment).onAcContentResult(acContent);
+                                ((AcContentInfoFragment) fragment)
+                                        .onAcContentResult(acContentInfo);
                             } else if (fragment instanceof AcContentReplyFragment) {
-
+                                ((AcContentReplyFragment) fragment)
+                                        .onAcContentResult(String.valueOf(acContentInfo.getData().getFullContent().getContentId()));
                             }
                         }
                     }

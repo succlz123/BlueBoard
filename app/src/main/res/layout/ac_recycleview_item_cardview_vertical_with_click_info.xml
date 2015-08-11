@@ -27,10 +27,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:clickable="true"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text=""
             android:textSize="12sp"/>
 
         <LinearLayout
@@ -44,10 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text=""
                 android:textSize="10sp"/>
 
             <TextView
@@ -56,10 +52,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text=""
                 android:textSize="10sp"/>
 
         </LinearLayout>

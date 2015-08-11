@@ -86,7 +86,7 @@ public class AcRecommendFragment extends BaseFragment {
     }
 
     private void getAcRecommend(final AcRecommendRvAdapter recyclerViewAdapter) {
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
 
         AcApi.getAcRecommend acRecommend = restAdapter.create(AcApi.getAcRecommend.class);
 

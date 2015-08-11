@@ -48,17 +48,16 @@ public class AcPartitionActivity extends BaseActivity {
 
         ViewUtils.setToolbar(AcPartitionActivity.this, mToolbar, true, AcString.getTitle(position));
 
-        if (mTabLayout != null && mViewPager != null) {
-            AcPartitionFmAdapter adapter = new AcPartitionFmAdapter(getSupportFragmentManager(), position);
-            mViewPager.setAdapter(adapter);
-            mViewPager.setOffscreenPageLimit(3);
-            if (position == 1) {
-                mTabLayout.setVisibility(View.GONE);
-            }
-            //设置tab模式,可以滚动
-            mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-            mTabLayout.setupWithViewPager(mViewPager);
+        AcPartitionFmAdapter adapter = new AcPartitionFmAdapter(getSupportFragmentManager(), position);
+        mViewPager.setAdapter(adapter);
+        mViewPager.setOffscreenPageLimit(3);
+        if (position == 1) {
+            mTabLayout.setVisibility(View.GONE);
         }
+        //设置tab模式,可以滚动
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.setupWithViewPager(mViewPager);
+
     }
 
     @Override

@@ -17,52 +17,53 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
 
-	@Bind(R.id.drawer_layout)
-	public DrawerLayout mDrawerLayout;
+    @Bind(R.id.drawer_layout)
+    public DrawerLayout mDrawerLayout;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		ButterKnife.bind(this);
+    @Bind(R.id.nav_view)
+    NavigationView mNavigationView;
 
-		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-		if (navigationView != null) {
-			setUpDrawerContent(navigationView);
-		}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-		FragmentManager fm = getSupportFragmentManager();
- 			FragmentTransaction ft = fm.beginTransaction();
-			ft.add(R.id.fragment_content, new MainFragment());
-			ft.commitAllowingStateLoss();
-			fm.executePendingTransactions();
+        setUpDrawerContent(mNavigationView);
 
-	}
 
-	private void setUpDrawerContent(NavigationView navigationView) {
-		navigationView.setNavigationItemSelectedListener(
-				new NavigationView.OnNavigationItemSelectedListener() {
-					@Override
-					public boolean onNavigationItemSelected(MenuItem menuItem) {
-						menuItem.setChecked(true);
-						mDrawerLayout.closeDrawers();
-						return true;
-					}
-				});
-	}
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.fragment_content, new MainFragment());
+        ft.commitAllowingStateLoss();
+        fm.executePendingTransactions();
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.action_settings:
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    private void setUpDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

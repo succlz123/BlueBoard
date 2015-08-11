@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by succlz123 on 15/8/3.
  */
-public class AcContent {
+public class AcContentInfo {
     /**
      * status : 200
      * data : {"fullContent":{"tags":["亡国的阿基德"],"toplevel":0,"channelId":67,"videos":[{"startTime":0,"sourceType":"letv","time":3602,"name":"F宅","danmakuId":2463027,"videoId":2463027,"type":"letv","commentId":2463027,"sourceId":"311043eae0"},{"startTime":0,"sourceType":"letv","time":3602,"name":"白恋","danmakuId":2463291,"videoId":2463291,"type":"letv","commentId":2463291,"sourceId":"36fc8b71e5"}],"isArticle":0,"contentId":2069095,"viewOnly":0,"cover":"http://static.acfun.mm111.net/dotnet/artemis/u/cms/www/201508/02232914yqta.jpg","title":"【剧场版/720P】CODE GEASS 亡国的阿基德 第4章【F宅/白恋字幕组】","releaseDate":1438526006000,"description":"【剧场版/720P】CODE GEASS 亡国的阿基德 第4章【F宅/白恋字幕组】","views":4412,"stows":57,"user":{"username":"零元帅","userId":1370061,"userImg":"http://static.acfun.mm111.net/dotnet/20120923/style/image/avatar.jpg"},"isRecommend":0,"comments":24}}

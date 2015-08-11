@@ -81,12 +81,13 @@ public class AcPartitionFragment extends BaseFragment {
                 AcContentActivity.startActivity(getActivity(), contentId);
             }
         });
-        //延迟加载 默认只在fragment显示时才去发起http请求 使viewPager只加载一页
-        lazyLoad();
 
         return view;
     }
 
+    /**
+     * 延迟加载 默认只在fragment显示时才去发起http请求 使viewPager只加载一页
+     */
     @Override
     protected void lazyLoad() {
         if (!mIsPrepared || !isVisible) {
@@ -105,7 +106,7 @@ public class AcPartitionFragment extends BaseFragment {
     }
 
     private void getHttpResult(int type) {
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_BASE).build();
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
         AcApi.getAcPartition acPartition = restAdapter.create(AcApi.getAcPartition.class);
         AcApi.getAcRecommend acRecommend = restAdapter.create(AcApi.getAcRecommend.class);
         //热门焦点
