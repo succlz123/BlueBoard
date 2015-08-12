@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 
@@ -23,9 +24,9 @@ import butterknife.ButterKnife;
  */
 public class AcPartitionActivity extends BaseActivity {
 
-    public static void startActivity(Context activity, int position) {
+    public static void startActivity(Context activity, String partitionType) {
         Intent intent = new Intent(activity, AcPartitionActivity.class);
-        intent.putExtra(AcString.CHANNEL_IDS, position);
+        intent.putExtra(AcString.CHANNEL_IDS, partitionType);
         activity.startActivity(intent);
     }
 
@@ -44,17 +45,16 @@ public class AcPartitionActivity extends BaseActivity {
         setContentView(R.layout.ac_activity_partition);
         ButterKnife.bind(this);
         //根据position来判断什么分区
-        int position = getIntent().getIntExtra(AcString.CHANNEL_IDS, 0);
+        String partitionType = getIntent().getStringExtra(AcString.CHANNEL_IDS);
 
-        ViewUtils.setToolbar(AcPartitionActivity.this, mToolbar, true, AcString.getTitle(position));
+        ViewUtils.setToolbar(AcPartitionActivity.this, mToolbar, true, partitionType);
 
-        AcPartitionFmAdapter adapter = new AcPartitionFmAdapter(getSupportFragmentManager(), position);
+        AcPartitionFmAdapter adapter = new AcPartitionFmAdapter(getSupportFragmentManager(), partitionType);
         mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(3);
-        if (position == 1) {
+        mViewPager.setOffscreenPageLimit(5);
+        if (TextUtils.equals(partitionType, AcString.TITLE_HOT)) {
             mTabLayout.setVisibility(View.GONE);
         }
-        //设置tab模式,可以滚动
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setupWithViewPager(mViewPager);
 

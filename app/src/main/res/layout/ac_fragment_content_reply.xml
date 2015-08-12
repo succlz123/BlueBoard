@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/ac_fragment_content_reply_recycler_view"
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="@dimen/recycle_view_bottom"
-    android:paddingLeft="@dimen/recycle_view_margin"
-    android:paddingRight="@dimen/recycle_view_margin">
+    android:layout_height="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ac_fragment_content_reply_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/recycle_view_bottom"
+        android:paddingLeft="@dimen/recycle_view_margin"
+        android:paddingRight="@dimen/recycle_view_margin"/>
+
+    <ProgressBar
+        android:id="@+id/ac_fragment_content_reply_pro_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:theme="@style/progressBarColor"
+        android:layout_marginTop="80dp"/>
+
+</FrameLayout>

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
@@ -34,6 +35,9 @@ public class AcContentInfoFragment extends BaseFragment {
     @Bind(R.id.ac_fragment_content_reply_recycler_view)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.ac_fragment_content_info_pro_bar)
+    ProgressBar mProgressBar;
+
     private boolean mIsPrepared;
     private AcContentInfoRvAdapter mAdapter;
 
@@ -42,7 +46,6 @@ public class AcContentInfoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_content_info, container, false);
         ButterKnife.bind(this, view);
-        mIsPrepared = true;
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
@@ -52,7 +55,7 @@ public class AcContentInfoFragment extends BaseFragment {
             @Override
             public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
                 if (position == 0) {
-                    GlobalUtils.showToastShort(getActivity(), "哇哈哈哈 " + userId);
+                    GlobalUtils.showToastShort(getActivity(), "哇哈哈 " + userId);
                 } else {
                     VideoPlayActivity.startActivity(getActivity(),
                             videoId,
@@ -64,11 +67,17 @@ public class AcContentInfoFragment extends BaseFragment {
         });
         mRecyclerView.setAdapter(mAdapter);
 
+        mIsPrepared = true;
+
         return view;
     }
 
     public void onAcContentResult(AcContentInfo acContentInfo) {
         mAdapter.setContentInfo(acContentInfo);
+
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

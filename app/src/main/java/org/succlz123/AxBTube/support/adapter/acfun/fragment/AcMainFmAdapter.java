@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.fragment.acfun.main.AcNavigationFragment;
 import org.succlz123.AxBTube.ui.fragment.acfun.main.AcRecommendFragment;
-import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliBangumiFragment;
-import org.succlz123.AxBTube.ui.fragment.main.bilili.BiliTimeFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.main.AcBangumiFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.main.AcEssayFragment;
 
 /**
  * Created by succlz123 on 15/8/10.
@@ -27,9 +27,9 @@ public class AcMainFmAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return new AcNavigationFragment();
             case 2:
-                return new BiliBangumiFragment();
+                return new AcBangumiFragment();
             case 3:
-                return new BiliTimeFragment();
+                return new AcEssayFragment();
         }
         return null;
     }

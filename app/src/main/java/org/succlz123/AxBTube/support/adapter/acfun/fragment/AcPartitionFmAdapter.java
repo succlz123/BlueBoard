@@ -12,32 +12,34 @@ import org.succlz123.AxBTube.ui.fragment.acfun.other.AcPartitionFragment;
  */
 public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
 
-    private int mPosition;
+    private String mPosition;
 
-    public AcPartitionFmAdapter(FragmentManager fm, int position) {
+    public AcPartitionFmAdapter(FragmentManager fm, String partitionType) {
         super(fm);
-        this.mPosition = position;
+        this.mPosition = partitionType;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (mPosition) {
-            case 1:
+            case AcString.TITLE_HOT:
                 return AcPartitionFragment.newInstance("1");
-            case 6:
+            case AcString.TITLE_ANIMATION:
                 return getAnimationFragment(position);
-            case 9:
+            case AcString.TITLE_FUN:
                 return getFunFragment(position);
-            case 12:
+            case AcString.TITLE_MUSIC:
                 return getMusicFragment(position);
-            case 15:
+            case AcString.TITLE_GAME:
                 return getGameFragment(position);
-            case 18:
+            case AcString.TITLE_SCIENCE:
                 return getScienceFragment(position);
-            case 21:
+            case AcString.TITLE_SPORT:
                 return getSportFragment(position);
-            case 24:
+            case AcString.TITLE_TV:
                 return getTvFragment(position);
+//            case AcString.TITLE_ESSAY:
+//                return getTvFragment(position);
         }
         return null;
     }
@@ -45,21 +47,21 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         switch (mPosition) {
-            case 1:
+            case AcString.TITLE_HOT:
                 return 1;
-            case 6:
+            case AcString.TITLE_ANIMATION:
                 return AcString.ANIMATION_TITLES.length;
-            case 9:
+            case AcString.TITLE_FUN:
                 return AcString.FUN_TITLES.length;
-            case 12:
+            case AcString.TITLE_MUSIC:
                 return AcString.MUSIC_TITLES.length;
-            case 15:
+            case AcString.TITLE_GAME:
                 return AcString.GAME_TITLES.length;
-            case 18:
+            case AcString.TITLE_SCIENCE:
                 return AcString.SCIENCE_TITLES.length;
-            case 21:
+            case AcString.TITLE_SPORT:
                 return AcString.SPORT_TITLES.length;
-            case 24:
+            case AcString.TITLE_TV:
                 return AcString.TV_TITLES.length;
         }
         return 0;
@@ -68,21 +70,21 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (mPosition) {
-            case 1:
+            case AcString.TITLE_HOT:
                 return null;
-            case 6:
+            case AcString.TITLE_ANIMATION:
                 return AcString.ANIMATION_TITLES[position];
-            case 9:
+            case AcString.TITLE_FUN:
                 return AcString.FUN_TITLES[position];
-            case 12:
+            case AcString.TITLE_MUSIC:
                 return AcString.MUSIC_TITLES[position];
-            case 15:
+            case AcString.TITLE_GAME:
                 return AcString.GAME_TITLES[position];
-            case 18:
+            case AcString.TITLE_SCIENCE:
                 return AcString.SCIENCE_TITLES[position];
-            case 21:
+            case AcString.TITLE_SPORT:
                 return AcString.SPORT_TITLES[position];
-            case 24:
+            case AcString.TITLE_TV:
                 return AcString.TV_TITLES[position];
         }
         return null;

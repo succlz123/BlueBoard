@@ -9,6 +9,7 @@ import org.succlz123.AxBTube.support.utils.GlobalUtils;
 public class AcString {
 
     public static final String TITLE_HOT = "热门焦点";
+    public static final String TITLE_RANKING = "排行榜";
     public static final String TITLE_ANIMATION = "动画";
     public static final String TITLE_FUN = "娱乐";
     public static final String TITLE_MUSIC = "音乐";
@@ -16,6 +17,10 @@ public class AcString {
     public static final String TITLE_SCIENCE = "科学";
     public static final String TITLE_SPORT = "体育";
     public static final String TITLE_TV = "影视";
+    public static final String TITLE_ESSAY = "文章";
+
+    public static final String TITLE_HOT_RANKING = "人气榜单";
+    public static final String TITLE_PARTITION = "视频分区";
 
     public static final String VIDEO_ID = "videoId";
     public static final String DANMAKU_ID = "danmakuId";
@@ -52,7 +57,9 @@ public class AcString {
     /*请求基础url*/
     public static final String URL_ACFUN_API_SERVER = "http://api.acfun.tv/apiserver";
     /*请求评论基础url*/
-    public static final String URL_ACFUN = "http://www.acfun.tv";
+    public static final String URL_ACFUN_TV = "http://www.acfun.tv";
+    /*请求新番详情url*/
+    public static final String URL_ACFUN_ICAO = "http://icao.acfun.tv";
     /*请求首页banner*/
     public static final String RECOMMEND_LIST = "/recommend/list";
     /*请求首页数据*/
@@ -63,6 +70,8 @@ public class AcString {
     public static final String CONTENT_INFO = "/content/info";
     /*请求视频评论数据*/
     public static final String CONTENT_REPLY = "/comment/content/list";
+    /*请求每周新番时间表数据*/
+    public static final String BANGUMI_WEEK = "/bangumi/week";
 
     /*各分区id*/
     public static final String CHANNEL_IDS = "channelIds";
@@ -251,6 +260,9 @@ public class AcString {
 
     public static final String LETV_VER = "ver";
     public static final String LETV_VER_NUM = "2.0";
+
+    public static final String BANGUMI_TYPES = "bangumiTypes";
+    public static final String BANGUMI_TYPES_ANIMATION = "1";
 
 
 }

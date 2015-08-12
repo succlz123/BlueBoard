@@ -71,10 +71,11 @@ public class AcContentActivity extends BaseActivity {
 
         ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
 
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(2);
+
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mTabLayout.setupWithViewPager(mViewPager);
 
         if (mContentId != null) {

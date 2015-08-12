@@ -31,5 +31,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="progressBarColor">
+        <item name="colorAccent">@color/pink_base</item>
+    </style>
 
 </resources>

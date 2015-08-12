@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "org.succlz123.axbtube.app"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
         versionName "0.0.1"

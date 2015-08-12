@@ -56,7 +56,6 @@ public class AcPartitionFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_fragment_partition, container, false);
         ButterKnife.bind(this, view);
         mChannelIds = getArguments().getString(AcString.CHANNEL_IDS);
-        mIsPrepared = true;
 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -81,6 +80,9 @@ public class AcPartitionFragment extends BaseFragment {
                 AcContentActivity.startActivity(getActivity(), contentId);
             }
         });
+
+        mIsPrepared = true;
+        lazyLoad();
 
         return view;
     }

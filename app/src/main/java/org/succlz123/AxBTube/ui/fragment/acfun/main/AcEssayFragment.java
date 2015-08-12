@@ -1,4 +1,4 @@
-package org.succlz123.AxBTube.ui.fragment.main.bilili;
+package org.succlz123.AxBTube.ui.fragment.acfun.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +12,7 @@ import org.succlz123.AxBTube.R;
 /**
  * Created by fashi on 2015/5/2.
  */
-public class BiliTimeFragment extends Fragment {
+public class AcEssayFragment extends Fragment {
 	private View mView;
 
 	@Nullable

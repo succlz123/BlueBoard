@@ -1,5 +1,6 @@
 package org.succlz123.AxBTube.support.helper.acfun;
 
+import org.succlz123.AxBTube.bean.acfun.AcBangumi;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.bean.acfun.AcContentReply;
 import org.succlz123.AxBTube.bean.acfun.AcContentVideo;
@@ -26,7 +27,7 @@ public class AcApi {
         map.put(AcString.SYS_NAME, AcString.SYS_NAME_ANDROID);
         map.put(AcString.SYS_VERSION, AcString.SYS_VERSION_ANDROID);
         map.put(AcString.RESOLUTION, AcString.RESOLUTION_WIDTH_HEIGHT);
-        map.put(AcString.MARKET,AcString.MARKET_NAME);
+        map.put(AcString.MARKET, AcString.MARKET_NAME);
         return map;
     }
 
@@ -192,5 +193,24 @@ public class AcApi {
     public interface getAcContentVideo {
         @GET(AcString.LETV_URL_GPC)
         void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContentVideo> cb);
+    }
+
+    /**
+     * http://icao.acfun.tv
+     * /bangumi/week
+     * ?bangumiTypes=1
+     * &app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+     *
+     * @return 每周新番时间表
+     */
+    public static HashMap getAcBangumiUrl(String types) {
+        HashMap map = getBaseMap();
+        map.put(AcString.BANGUMI_TYPES, types);
+        return map;
+    }
+
+    public interface getAcBangumi {
+        @GET(AcString.BANGUMI_WEEK)
+        void onBangumiResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcBangumi> cb);
     }
 }

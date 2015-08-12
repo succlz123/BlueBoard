@@ -90,9 +90,9 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View titleInfoView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_item_cardview_content_title_info, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_content_title_info, parent, false);
         View videoItemView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_item_cardview_content_video_item, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_content_video_item, parent, false);
 
         if (viewType == CONTENT_INFO_TITLE_INFO) {
             return new TitleInfoViewHolder(titleInfoView);

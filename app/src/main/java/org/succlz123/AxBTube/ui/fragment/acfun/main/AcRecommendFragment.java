@@ -57,26 +57,25 @@ public class AcRecommendFragment extends BaseFragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new AcRecommendRvAdapter.MyDecoration());
 
         AcRecommendRvAdapter recyclerViewAdapter = new AcRecommendRvAdapter();
         recyclerViewAdapter.setOnClickListener(new AcRecommendRvAdapter.OnClickListener() {
             @Override
-            public void onClick(View view, int position, String contentId) {
+            public void onClick(View view, String partitionType, String contentId) {
                 if (contentId == null) {
                     //启动分区页面
-                    AcPartitionActivity.startActivity(getActivity(), position);
+                    AcPartitionActivity.startActivity(getActivity(), partitionType);
                 } else {
                     //启动视频信息页面
                     AcContentActivity.startActivity(getActivity(), contentId);
                 }
             }
         });
-
+        mRecyclerView.setAdapter(recyclerViewAdapter);
         //加载首页recommend数据
         getAcRecommend(recyclerViewAdapter);
 
-        mRecyclerView.setAdapter(recyclerViewAdapter);
-        mRecyclerView.addItemDecoration(new AcRecommendRvAdapter.RecommendDecoration());
         return view;
     }
 
