@@ -44,7 +44,7 @@ public class AcPartitionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_activity_partition);
         ButterKnife.bind(this);
-        //根据position来判断什么分区
+        //根据partitionType来判断什么分区
         String partitionType = getIntent().getStringExtra(AcString.CHANNEL_IDS);
 
         ViewUtils.setToolbar(AcPartitionActivity.this, mToolbar, true, partitionType);
@@ -57,7 +57,6 @@ public class AcPartitionActivity extends BaseActivity {
         }
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setupWithViewPager(mViewPager);
-
     }
 
     @Override

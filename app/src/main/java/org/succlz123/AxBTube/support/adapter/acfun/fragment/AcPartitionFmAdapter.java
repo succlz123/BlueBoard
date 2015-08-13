@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.ui.fragment.acfun.main.AcEssayFragment;
 import org.succlz123.AxBTube.ui.fragment.acfun.other.AcPartitionFragment;
 
 /**
@@ -23,7 +24,7 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (mPosition) {
             case AcString.TITLE_HOT:
-                return AcPartitionFragment.newInstance("1");
+                return AcPartitionFragment.newInstance(AcString.TITLE_HOT);
             case AcString.TITLE_ANIMATION:
                 return getAnimationFragment(position);
             case AcString.TITLE_FUN:
@@ -38,8 +39,8 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
                 return getSportFragment(position);
             case AcString.TITLE_TV:
                 return getTvFragment(position);
-//            case AcString.TITLE_ESSAY:
-//                return getTvFragment(position);
+            case AcString.TITLE_ESSAY:
+                return getEssayFragment(position);
         }
         return null;
     }
@@ -63,6 +64,8 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
                 return AcString.SPORT_TITLES.length;
             case AcString.TITLE_TV:
                 return AcString.TV_TITLES.length;
+            case AcString.TITLE_ESSAY:
+                return AcString.ESSAY_TITLES.length;
         }
         return 0;
     }
@@ -86,6 +89,8 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
                 return AcString.SPORT_TITLES[position];
             case AcString.TITLE_TV:
                 return AcString.TV_TITLES[position];
+            case AcString.TITLE_ESSAY:
+                return AcString.ESSAY_TITLES[position];
         }
         return null;
     }
@@ -128,6 +133,12 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
 
     public Fragment getTvFragment(int position) {
         Fragment fragment = AcPartitionFragment.newInstance(AcString.TV_TITLES_ID[position]);
+
+        return fragment;
+    }
+
+    public Fragment getEssayFragment(int position) {
+        Fragment fragment = AcEssayFragment.newInstance(AcString.ESSAY_TITLES_ID[position]);
 
         return fragment;
     }

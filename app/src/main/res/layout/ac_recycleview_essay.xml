@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/ac_fragment_bangumi_recycler_view"
+        android:id="@+id/ac_fragment_essay_recycler_view"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,16 +13,9 @@
         android:paddingBottom="@dimen/recycle_view_bottom"
         android:paddingLeft="@dimen/recycle_view_margin"
         android:paddingRight="@dimen/recycle_view_margin"
-        android:scrollbars="none"/>
+        android:scrollbars="none">
 
-    <ProgressBar
-        android:id="@+id/pro_bar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="120dp"
-        android:theme="@style/progressBarColor"/>
+    </android.support.v7.widget.RecyclerView>
 
 
-</FrameLayout>
+</LinearLayout>

@@ -34,8 +34,8 @@
                 android:layout_alignParentTop="true"
                 android:gravity="center_vertical"
                 android:maxLines="2"
-                android:textColor="@color/black"
-                android:textSize="14sp"/>
+                android:textColor="@color/font_light"
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/cv_horizontal_tv_up"

@@ -198,6 +198,14 @@ public class AcString {
     public static final String[] TV_TITLES_ID = new String[]{
             "96", "97", "98", "99", "100"};
 
+    /*文章区*/
+    public static final String ESSAY = "110";
+    /*影视区标题*/
+    public static final String[] ESSAY_TITLES = new String[]{
+            "综合", "工作·情感", "动漫文化", "漫画·小说"};
+    public static final String[] ESSAY_TITLES_ID = new String[]{
+            "110", "73", "74", "75"};
+
     /*应用版本 ?app_version=118*/
     public static final String APP_VERSION = "app_version";
     public static final String APP_NUM = "118";
@@ -220,6 +228,7 @@ public class AcString {
     /*请求页数 pageSize=10*/
     public static final String PAGE_SIZE = "pageSize";
     public static final String PAGE_SIZE_NUM_10 = "10";
+    public static final String PAGE_SIZE_NUM_20 = "20";
     public static final String PAGE_SIZE_NUM_50 = "50";
     /*pageNo=1*/
     public static final String PAGE_NO = "pageNo";

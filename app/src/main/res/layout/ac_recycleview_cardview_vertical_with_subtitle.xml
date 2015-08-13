@@ -27,6 +27,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
+            android:textColor="@color/font_light"
+
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textSize="12sp"/>

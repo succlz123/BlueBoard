@@ -85,10 +85,10 @@ public class AcContentActivity extends BaseActivity {
             acContent.onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
                 @Override
                 public void success(final AcContentInfo acContentInfo, Response response) {
-                    //如果请求的视频被删除
-                    if (acContentInfo.getStatus() == 404) {
+                    //如果请求的视频被删除 未被审核 或者其他
+                    if (!acContentInfo.isSuccess() || acContentInfo.getStatus() == 404 || acContentInfo.getStatus() == 403) {
                         GlobalUtils.showToastShort(AcContentActivity.this, acContentInfo.getMsg());
-                    } else {
+                    } else if (acContentInfo.getData() != null) {
                         String url = acContentInfo.getData().getFullContent().getCover();
                         int title = acContentInfo.getData().getFullContent().getContentId();
                         //加载标题图片并点击播放默认第一个视频

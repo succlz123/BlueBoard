@@ -3,18 +3,19 @@ package org.succlz123.AxBTube.ui.fragment.acfun.main;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcBangumi;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcBangumiRvAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
-import org.succlz123.AxBTube.support.utils.LogUtils;
+import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
@@ -32,6 +33,9 @@ public class AcBangumiFragment extends BaseFragment {
     @Bind(R.id.ac_fragment_bangumi_recycler_view)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.pro_bar)
+    ProgressBar mProgressBar;
+
     private boolean mIsPrepared;
     private AcBangumiRvAdapter mAdapter;
 
@@ -42,25 +46,33 @@ public class AcBangumiFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         mIsPrepared = true;
 
-        GridLayoutManager manager = new GridLayoutManager(getActivity(),2);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addItemDecoration(new AcNavigationRvAdapter.MyDecoration());
+        mRecyclerView.addItemDecoration(new AcBangumiRvAdapter.MyDecoration());
         mAdapter = new AcBangumiRvAdapter();
-
+        mAdapter.setOnClickListener(new AcBangumiRvAdapter.OnClickListener() {
+            @Override
+            public void onClick(View view, int position, String contentId) {
+                GlobalUtils.showToastShort(getActivity(), "TODO");
+            }
+        });
 
         mRecyclerView.setAdapter(mAdapter);
-        xxx();
         return view;
     }
 
     @Override
     protected void lazyLoad() {
-
+        if (!mIsPrepared || !isVisible) {
+            return;
+        } else {
+            getHttpResult();
+        }
     }
 
-    private void xxx() {
+    private void getHttpResult() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_ICAO).build();
         AcApi.getAcBangumi acBangumi = restAdapter.create(AcApi.getAcBangumi.class);
 
@@ -68,14 +80,13 @@ public class AcBangumiFragment extends BaseFragment {
             @Override
             public void success(AcBangumi acBangumi, Response response) {
                 mAdapter.setBangumiInfo(acBangumi);
-                LogUtils.e(acBangumi.toString());
-
-                int x=3;
+                if (mProgressBar != null && mProgressBar.getVisibility() == View.VISIBLE) {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
-
             }
         });
     }

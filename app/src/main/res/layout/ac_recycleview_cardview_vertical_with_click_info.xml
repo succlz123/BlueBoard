@@ -29,6 +29,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:singleLine="true"
+            android:textColor="@color/font_light"
             android:textSize="12sp"/>
 
         <LinearLayout

@@ -29,7 +29,7 @@ public class AcMainFmAdapter extends FragmentStatePagerAdapter {
             case 2:
                 return new AcBangumiFragment();
             case 3:
-                return new AcEssayFragment();
+                return AcEssayFragment.newInstance(AcString.ESSAY);
         }
         return null;
     }

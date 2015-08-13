@@ -43,7 +43,7 @@ public class AcContentReplyFragment extends BaseFragment {
     @Bind(R.id.ac_fragment_content_reply_recycler_view)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.ac_fragment_content_reply_pro_bar)
+    @Bind(R.id.pro_bar)
     ProgressBar mProgressBar;
 
     private boolean mIsPrepared;
@@ -128,7 +128,7 @@ public class AcContentReplyFragment extends BaseFragment {
 
                         mAdapter.setContentReply(replys);
 
-                        if (mProgressBar.getVisibility() == View.VISIBLE && mProgressBar != null) {
+                        if (mProgressBar != null && mProgressBar.getVisibility() == View.VISIBLE) {
                             mProgressBar.setVisibility(View.GONE);
                         }
                     }

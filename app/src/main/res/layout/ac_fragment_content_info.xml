@@ -17,12 +17,13 @@
         android:scrollbars="none"/>
 
     <ProgressBar
-        android:id="@+id/ac_fragment_content_info_pro_bar"
+        android:id="@+id/pro_bar"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:theme="@style/progressBarColor"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="120dp"
+        android:theme="@style/progressBarColor"/>
+
 
 </FrameLayout>

@@ -223,6 +223,13 @@ public class GlobalUtils {
         return sf.format(d);
     }
 
+    public static String getDateToStringWithYDHM(long time) {
+        Date d = new Date(time);
+        SimpleDateFormat sf = new SimpleDateFormat("MM月dd日 HH:mm");
+
+        return sf.format(d);
+    }
+
     /**
      * 将字符串转为时间戳
      */

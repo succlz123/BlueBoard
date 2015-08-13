@@ -2,28 +2,29 @@ package org.succlz123.AxBTube.support.adapter.acfun.recyclerview;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.net.Uri;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcBangumi;
+import org.succlz123.AxBTube.bean.acfun.AcEssay;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by succlz123 on 15/8/12.
+ * Created by succlz123 on 15/8/13.
  */
-public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private AcBangumi mAcBangumi;
+public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private AcEssay mAcEssay;
+
+    public AcEssay getmAcEssay() {
+        return mAcEssay;
+    }
+
     private OnClickListener mOnClickListener;
 
     public interface OnClickListener {
@@ -34,23 +35,27 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.mOnClickListener = onClickListener;
     }
 
-    public void setBangumiInfo(AcBangumi acBangumi) {
-        this.mAcBangumi = acBangumi;
+    public void setEssayInfo(AcEssay acEssay) {
+        this.mAcEssay = acEssay;
         notifyDataSetChanged();
     }
 
     public class CardViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_bangumi_img)
-        SimpleDraweeView imgBangumi;
-
-        @Bind(R.id.ac_recycle_view_bangumi_title_tv)
+        @Bind(R.id.ac_recycle_view_essay_cv_title)
         TextView tvTitle;
 
-        @Bind(R.id.ac_recycle_view_bangumi_num_tv)
-        TextView tvNum;
+        @Bind(R.id.ac_recycle_view_essay_cv_name)
+        TextView tvName;
 
-        @Bind(R.id.cv_bangumi)
-        CardView cvBangumi;
+        @Bind(R.id.ac_recycle_view_essay_cv_time)
+        TextView tvTime;
+
+        @Bind(R.id.ac_recycle_view_essay_cv_click)
+        TextView tvClick;
+
+        @Bind(R.id.ac_recycle_view_essay_cv_reply)
+        TextView tvReply;
+
 
         public CardViewHolder(View itemView) {
             super(itemView);
@@ -61,33 +66,29 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View cardView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_bangumi, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_essay, parent, false);
 
         return new CardViewHolder(cardView);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (mAcBangumi != null) {
-            final AcBangumi.DataEntity.ListEntity entity = mAcBangumi.getData().getList().get(position);
+        if (mAcEssay != null) {
+            AcEssay.DataEntity.PageEntity.ListEntity entity = mAcEssay.getData().getPage().getList().get(position);
             if (holder instanceof CardViewHolder) {
-                ((CardViewHolder) holder).imgBangumi.setImageURI(Uri.parse(entity.getCover()));
                 ((CardViewHolder) holder).tvTitle.setText(entity.getTitle());
-                ((CardViewHolder) holder).tvNum.setText("更新至 " + entity.getLastVideoName());
-                ((CardViewHolder) holder).cvBangumi.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mOnClickListener.onClick(v, position, entity.getId());
-                    }
-                });
+                ((CardViewHolder) holder).tvName.setText( entity.getUser().getUsername());
+                ((CardViewHolder) holder).tvTime.setText(GlobalUtils.getDateToStringWithYDHM(entity.getReleaseDate()));
+                ((CardViewHolder) holder).tvClick.setText("点击 "+entity.getViews());
+                ((CardViewHolder) holder).tvReply.setText("回复 "+entity.getComments());
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mAcBangumi != null) {
-            return mAcBangumi.getData().getPageSize();
+        if (mAcEssay != null) {
+            return mAcEssay.getData().getPage().getPageSize();
         }
         return 0;
     }

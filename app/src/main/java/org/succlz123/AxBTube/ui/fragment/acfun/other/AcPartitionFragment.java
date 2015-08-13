@@ -16,6 +16,7 @@ import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcPartitionRvAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.ui.activity.acfun.AcContentActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
@@ -31,10 +32,10 @@ import retrofit.client.Response;
  */
 public class AcPartitionFragment extends BaseFragment {
 
-    public static AcPartitionFragment newInstance(String channelIds) {
+    public static AcPartitionFragment newInstance(String channelType) {
         AcPartitionFragment fragment = new AcPartitionFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AcString.CHANNEL_IDS, channelIds);
+        bundle.putString(AcString.CHANNEL_IDS, channelType);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -46,7 +47,7 @@ public class AcPartitionFragment extends BaseFragment {
     private static final int TYPE_HOT = 1;
     private static final int TYPE_LAST_POST = 2;
 
-    private String mChannelIds;
+    private String mPartitionType;
     private boolean mIsPrepared;
     private AcPartitionRvAdapter mAdapter;
 
@@ -55,7 +56,8 @@ public class AcPartitionFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_partition, container, false);
         ButterKnife.bind(this, view);
-        mChannelIds = getArguments().getString(AcString.CHANNEL_IDS);
+        mPartitionType = getArguments().getString(AcString.CHANNEL_IDS);
+
 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -95,13 +97,13 @@ public class AcPartitionFragment extends BaseFragment {
         if (!mIsPrepared || !isVisible) {
             return;
         } else {
-            if (TextUtils.equals(mChannelIds, "1") && mAdapter.getmAcReHot() == null) {
+            if (TextUtils.equals(mPartitionType, AcString.TITLE_HOT) && mAdapter.getmAcReHot() == null) {
                 getHttpResult(TYPE_RECOMMEND_HOT);
-            }
-            if (mAdapter.getmAcHot() == null) {
+                GlobalUtils.showToastShort(getActivity(), AcString.TITLE_HOT);
+                return;
+            } else if (mAdapter.getmAcHot() == null) {
                 getHttpResult(TYPE_HOT);
-            }
-            if (mAdapter.getmAcLastPost() == null) {
+            } else if (mAdapter.getmAcLastPost() == null) {
                 getHttpResult(TYPE_LAST_POST);
             }
         }
@@ -126,7 +128,7 @@ public class AcPartitionFragment extends BaseFragment {
         }
         //人气最旺
         if (type == TYPE_HOT) {
-            acPartition.onResult(AcApi.getAcPartitionUrl(mChannelIds, AcString.POPULARITY, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            acPartition.onResult(AcApi.getAcPartitionUrl(mPartitionType, AcString.POPULARITY, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReOther, Response response) {
                     if (acReOther.getData().getPage().getList().size() > 1) {
@@ -142,7 +144,7 @@ public class AcPartitionFragment extends BaseFragment {
         }
         //最新发布
         if (type == TYPE_LAST_POST) {
-            acPartition.onResult(AcApi.getAcPartitionUrl(mChannelIds, AcString.TIME_ORDER, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            acPartition.onResult(AcApi.getAcPartitionUrl(mPartitionType, AcString.TIME_ORDER, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReOther, Response response) {
                     if (acReOther.getData().getPage().getList().size() > 1) {

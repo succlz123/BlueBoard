@@ -4,6 +4,7 @@ import org.succlz123.AxBTube.bean.acfun.AcBangumi;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.bean.acfun.AcContentReply;
 import org.succlz123.AxBTube.bean.acfun.AcContentVideo;
+import org.succlz123.AxBTube.bean.acfun.AcEssay;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
@@ -110,7 +111,7 @@ public class AcApi {
     public static HashMap getAcPartitionUrl(String channelIds, String orderBy, String range) {
         HashMap map = getBaseMap();
         map.put(AcString.CHANNEL_IDS, channelIds);
-        map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_10);
+        map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_20);
         map.put(AcString.PAGE_NO, AcString.PAGE_NO_NUM_1);
         map.put(AcString.ORDER_BY, orderBy);
         map.put(AcString.RANGE, range);
@@ -122,6 +123,9 @@ public class AcApi {
 
         @GET(AcString.CONTENT_CHANNEL)
         void onResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
+
+        @GET(AcString.CONTENT_CHANNEL)
+        void onEssayResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcEssay> cb);
     }
 
 

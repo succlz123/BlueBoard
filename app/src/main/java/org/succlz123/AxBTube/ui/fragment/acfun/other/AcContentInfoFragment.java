@@ -35,7 +35,7 @@ public class AcContentInfoFragment extends BaseFragment {
     @Bind(R.id.ac_fragment_content_reply_recycler_view)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.ac_fragment_content_info_pro_bar)
+    @Bind(R.id.pro_bar)
     ProgressBar mProgressBar;
 
     private boolean mIsPrepared;
@@ -75,7 +75,7 @@ public class AcContentInfoFragment extends BaseFragment {
     public void onAcContentResult(AcContentInfo acContentInfo) {
         mAdapter.setContentInfo(acContentInfo);
 
-        if (mProgressBar.getVisibility() == View.VISIBLE) {
+        if (mProgressBar != null && mProgressBar.getVisibility() == View.VISIBLE) {
             mProgressBar.setVisibility(View.GONE);
         }
     }
