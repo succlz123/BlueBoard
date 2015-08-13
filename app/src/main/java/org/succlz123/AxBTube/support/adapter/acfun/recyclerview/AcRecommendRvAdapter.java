@@ -50,6 +50,42 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     private AcReOther acReSport;
     private AcReOther acReTv;
 
+    public AcReBanner getAcReBanner() {
+        return acReBanner;
+    }
+
+    public AcReHot getAcReHot() {
+        return acReHot;
+    }
+
+    public AcReOther getAcReAnimation() {
+        return acReAnimation;
+    }
+
+    public AcReOther getAcReFun() {
+        return acReFun;
+    }
+
+    public AcReOther getAcReMusic() {
+        return acReMusic;
+    }
+
+    public AcReOther getAcReGame() {
+        return acReGame;
+    }
+
+    public AcReOther getAcReScience() {
+        return acReScience;
+    }
+
+    public AcReOther getAcReSport() {
+        return acReSport;
+    }
+
+    public AcReOther getAcReTv() {
+        return acReTv;
+    }
+
     @Override
     public void onReBannerResult(AcReBanner result) {
         this.acReBanner = result;
@@ -228,7 +264,8 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 LinearLayout dotsLinearLayout = ((ViewPagerVH) holder).llDots;
                 ViewPager viewPager = ((ViewPagerVH) holder).vpBanner;
 
-                AcRecommendBannerAdapter adapter = new AcRecommendBannerAdapter(acReBanner, viewPager, dotsLinearLayout);
+                AcRecommendBannerAdapter adapter
+                        = new AcRecommendBannerAdapter(acReBanner, viewPager, dotsLinearLayout);
                 viewPager.setAdapter(adapter);
             }
         } else if (holder instanceof NavigationTitleVH) {

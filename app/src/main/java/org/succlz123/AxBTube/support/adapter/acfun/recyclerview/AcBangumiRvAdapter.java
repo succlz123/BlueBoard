@@ -26,6 +26,10 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private AcBangumi mAcBangumi;
     private OnClickListener mOnClickListener;
 
+    public AcBangumi getmAcBangumi() {
+        return mAcBangumi;
+    }
+
     public interface OnClickListener {
         void onClick(View view, int position, String contentId);
     }
