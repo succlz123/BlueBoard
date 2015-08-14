@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/ac_fragment_recommend_recycler_view"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_fresh_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="7dp"
-    android:paddingLeft="7dp"
-    android:paddingRight="7dp"
-    android:paddingTop="7dp"
-    android:scrollbars="none">
+    android:layout_height="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ac_fragment_recommend_recycler_view"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/recycle_view_margin"
+        android:paddingLeft="@dimen/recycle_view_margin"
+        android:paddingRight="@dimen/recycle_view_margin"
+        android:paddingTop="@dimen/recycle_view_margin"
+        android:scrollbars="none">
+
+    </android.support.v7.widget.RecyclerView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
+

@@ -108,11 +108,11 @@ public class AcApi {
      *
      * @return 分区内不同板块数据
      */
-    public static HashMap getAcPartitionUrl(String channelIds, String orderBy, String range) {
+    public static HashMap getAcPartitionUrl(String channelIds, String orderBy, String range,String pageSize,String pagerNo) {
         HashMap map = getBaseMap();
         map.put(AcString.CHANNEL_IDS, channelIds);
-        map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_20);
-        map.put(AcString.PAGE_NO, AcString.PAGE_NO_NUM_1);
+        map.put(AcString.PAGE_SIZE, pageSize);
+        map.put(AcString.PAGE_NO, pagerNo);
         map.put(AcString.ORDER_BY, orderBy);
         map.put(AcString.RANGE, range);
 

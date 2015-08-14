@@ -8,6 +8,7 @@ import org.succlz123.AxBTube.support.utils.GlobalUtils;
  */
 public class AcString {
 
+	public static final String TITLE = "title";
 	public static final String TITLE_HOT = "热门焦点";
 	public static final String TITLE_RANKING = "排行榜";
 	public static final String TITLE_ANIMATION = "动画";
@@ -240,6 +241,10 @@ public class AcString {
 
 	/*orderBy=4 最后回复 orderBy=5 时间排序  orderBy=6 评论最多 orderBy=7 人气最旺 */
 	public static final String ORDER_BY = "orderBy";
+	public static final String TITLE_LAST_POST = "最后回复";
+	public static final String TITLE_TIME_ORDER = "最新发布";
+	public static final String TITLE_MOST_REPLY = "评论最多";
+	public static final String TITLE_POPULARITY = "人气最旺";
 	public static final String LAST_POST = "4";
 	public static final String TIME_ORDER = "5";
 	public static final String MOST_REPLY = "6";

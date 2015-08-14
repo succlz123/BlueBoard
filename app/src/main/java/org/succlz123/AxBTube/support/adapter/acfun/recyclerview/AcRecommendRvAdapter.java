@@ -39,104 +39,104 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int TYPE_CARD_VIEW = 2;
     private static final int TYPE_CARD_VIEW_OTHER = 3;
 
-    private AcReBanner acReBanner;
-    private AcReHot acReHot;
+    private AcReBanner mAcReBanner;
+    private AcReHot mAcReHot;
 
-    private AcReOther acReAnimation;
-    private AcReOther acReFun;
-    private AcReOther acReMusic;
-    private AcReOther acReGame;
-    private AcReOther acReScience;
-    private AcReOther acReSport;
-    private AcReOther acReTv;
+    private AcReOther mAcReAnimation;
+    private AcReOther mAcReFun;
+    private AcReOther mAcReMusic;
+    private AcReOther mAcReGame;
+    private AcReOther mAcReScience;
+    private AcReOther mAcReSport;
+    private AcReOther mAcReTv;
 
-    public AcReBanner getAcReBanner() {
-        return acReBanner;
+    public AcReBanner getmAcReBanner() {
+        return mAcReBanner;
     }
 
-    public AcReHot getAcReHot() {
-        return acReHot;
+    public AcReHot getmAcReHot() {
+        return mAcReHot;
     }
 
-    public AcReOther getAcReAnimation() {
-        return acReAnimation;
+    public AcReOther getmAcReAnimation() {
+        return mAcReAnimation;
     }
 
-    public AcReOther getAcReFun() {
-        return acReFun;
+    public AcReOther getmAcReFun() {
+        return mAcReFun;
     }
 
-    public AcReOther getAcReMusic() {
-        return acReMusic;
+    public AcReOther getmAcReMusic() {
+        return mAcReMusic;
     }
 
-    public AcReOther getAcReGame() {
-        return acReGame;
+    public AcReOther getmAcReGame() {
+        return mAcReGame;
     }
 
-    public AcReOther getAcReScience() {
-        return acReScience;
+    public AcReOther getmAcReScience() {
+        return mAcReScience;
     }
 
-    public AcReOther getAcReSport() {
-        return acReSport;
+    public AcReOther getmAcReSport() {
+        return mAcReSport;
     }
 
-    public AcReOther getAcReTv() {
-        return acReTv;
+    public AcReOther getmAcReTv() {
+        return mAcReTv;
     }
 
     @Override
     public void onReBannerResult(AcReBanner result) {
-        this.acReBanner = result;
+        this.mAcReBanner = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReHotResult(AcReHot result) {
-        this.acReHot = result;
+        this.mAcReHot = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReAnimationResult(AcReOther result) {
-        this.acReAnimation = result;
+        this.mAcReAnimation = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReFunResult(AcReOther result) {
-        this.acReFun = result;
+        this.mAcReFun = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReMusicResult(AcReOther result) {
-        this.acReMusic = result;
+        this.mAcReMusic = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReGameResult(AcReOther result) {
-        this.acReGame = result;
+        this.mAcReGame = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReScienceResult(AcReOther result) {
-        this.acReScience = result;
+        this.mAcReScience = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReSportResult(AcReOther result) {
-        this.acReSport = result;
+        this.mAcReSport = result;
         notifyDataSetChanged();
     }
 
     @Override
     public void onAcReTvResult(AcReOther result) {
-        this.acReTv = result;
+        this.mAcReTv = result;
         notifyDataSetChanged();
     }
 
@@ -259,14 +259,12 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewPagerVH) {
-            if (acReBanner != null) {
-                //放置指示圆点
-                LinearLayout dotsLinearLayout = ((ViewPagerVH) holder).llDots;
+            if (mAcReBanner != null) {
                 ViewPager viewPager = ((ViewPagerVH) holder).vpBanner;
-
                 AcRecommendBannerAdapter adapter
-                        = new AcRecommendBannerAdapter(acReBanner, viewPager, dotsLinearLayout);
+                        = new AcRecommendBannerAdapter(mAcReBanner, viewPager, ((ViewPagerVH) holder).llDots);
                 viewPager.setAdapter(adapter);
+                viewPager.requestFocus();
             }
         } else if (holder instanceof NavigationTitleVH) {
             ((NavigationTitleVH) holder).tvPartitionTitle.setText(AcString.getTitle(position));
@@ -279,9 +277,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 });
             }
         } else if (holder instanceof HotVH) {
-            if (position == 2 | position == 3 | position == 4 | position == 5 && acReHot != null) {
+            if (position == 2 | position == 3 | position == 4 | position == 5 && mAcReHot != null) {
                 final AcReHot.DataEntity.PageEntity.ListEntity entity
-                        = acReHot.getData().getPage().getList().get(position - 2);
+                        = mAcReHot.getData().getPage().getList().get(position - 2);
 
                 ((HotVH) holder).imgCoverHot.setImageURI(Uri.parse(entity.getCover()));
                 ((HotVH) holder).tvTitleHot.setText(entity.getTitle());
@@ -297,9 +295,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             }
         } else if (holder instanceof OtherVH) {
-            if (position == 7 | position == 8 && acReAnimation != null) {
+            if (position == 7 | position == 8 && mAcReAnimation != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity =
-                        acReAnimation.getData().getPage().getList().get(position - 7);
+                        mAcReAnimation.getData().getPage().getList().get(position - 7);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,
@@ -309,9 +307,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
                         String.valueOf(entity.getContentId()));
-            } else if (position == 10 | position == 11 && acReFun != null) {
+            } else if (position == 10 | position == 11 && mAcReFun != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity =
-                        acReFun.getData().getPage().getList().get(position - 10);
+                        mAcReFun.getData().getPage().getList().get(position - 10);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,
@@ -321,9 +319,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
                         String.valueOf(entity.getContentId()));
-            } else if (position == 13 | position == 14 && acReMusic != null) {
+            } else if (position == 13 | position == 14 && mAcReMusic != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = acReMusic.getData().getPage().getList().get(position - 13);
+                        = mAcReMusic.getData().getPage().getList().get(position - 13);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,
@@ -333,9 +331,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
                         String.valueOf(entity.getContentId()));
-            } else if (position == 16 | position == 17 && acReGame != null) {
+            } else if (position == 16 | position == 17 && mAcReGame != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = acReGame.getData().getPage().getList().get(position - 16);
+                        = mAcReGame.getData().getPage().getList().get(position - 16);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,
@@ -345,9 +343,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
                         String.valueOf(entity.getContentId()));
-            } else if (position == 19 | position == 20 && acReScience != null) {
+            } else if (position == 19 | position == 20 && mAcReScience != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = acReScience.getData().getPage().getList().get(position - 19);
+                        = mAcReScience.getData().getPage().getList().get(position - 19);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,
@@ -357,9 +355,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
                         String.valueOf(entity.getContentId()));
-            } else if (position == 22 | position == 23 && acReSport != null) {
+            } else if (position == 22 | position == 23 && mAcReSport != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = acReSport.getData().getPage().getList().get(position - 22);
+                        = mAcReSport.getData().getPage().getList().get(position - 22);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,
@@ -369,9 +367,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
                         String.valueOf(entity.getContentId()));
-            } else if (position == 25 | position == 26 && acReTv != null) {
+            } else if (position == 25 | position == 26 && mAcReTv != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = acReTv.getData().getPage().getList().get(position - 25);
+                        = mAcReTv.getData().getPage().getList().get(position - 25);
 
                 setCardViewInfo(entity,
                         ((OtherVH) holder).imgCoverOther,

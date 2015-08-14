@@ -1,16 +1,18 @@
 package org.succlz123.AxBTube.support.adapter.acfun.recyclerview;
 
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcEssay;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,6 +22,7 @@ import butterknife.ButterKnife;
  */
 public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private AcEssay mAcEssay;
+    private List<AcEssay.DataEntity.PageEntity.ListEntity> mEntityList = new ArrayList<>();
 
     public AcEssay getmAcEssay() {
         return mAcEssay;
@@ -37,7 +40,15 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void setEssayInfo(AcEssay acEssay) {
         this.mAcEssay = acEssay;
+        //下拉时保证重新填充
+        mEntityList.clear();
+        mEntityList.addAll(mAcEssay.getData().getPage().getList());
         notifyDataSetChanged();
+    }
+
+    public void addData(AcEssay acEssay) {
+        mEntityList.addAll(acEssay.getData().getPage().getList());
+        notifyItemInserted(getItemCount());
     }
 
     public class CardViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +67,6 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @Bind(R.id.ac_recycle_view_essay_cv_reply)
         TextView tvReply;
 
-
         public CardViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -73,42 +83,25 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (mAcEssay != null) {
-            AcEssay.DataEntity.PageEntity.ListEntity entity = mAcEssay.getData().getPage().getList().get(position);
+        if (mEntityList.size() != 0) {
+            AcEssay.DataEntity.PageEntity.ListEntity entity = mEntityList.get(position);
             if (holder instanceof CardViewHolder) {
-                ((CardViewHolder) holder).tvTitle.setText(entity.getTitle());
-                ((CardViewHolder) holder).tvName.setText( entity.getUser().getUsername());
-                ((CardViewHolder) holder).tvTime.setText(GlobalUtils.getDateToStringWithYDHM(entity.getReleaseDate()));
-                ((CardViewHolder) holder).tvClick.setText("点击 "+entity.getViews());
-                ((CardViewHolder) holder).tvReply.setText("回复 "+entity.getComments());
+                ((CardViewHolder) holder).tvTitle
+                        .setText(entity.getTitle());
+                ((CardViewHolder) holder).tvName
+                        .setText(entity.getUser().getUsername());
+                ((CardViewHolder) holder).tvTime
+                        .setText(GlobalUtils.getDateToStringWithYDHM(entity.getReleaseDate()));
+                ((CardViewHolder) holder).tvClick
+                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+                ((CardViewHolder) holder).tvReply
+                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mAcEssay != null) {
-            return mAcEssay.getData().getPage().getPageSize();
-        }
-        return 0;
-    }
-
-    public static class MyDecoration extends RecyclerView.ItemDecoration {
-
-        @Override
-        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            super.onDraw(c, parent, state);
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2pix(parent.getContext(), 8f);
-            if (position % 2 == 0) {
-                outRect.set(0, 0, marginRight, 0);
-            } else if (position == 1) {
-                outRect.set(0, marginRight, 0, 0);
-            }
-        }
+        return mEntityList.size();
     }
 }

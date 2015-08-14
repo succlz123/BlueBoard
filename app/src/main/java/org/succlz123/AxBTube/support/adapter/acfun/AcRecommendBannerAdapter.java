@@ -7,7 +7,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.facebook.drawee.drawable.ScalingUtils;
@@ -29,7 +28,7 @@ import java.util.List;
 public class AcRecommendBannerAdapter extends PagerAdapter {
 	private List<View> mViewItems = new ArrayList<>();
 	private int mVpTotalNum;
-	private List<ImageView> mDotsIvs = new ArrayList<>();
+	private List<View> mDotsIvs = new ArrayList<>();
 
 	public AcRecommendBannerAdapter(AcReBanner acReBanner, ViewPager viewPager, LinearLayout dots) {
 		super();
@@ -38,7 +37,7 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
 		List<AcReBanner.DataEntity.ListEntity> bannerInfo = acReBanner.getData().getList();
 		mVpTotalNum = bannerInfo.size();
 
-		int dotsPx = GlobalUtils.dip2pix(context, 7);
+		int dotsPx = GlobalUtils.dip2pix(context, 7f);
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dotsPx, dotsPx);
 		layoutParams.setMargins(dotsPx / 2, dotsPx, dotsPx, dotsPx);
 
@@ -53,11 +52,11 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
 				@Override
 				public void onPageSelected(int position) {
 					int VpNum = (position % mVpTotalNum);
-					for (ImageView iv : mDotsIvs) {
-						if (VpNum == (int) iv.getTag()) {
-							iv.setSelected(true);
+					for (View view : mDotsIvs) {
+						if (VpNum == (int) view.getTag()) {
+							view.setSelected(true);
 						} else {
-							iv.setSelected(false);
+							view.setSelected(false);
 						}
 					}
 				}
@@ -72,18 +71,18 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
 				String url = bannerInfo.get(i).getCover();
 				Uri uri = Uri.parse(url);
 				//新建圆点
-				ImageView dotsIv = new ImageView(context);
-				dotsIv.setLayoutParams(layoutParams);
-				dotsIv.setTag(i);
-				dotsIv.setImageResource(R.drawable.banner_dots_selector);
+				View dotsView = new View(context);
+				dotsView.setLayoutParams(layoutParams);
+				dotsView.setTag(i);
+				dotsView.setBackgroundResource(R.drawable.banner_dots_selector);
 				//默认第一个着色
 				if (i == 0) {
-					dotsIv.setSelected(true);
+					dotsView.setSelected(true);
 				}
-				mDotsIvs.add(dotsIv);
+				mDotsIvs.add(dotsView);
 				//在linearLayout上添加圆点 防止每次回收时重新刷新导致添加过多的圆点
 				if (dots.getChildCount() < mVpTotalNum) {
-					dots.addView(dotsIv, i);
+					dots.addView(dotsView, i);
 				}
 				//viewPager的itemView
 				SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);

@@ -1,5 +1,8 @@
 package org.succlz123.AxBTube.support.adapter.acfun.recyclerview;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -16,8 +19,11 @@ import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
-import org.succlz123.AxBTube.support.callback.GetAcPartitionHttpResult;
+import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,18 +31,19 @@ import butterknife.ButterKnife;
 /**
  * Created by fashi on 2015/8/9.
  */
-public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements GetAcPartitionHttpResult {
+public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_TITle = 0;
     private static final int TYPE_HOT = 1;
     private static final int TYPE_OTHER = 2;
 
-    private AcReOther mAcHot;
+    private AcReOther mAcMostPopular;
     private AcReOther mAcLastPost;
     private AcReHot mAcReHot;
 
-    public AcReOther getmAcHot() {
-        return mAcHot;
+    private List<AcReOther.DataEntity.PageEntity.ListEntity> mEntityList = new ArrayList();
+
+    public AcReOther getmAcMostPopular() {
+        return mAcMostPopular;
     }
 
     public AcReOther getmAcLastPost() {
@@ -49,30 +56,35 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private OnClickListener mOnClickListener;
 
+    public void setmAcMostPopular(AcReOther acMostPopular) {
+        this.mAcMostPopular = acMostPopular;
+        notifyDataSetChanged();
+    }
+
+    public void setmAcLastPost(AcReOther acLastPost) {
+        this.mAcLastPost = acLastPost;
+        //下拉时保证重新填充
+        mEntityList.clear();
+        mEntityList.addAll(mAcLastPost.getData().getPage().getList());
+        notifyDataSetChanged();
+    }
+
+    public void setmAcReHot(AcReHot acReHot) {
+        this.mAcReHot = acReHot;
+        notifyDataSetChanged();
+    }
+
+    public void addDate(AcReOther acMostPopular) {
+        mEntityList.addAll(acMostPopular.getData().getPage().getList());
+        notifyItemInserted(getItemCount());
+    }
+
     public interface OnClickListener {
         void onClick(View view, int position, String contentId);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
         this.mOnClickListener = onClickListener;
-    }
-
-    @Override
-    public void onPartitionHotResult(AcReOther result) {
-        this.mAcHot = result;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onPartitionLastPostResult(AcReOther result) {
-        this.mAcLastPost = result;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onHotResult(AcReHot result) {
-        this.mAcReHot = result;
-        notifyDataSetChanged();
     }
 
     public class TitleVH extends RecyclerView.ViewHolder {
@@ -85,7 +97,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public class HotVH extends RecyclerView.ViewHolder {
+    public class MostPopularVH extends RecyclerView.ViewHolder {
         @Bind(R.id.cv_vertical_with_click_info_tv_title)
         TextView tvTitleHot;
 
@@ -101,13 +113,13 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Bind(R.id.cv_vertical_with_click_info)
         CardView cvVerticalWithClickInfo;
 
-        public HotVH(View itemView) {
+        public MostPopularVH(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
 
-    public class OtherVH extends RecyclerView.ViewHolder {
+    public class LastPostVH extends RecyclerView.ViewHolder {
         @Bind(R.id.cv_horizontal_tv_title)
         TextView tvTitleOther;
 
@@ -126,7 +138,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Bind(R.id.cv_horizontal)
         CardView cvHorizontal;
 
-        public OtherVH(View itemView) {
+        public LastPostVH(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -158,9 +170,9 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (viewType == TYPE_TITle) {
             return new TitleVH(title);
         } else if (viewType == TYPE_HOT) {
-            return new HotVH(hot);
+            return new MostPopularVH(hot);
         } else if (viewType == TYPE_OTHER) {
-            return new OtherVH(other);
+            return new LastPostVH(other);
         }
         return null;
     }
@@ -170,24 +182,28 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (holder instanceof TitleVH) {
             TextView tvTitle = ((TitleVH) holder).tvTitle;
             if (position == 0) {
-                tvTitle.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.the_most_popular));
+                tvTitle.setText(AcString.TITLE_HOT);
             } else {
-                tvTitle.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.latest_release));
+                Context context=MyApplication.getsInstance().getApplicationContext();
+                SharedPreferences settings
+                        = context.getSharedPreferences(context.getString(R.string.app_name), Activity.MODE_PRIVATE);
+                String title = settings.getString(AcString.TITLE,AcString.TITLE_TIME_ORDER);
+                tvTitle.setText(title);
             }
-        } else if (holder instanceof HotVH) {
-            if (position == 1 | position == 2 | position == 3 | position == 4 && mAcHot != null) {
+        } else if (holder instanceof MostPopularVH) {
+            if (position == 1 | position == 2 | position == 3 | position == 4 && mAcMostPopular != null) {
                 final AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = mAcHot.getData().getPage().getList().get(position - 1);
+                        = mAcMostPopular.getData().getPage().getList().get(position - 1);
 
-                ((HotVH) holder).imgCoverHot
+                ((MostPopularVH) holder).imgCoverHot
                         .setImageURI(Uri.parse(entity.getCover()));
-                ((HotVH) holder).tvTitleHot
+                ((MostPopularVH) holder).tvTitleHot
                         .setText(entity.getTitle());
-                ((HotVH) holder).tvClickHot
+                ((MostPopularVH) holder).tvClickHot
                         .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
-                ((HotVH) holder).tvReplyHot
+                ((MostPopularVH) holder).tvReplyHot
                         .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
-                ((HotVH) holder).cvVerticalWithClickInfo.setOnClickListener(new View.OnClickListener() {
+                ((MostPopularVH) holder).cvVerticalWithClickInfo.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
@@ -195,19 +211,23 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 });
             }
-        } else if (holder instanceof OtherVH) {
-            if (mAcLastPost != null) {
-                final AcReOther.DataEntity.PageEntity.ListEntity entity
-                        = mAcLastPost.getData().getPage().getList().get(position - 6);
+        } else if (holder instanceof LastPostVH) {
+            if (mEntityList.size() != 0) {
+                final AcReOther.DataEntity.PageEntity.ListEntity entity = mEntityList.get(position - 6);
 
-                ((OtherVH) holder).imgCoverOther.setImageURI(Uri.parse(entity.getCover()));
-                ((OtherVH) holder).tvTitleOther.setText(entity.getTitle());
-                ((OtherVH) holder).tvUpOther.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.up) + " " + entity.getUser().getUsername());
-                ((OtherVH) holder).tvClickOther.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
-                ((OtherVH) holder).tvReplyOther.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+                ((LastPostVH) holder).imgCoverOther
+                        .setImageURI(Uri.parse(entity.getCover()));
+                ((LastPostVH) holder).tvTitleOther
+                        .setText(entity.getTitle());
+                ((LastPostVH) holder).tvUpOther
+                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.up) + " " + entity.getUser().getUsername());
+                ((LastPostVH) holder).tvClickOther
+                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+                ((LastPostVH) holder).tvReplyOther
+                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
 
                 if (mOnClickListener != null) {
-                    ((OtherVH) holder).cvHorizontal.setOnClickListener(new View.OnClickListener() {
+                    ((LastPostVH) holder).cvHorizontal.setOnClickListener(new View.OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
@@ -221,13 +241,10 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        if (mAcLastPost != null) {
-            if (mAcLastPost.getData().getPage().getList().size() < 1) {
-                return 16;
-            }
-            return 6 + mAcLastPost.getData().getPage().getList().size();
+        if (mEntityList.size() != 0) {
+            return mEntityList.size() + 6;
         }
-        return 16;
+        return 0;
     }
 
     //根据position判断是否显示间隔标题

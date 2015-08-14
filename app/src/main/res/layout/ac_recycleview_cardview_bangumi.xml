@@ -18,7 +18,7 @@
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/ac_recycle_view_bangumi_img"
             android:layout_width="match_parent"
-            android:layout_height="150dp"/>
+            android:layout_height="170dp"/>
 
         <TextView
             android:id="@+id/ac_recycle_view_bangumi_title_tv"

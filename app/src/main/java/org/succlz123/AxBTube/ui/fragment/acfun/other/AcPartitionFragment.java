@@ -1,7 +1,10 @@
 package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,7 @@ import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcPartitionRvAdapter;
+import org.succlz123.AxBTube.support.config.RetrofitConfig;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
@@ -23,7 +27,6 @@ import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -40,16 +43,21 @@ public class AcPartitionFragment extends BaseFragment {
         return fragment;
     }
 
-    @Bind(R.id.ac_fragment_partition_recycler_view)
-    RecyclerView mRecyclerView;
-
     private static final int TYPE_RECOMMEND_HOT = 0;
-    private static final int TYPE_HOT = 1;
+    private static final int TYPE_MOST_POPULAR = 1;
     private static final int TYPE_LAST_POST = 2;
 
     private String mPartitionType;
     private boolean mIsPrepared;
     private AcPartitionRvAdapter mAdapter;
+    private GridLayoutManager mManager;
+    private int mPagerNoNum = 1;
+
+    @Bind(R.id.ac_fragment_partition_recycler_view)
+    RecyclerView mRecyclerView;
+
+    @Bind(R.id.swipe_fresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -58,9 +66,8 @@ public class AcPartitionFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         mPartitionType = getArguments().getString(AcString.CHANNEL_IDS);
 
-
-        GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
-        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        mManager = new GridLayoutManager(getActivity(), 2);
+        mManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
             @Override
             public int getSpanSize(int position) {
@@ -70,16 +77,38 @@ public class AcPartitionFragment extends BaseFragment {
                 return 2;
             }
         });
-
-        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new AcPartitionRvAdapter.PartitionDecoration());
         mAdapter = new AcPartitionRvAdapter();
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new AcPartitionRvAdapter.PartitionDecoration());
         mAdapter.setOnClickListener(new AcPartitionRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position, String contentId) {
                 AcContentActivity.startActivity(getActivity(), contentId);
+            }
+        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING
+                        && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mPagerNoNum++;
+                    getHttpResult(TYPE_LAST_POST, "" + mPagerNoNum);
+                }
+            }
+        });
+
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getHttpResult(TYPE_MOST_POPULAR, null);
+                getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
             }
         });
 
@@ -98,27 +127,37 @@ public class AcPartitionFragment extends BaseFragment {
             return;
         } else {
             if (TextUtils.equals(mPartitionType, AcString.TITLE_HOT) && mAdapter.getmAcReHot() == null) {
-                getHttpResult(TYPE_RECOMMEND_HOT);
+                getHttpResult(TYPE_RECOMMEND_HOT, null);
                 GlobalUtils.showToastShort(getActivity(), AcString.TITLE_HOT);
                 return;
-            } else if (mAdapter.getmAcHot() == null) {
-                getHttpResult(TYPE_HOT);
-            } else if (mAdapter.getmAcLastPost() == null) {
-                getHttpResult(TYPE_LAST_POST);
+            }
+            if (mAdapter.getmAcMostPopular() == null) {
+                getHttpResult(TYPE_MOST_POPULAR, null);
+            }
+            if (mAdapter.getmAcLastPost() == null) {
+                getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
             }
         }
     }
 
-    private void getHttpResult(int type) {
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
-        AcApi.getAcPartition acPartition = restAdapter.create(AcApi.getAcPartition.class);
-        AcApi.getAcRecommend acRecommend = restAdapter.create(AcApi.getAcRecommend.class);
+    public void setHttpOrder() {
+        getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
+    }
+
+    private void getHttpResult(int type, final String pagerNoNum) {
+        SharedPreferences settings
+                = getActivity().getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
+        String order = settings.getString(AcString.ORDER_BY, AcString.TIME_ORDER);
+        mSwipeRefreshLayout.setRefreshing(true);
+
         //热门焦点
         if (type == TYPE_RECOMMEND_HOT) {
-            acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
+            RetrofitConfig.getAcRecommend().onAcReHotResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
                 @Override
                 public void success(AcReHot acReHot, Response response) {
-                    mAdapter.onHotResult(acReHot);
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
                 }
 
                 @Override
@@ -127,12 +166,19 @@ public class AcPartitionFragment extends BaseFragment {
             });
         }
         //人气最旺
-        if (type == TYPE_HOT) {
-            acPartition.onResult(AcApi.getAcPartitionUrl(mPartitionType, AcString.POPULARITY, AcString.ONE_WEEK), new Callback<AcReOther>() {
+        if (type == TYPE_MOST_POPULAR) {
+            RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl(mPartitionType,
+                    AcString.POPULARITY,
+                    AcString.ONE_WEEK,
+                    AcString.PAGE_SIZE_NUM_10,
+                    AcString.PAGE_NO_NUM_1), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReOther, Response response) {
-                    if (acReOther.getData().getPage().getList().size() > 1) {
-                        mAdapter.onPartitionHotResult(acReOther);
+                    if (acReOther.getData() != null) {
+                        mAdapter.setmAcMostPopular(acReOther);
+                    }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
 
@@ -144,11 +190,22 @@ public class AcPartitionFragment extends BaseFragment {
         }
         //最新发布
         if (type == TYPE_LAST_POST) {
-            acPartition.onResult(AcApi.getAcPartitionUrl(mPartitionType, AcString.TIME_ORDER, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl(mPartitionType,
+                    order,
+                    AcString.ONE_WEEK,
+                    AcString.PAGE_SIZE_NUM_10,
+                    pagerNoNum), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReOther, Response response) {
-                    if (acReOther.getData().getPage().getList().size() > 1) {
-                        mAdapter.onPartitionLastPostResult(acReOther);
+                    if (acReOther.getData() != null) {
+                        if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
+                            mAdapter.addDate(acReOther);
+                        } else {
+                            mAdapter.setmAcLastPost(acReOther);
+                        }
+                    }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
 
