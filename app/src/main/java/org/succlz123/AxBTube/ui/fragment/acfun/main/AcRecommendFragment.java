@@ -18,6 +18,7 @@ import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcRecommendRvAdapter;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.acfun.AcContentActivity;
 import org.succlz123.AxBTube.ui.activity.acfun.AcPartitionActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
@@ -84,9 +85,7 @@ public class AcRecommendFragment extends BaseFragment {
         });
         mRecyclerView.setAdapter(mAdapter);
 
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

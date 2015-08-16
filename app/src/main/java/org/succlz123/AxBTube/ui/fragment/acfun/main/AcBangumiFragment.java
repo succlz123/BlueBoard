@@ -16,6 +16,7 @@ import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcBangumiRvAdapt
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
+import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
@@ -59,9 +60,7 @@ public class AcBangumiFragment extends BaseFragment {
 		});
 		mRecyclerView.setAdapter(mAdapter);
 
-		mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light,
-				android.R.color.holo_orange_light,
-				android.R.color.holo_red_light);
+		ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {

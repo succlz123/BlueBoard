@@ -2,6 +2,7 @@ package org.succlz123.AxBTube.support.utils;
 
 import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -70,5 +71,11 @@ public class ViewUtils {
 		drawerLayout.setDrawerListener(drawerToggle);
 		drawerLayout.setScrimColor(MyApplication.getsInstance()
 				.getApplicationContext().getResources().getColor(R.color.shadow_white));
+	}
+
+	public static void setSwipeRefreshLayoutColor(SwipeRefreshLayout swipeRefreshLayout) {
+		swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light,
+				android.R.color.holo_orange_light,
+				android.R.color.holo_red_light);
 	}
 }

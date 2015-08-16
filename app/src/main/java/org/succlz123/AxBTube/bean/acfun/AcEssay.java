@@ -140,7 +140,7 @@ public class AcEssay {
                 private int toplevel;
                 private int channelId;
                 private int isArticle;
-                private int contentId;
+                private String contentId;
                 private int viewOnly;
                 private String cover;
                 private String title;
@@ -168,7 +168,7 @@ public class AcEssay {
                     this.isArticle = isArticle;
                 }
 
-                public void setContentId(int contentId) {
+                public void setContentId(String contentId) {
                     this.contentId = contentId;
                 }
 
@@ -228,7 +228,7 @@ public class AcEssay {
                     return isArticle;
                 }
 
-                public int getContentId() {
+                public String getContentId() {
                     return contentId;
                 }
 

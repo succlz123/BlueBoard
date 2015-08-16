@@ -2,18 +2,19 @@ package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentInfoRvAdapter;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
+import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
@@ -35,8 +36,8 @@ public class AcContentInfoFragment extends BaseFragment {
     @Bind(R.id.ac_fragment_content_reply_recycler_view)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.pro_bar)
-    ProgressBar mProgressBar;
+    @Bind(R.id.swipe_fresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private boolean mIsPrepared;
     private AcContentInfoRvAdapter mAdapter;
@@ -66,6 +67,9 @@ public class AcContentInfoFragment extends BaseFragment {
             }
         });
         mRecyclerView.setAdapter(mAdapter);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
+
+        mSwipeRefreshLayout.setRefreshing(true);
 
         mIsPrepared = true;
 
@@ -75,8 +79,9 @@ public class AcContentInfoFragment extends BaseFragment {
     public void onAcContentResult(AcContentInfo acContentInfo) {
         mAdapter.setContentInfo(acContentInfo);
 
-        if (mProgressBar != null && mProgressBar.getVisibility() == View.VISIBLE) {
-            mProgressBar.setVisibility(View.GONE);
+
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 

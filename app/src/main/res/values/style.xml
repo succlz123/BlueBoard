@@ -31,6 +31,12 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!--状态栏透明 DrawerLayout-->
+    <style name="TranslucentStatusTheme" parent="AppTheme">
+          <!--状态栏透明-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+    </style>
+
     <style name="progressBarColor">
         <item name="colorAccent">@color/pink_base</item>
     </style>

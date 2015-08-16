@@ -39,6 +39,10 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.mOnClickListener = onClickListener;
     }
 
+    public ArrayList<AcContentReply.DataEntity.Entity> getmAcContentReply() {
+        return mAcContentReply;
+    }
+
     public void setContentReply(ArrayList<AcContentReply.DataEntity.Entity> acContentReply) {
         this.mAcContentReply = acContentReply;
         notifyDataSetChanged();
