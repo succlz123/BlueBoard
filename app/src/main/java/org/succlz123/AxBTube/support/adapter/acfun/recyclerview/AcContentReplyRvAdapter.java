@@ -85,8 +85,10 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (mAcContentReply != null) {
             AcContentReply.DataEntity.Entity entity = mAcContentReply.get(position);
-            ((TitleInfoViewHolder) holder).userImg
-                    .setImageURI(Uri.parse(entity.getAvatar()));
+            if(entity.getAvatar()!=null){
+                ((TitleInfoViewHolder) holder).userImg
+                        .setImageURI(Uri.parse(entity.getAvatar()));
+            }
             ((TitleInfoViewHolder) holder).tvName
                     .setText("#" + (entity.getFloor() + " " + entity.getUsername()));
             ((TitleInfoViewHolder) holder).tvTime

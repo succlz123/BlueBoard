@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="AppTheme">
+    <style name="AppTheme" parent="BaseTheme">
         <!--状态栏颜色-->
         <item name="android:statusBarColor">@color/pink_base_dark</item>
         <!--&lt;!&ndash;底部导航栏透明&ndash;&gt;-->
@@ -17,8 +17,5 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="fit" parent="AppTheme">
-        <item name="android:fitsSystemWindows">true</item>
-       </style>
 
 </resources>

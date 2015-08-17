@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.fragment.acfun.main.AcEssayFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.other.AcHotRankingFragment;
 import org.succlz123.AxBTube.ui.fragment.acfun.other.AcPartitionFragment;
 
 /**
@@ -24,7 +25,9 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (mPosition) {
             case AcString.TITLE_HOT:
-                return AcPartitionFragment.newInstance(AcString.TITLE_HOT);
+                return getHotFragment(position);
+            case AcString.TITLE_RANKING:
+                return getRankingFragment(position);
             case AcString.TITLE_ANIMATION:
                 return getAnimationFragment(position);
             case AcString.TITLE_FUN:
@@ -50,6 +53,8 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
         switch (mPosition) {
             case AcString.TITLE_HOT:
                 return 1;
+            case AcString.TITLE_RANKING:
+                return AcString.RANKING_TITLES.length;
             case AcString.TITLE_ANIMATION:
                 return AcString.ANIMATION_TITLES.length;
             case AcString.TITLE_FUN:
@@ -75,6 +80,8 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
         switch (mPosition) {
             case AcString.TITLE_HOT:
                 return null;
+            case AcString.TITLE_RANKING:
+                return AcString.RANKING_TITLES[position];
             case AcString.TITLE_ANIMATION:
                 return AcString.ANIMATION_TITLES[position];
             case AcString.TITLE_FUN:
@@ -139,6 +146,18 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
 
     public Fragment getEssayFragment(int position) {
         Fragment fragment = AcEssayFragment.newInstance(AcString.ESSAY_TITLES_ID[position]);
+
+        return fragment;
+    }
+
+    public Fragment getHotFragment(int position) {
+        Fragment fragment = AcHotRankingFragment.newInstance(AcString.TITLE_HOT);
+
+        return fragment;
+    }
+
+    public Fragment getRankingFragment(int position) {
+        Fragment fragment = AcHotRankingFragment.newInstance(AcString.RANKING_TITLES_ID[position]);
 
         return fragment;
     }

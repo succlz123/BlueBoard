@@ -80,7 +80,7 @@ public class AcPartitionFragment extends BaseFragment {
 		});
 		mRecyclerView.setLayoutManager(mManager);
 		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-		mRecyclerView.addItemDecoration(new AcPartitionRvAdapter.PartitionDecoration());
+		mRecyclerView.addItemDecoration(new AcPartitionRvAdapter.MyDecoration());
 		mAdapter = new AcPartitionRvAdapter();
 		mRecyclerView.setAdapter(mAdapter);
 		mAdapter.setOnClickListener(new AcPartitionRvAdapter.OnClickListener() {

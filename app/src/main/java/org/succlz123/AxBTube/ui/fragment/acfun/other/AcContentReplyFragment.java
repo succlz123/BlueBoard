@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentReply;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentReplyRvAdapter;
+import org.succlz123.AxBTube.support.config.RetrofitConfig;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
+import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
@@ -25,7 +27,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -34,35 +35,35 @@ import retrofit.client.Response;
  */
 public class AcContentReplyFragment extends BaseFragment {
 
-	public static AcContentReplyFragment newInstance() {
-		AcContentReplyFragment fragment = new AcContentReplyFragment();
+    public static AcContentReplyFragment newInstance() {
+        AcContentReplyFragment fragment = new AcContentReplyFragment();
 //        Bundle bundle = new Bundle();
 //        fragment.setArguments(bundle);
-		return fragment;
-	}
+        return fragment;
+    }
 
-	@Bind(R.id.ac_fragment_content_reply_recycler_view)
-	RecyclerView mRecyclerView;
+    @Bind(R.id.ac_fragment_content_reply_recycler_view)
+    RecyclerView mRecyclerView;
 
-	@Bind(R.id.swipe_fresh_layout)
-	SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.swipe_fresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
-	private boolean mIsPrepared;
-	private boolean mIsContentId;
+    private boolean mIsPrepared;
+    private boolean mIsContentId;
 
-	private String mContentId;
-	private AcContentReplyRvAdapter mAdapter;
+    private String mContentId;
+    private AcContentReplyRvAdapter mAdapter;
 
-	@Nullable
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.ac_fragment_content_reply, container, false);
-		ButterKnife.bind(this, view);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.ac_fragment_content_reply, container, false);
+        ButterKnife.bind(this, view);
 
-		LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-		mRecyclerView.setLayoutManager(manager);
-		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-		mAdapter = new AcContentReplyRvAdapter();
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new AcContentReplyRvAdapter();
 //        mAdapter.setOnClickListener(new AcContentInfoRvAdapter.OnClickListener() {
 //            @Override
 //            public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
@@ -78,72 +79,80 @@ public class AcContentReplyFragment extends BaseFragment {
 //            }
 //        });
 
-		mRecyclerView.setAdapter(mAdapter);
-		ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
+        mRecyclerView.setAdapter(mAdapter);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
-		mIsPrepared = true;
+        mIsPrepared = true;
 
-		return view;
-	}
+        return view;
+    }
 
-	public void onAcContentResult(String contentId) {
-		this.mContentId = contentId;
-		lazyLoad();
-	}
+    public void onAcContentResult(String contentId) {
+        this.mContentId = contentId;
+    }
 
-	@Override
-	protected void lazyLoad() {
-		if (!mIsPrepared || !isVisible || mContentId == null) {
-			return;
-		} else {
-			if(mAdapter.getmAcContentReply()==null){
-				getHttpResult();
-			}
-		}
-	}
+    @Override
+    protected void lazyLoad() {
+        if (!mIsPrepared || !isVisible || mContentId == null) {
+            return;
+        } else {
+            if (mAdapter.getmAcContentReply() == null) {
+                getHttpResult();
+            }
+        }
+    }
 
-	private void getHttpResult() {
-		mSwipeRefreshLayout.setRefreshing(true);
-		RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_TV).build();
-		AcApi.getAcContentReply acContentReply = restAdapter.create(AcApi.getAcContentReply.class);
-		//评论
-		acContentReply.onContentReplyResult(AcApi.getAcContentReplyUrl(mContentId, AcString.PAGE_SIZE_NUM_50, AcString.PAGE_NO_NUM_1),
-				new Callback<AcContentReply>() {
+    private void getHttpResult() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        //评论
+        RetrofitConfig.getAcContentReply().onContentReplyResult(AcApi.getAcContentReplyUrl(mContentId,
+                        AcString.PAGE_SIZE_NUM_50,
+                        AcString.PAGE_NO_NUM_1),
+                new Callback<AcContentReply>() {
 
-					@Override
-					public void success(AcContentReply mAcContentReply, Response response) {
-						ArrayList<AcContentReply.DataEntity.Entity> replys = new ArrayList<>();
-						List<Integer> replyIds = mAcContentReply.getData().getPage().getList();
-						HashMap<String, AcContentReply.DataEntity.Entity> replyIdMap = mAcContentReply.getData().getPage().getMap();
+                    @Override
+                    public void success(AcContentReply acContentReply, Response response) {
+                        if (acContentReply.getData().getPage().getList().size() == 0) {
+                            GlobalUtils.showToastShort(getActivity(), "评论为零");
+                        } else {
+                            mAdapter.setContentReply(sortListReply(acContentReply));
+                        }
 
-						for (Integer id : replyIds) {
-							replys.add(replyIdMap.get("c" + String.valueOf(id)));
-						}
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(false);
+                        }
+                    }
 
-						for (AcContentReply.DataEntity.Entity reply : replys) {
-							AcContentReply.DataEntity.Entity currentReply = reply;
-							int quoteId = currentReply.getQuoteId();
-							while (quoteId != 0 && currentReply.getQuoteReply() == null) {
-								AcContentReply.DataEntity.Entity quoteReply = replyIdMap.get("c" + quoteId);
-								currentReply.setQuoteReply(quoteReply);
-								currentReply = quoteReply;
-								quoteId = currentReply.getQuoteId();
-							}
-						}
+                    @Override
+                    public void failure(RetrofitError error) {
 
-						mAdapter.setContentReply(replys);
+                    }
+                });
+    }
 
-						if (mSwipeRefreshLayout != null) {
-							mSwipeRefreshLayout.setRefreshing(false);
-						}
-					}
+    private ArrayList<AcContentReply.DataEntity.Entity> sortListReply(AcContentReply acContentReply){
+        ArrayList<AcContentReply.DataEntity.Entity> replys = new ArrayList<>();
+        List<Integer> replyIds = acContentReply.getData().getPage().getList();
+        HashMap<String, AcContentReply.DataEntity.Entity> replyIdMap = acContentReply.getData().getPage().getMap();
 
-					@Override
-					public void failure(RetrofitError error) {
+        for (Integer id : replyIds) {
+            replys.add(replyIdMap.get("c" + String.valueOf(id)));
+        }
 
-					}
-				});
-	}
+        for (AcContentReply.DataEntity.Entity reply : replys) {
+            AcContentReply.DataEntity.Entity currentReply = reply;
+            int quoteId = currentReply.getQuoteId();
+            while (quoteId != 0 && currentReply.getQuoteReply() == null) {
+                AcContentReply.DataEntity.Entity quoteReply = replyIdMap.get("c" + quoteId);
+                currentReply.setQuoteReply(quoteReply);
+                currentReply = quoteReply;
+                quoteId = currentReply.getQuoteId();
+            }
+        }
+
+        return replys;
+    }
 }
 
 

@@ -87,7 +87,7 @@ public class AcContentInfo {
             private int channelId;
             private List<VideosEntity> videos;
             private int isArticle;
-            private int contentId;
+            private String contentId;
             private int viewOnly;
             private String cover;
             private String title;
@@ -119,7 +119,7 @@ public class AcContentInfo {
                 this.isArticle = isArticle;
             }
 
-            public void setContentId(int contentId) {
+            public void setContentId(String contentId) {
                 this.contentId = contentId;
             }
 
@@ -183,7 +183,7 @@ public class AcContentInfo {
                 return isArticle;
             }
 
-            public int getContentId() {
+            public String getContentId() {
                 return contentId;
             }
 

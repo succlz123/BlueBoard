@@ -184,10 +184,10 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
             if (position == 0) {
                 tvTitle.setText(AcString.TITLE_HOT);
             } else {
-                Context context=MyApplication.getsInstance().getApplicationContext();
+                Context context = MyApplication.getsInstance().getApplicationContext();
                 SharedPreferences settings
                         = context.getSharedPreferences(context.getString(R.string.app_name), Activity.MODE_PRIVATE);
-                String title = settings.getString(AcString.TITLE,AcString.TITLE_TIME_ORDER);
+                String title = settings.getString(AcString.TITLE, AcString.TITLE_TIME_ORDER);
                 tvTitle.setText(title);
             }
         } else if (holder instanceof MostPopularVH) {
@@ -231,7 +231,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                         @Override
                         public void onClick(View v) {
-                            mOnClickListener.onClick(v, position, String.valueOf(entity.getContentId()));
+                            mOnClickListener.onClick(v, position, entity.getContentId());
                         }
                     });
                 }
@@ -263,7 +263,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     //处理cardView中间的margin
-    public static class PartitionDecoration extends RecyclerView.ItemDecoration {
+    public static class MyDecoration extends RecyclerView.ItemDecoration {
 
         @Override
         public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {

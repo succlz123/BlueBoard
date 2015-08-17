@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Toolbar颜色 也是多任务切换的标题颜色-->
         <item name="colorPrimary">@color/pink_base</item>
         <!--状态栏颜色-->
@@ -14,6 +14,10 @@
 
         <!--ActionMode出现时 覆盖ActionBar-->
         <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme">
+
     </style>
 
     <!--<style name="Animation" parent="@android:style/Animation">-->
@@ -33,7 +37,7 @@
 
     <!--状态栏透明 DrawerLayout-->
     <style name="TranslucentStatusTheme" parent="AppTheme">
-          <!--状态栏透明-->
+        <!--状态栏透明-->
         <!--<item name="android:windowTranslucentStatus">true</item>-->
     </style>
 

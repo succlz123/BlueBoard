@@ -17,9 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.support.adapter.acfun.fragment.AcContentFmAdapter;
-import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
-import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.BaseActivity;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
@@ -28,10 +26,6 @@ import org.succlz123.AxBTube.ui.fragment.acfun.other.AcContentReplyFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by succlz123 on 15/8/1.
@@ -43,6 +37,9 @@ public class AcContentActivity extends BaseActivity {
         intent.putExtra(AcString.CONTENT_ID, contentId);
         activity.startActivity(intent);
     }
+
+    private String mContentId;
+    private AcContentFmAdapter mAdapter;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -59,15 +56,11 @@ public class AcContentActivity extends BaseActivity {
     @Bind(R.id.viewpager_content_info)
     ViewPager mViewPager;
 
-    private String mContentId;
-    private AcContentFmAdapter mAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_activity_content);
         ButterKnife.bind(this);
-
         mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);
 
         ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
@@ -79,55 +72,64 @@ public class AcContentActivity extends BaseActivity {
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mTabLayout.setupWithViewPager(mViewPager);
 
+//        View contentView = findViewById(android.R.id.content);
+//        contentView.getViewTreeObserver()
+//                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        if (mContentId != null) {
+//                            for (int i = 0; i < mAdapter.getCount(); i++) {
+//                                String tag = mAdapter.getFragmentTag(i);
+//                                Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+//
+//                                if (fragment instanceof AcContentInfoFragment) {
+//                                    ((AcContentInfoFragment) fragment)
+//                                            .onAcContentResult(mContentId);
+//                                } else if (fragment instanceof AcContentReplyFragment) {
+//                                    ((AcContentReplyFragment) fragment)
+//                                            .onAcContentResult(mContentId);
+//                                }
+//                            }
+//                        }
+//                    }
+//                });
+
         if (mContentId != null) {
-            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
-            AcApi.getAcContentInfo acContent = restAdapter.create(AcApi.getAcContentInfo.class);
+            for (int i = 0; i < mAdapter.getCount(); i++) {
+                Fragment fragment = (Fragment) mAdapter.instantiateItem(mViewPager, i);
 
-            acContent.onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
-                @Override
-                public void success(final AcContentInfo acContentInfo, Response response) {
-                    //如果请求的视频被删除 未被审核 或者其他
-                    if (!acContentInfo.isSuccess() || acContentInfo.getStatus() == 404 || acContentInfo.getStatus() == 403) {
-                        GlobalUtils.showToastShort(AcContentActivity.this, acContentInfo.getMsg());
-                    } else if (acContentInfo.getData() != null) {
-                        String url = acContentInfo.getData().getFullContent().getCover();
-                        int title = acContentInfo.getData().getFullContent().getContentId();
-                        //加载标题图片并点击播放默认第一个视频
-                        mTitleImg.setImageURI(Uri.parse(url));
-                        mTitleImg.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
-                                        = acContentInfo.getData().getFullContent().getVideos().get(0);
+                if (fragment instanceof AcContentInfoFragment) {
 
-                                VideoPlayActivity.startActivity(AcContentActivity.this,
-                                        String.valueOf(videosEntity.getVideoId()),
-                                        String.valueOf(videosEntity.getDanmakuId()),
-                                        videosEntity.getSourceId(),
-                                        videosEntity.getType());
-                            }
-                        });
-                        mCollapsingToolbarLayout.setTitle("AC" + title);
-                        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
+                    ((AcContentInfoFragment) fragment).onAcContentResult(mContentId);
 
-                        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                            if (fragment instanceof AcContentInfoFragment) {
-                                ((AcContentInfoFragment) fragment)
-                                        .onAcContentResult(acContentInfo);
-                            } else if (fragment instanceof AcContentReplyFragment) {
-                                ((AcContentReplyFragment) fragment)
-                                        .onAcContentResult(String.valueOf(acContentInfo.getData().getFullContent().getContentId()));
-                            }
-                        }
-                    }
+                } else if (fragment instanceof AcContentReplyFragment) {
+
+                    ((AcContentReplyFragment) fragment).onAcContentResult(mContentId);
                 }
 
-                @Override
-                public void failure(RetrofitError error) {
-
-                }
-            });
+            }
         }
+
+    }
+
+    public void onFragmentBack(final AcContentInfo.DataEntity.FullContentEntity fullContentEntity) {
+        //加载标题图片并点击播放默认第一个视频
+        mTitleImg.setImageURI(Uri.parse(fullContentEntity.getCover()));
+        mTitleImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
+                        = fullContentEntity.getVideos().get(0);
+
+                VideoPlayActivity.startActivity(AcContentActivity.this,
+                        String.valueOf(videosEntity.getVideoId()),
+                        String.valueOf(videosEntity.getDanmakuId()),
+                        videosEntity.getSourceId(),
+                        videosEntity.getType());
+            }
+        });
+        mCollapsingToolbarLayout.setTitle("AC" + fullContentEntity.getContentId());
+        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
     }
 
     @Override

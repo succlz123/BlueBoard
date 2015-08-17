@@ -29,6 +29,10 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private AcContentInfo mAcContentInfo;
     private OnClickListener mOnClickListener;
 
+    public AcContentInfo getmAcContentInfo() {
+        return mAcContentInfo;
+    }
+
     public interface OnClickListener {
         void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType);
     }

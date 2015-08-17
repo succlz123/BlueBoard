@@ -39,6 +39,7 @@
                     android:id="@+id/ac_recycle_view_content_reply_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxEms="9"
                     android:layout_alignParentLeft="true"
                     android:textColor="@color/font_blue"
                     android:textSize="12sp"/>

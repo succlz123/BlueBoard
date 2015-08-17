@@ -149,7 +149,7 @@ public class AcReOther {
 				private int comments;
 				private long releaseDate;
 				private int isArticle;
-				private int contentId;
+				private String contentId;
 				private String description;
 				private String title;
 				private List<?> tags;
@@ -180,7 +180,7 @@ public class AcReOther {
 					this.isArticle = isArticle;
 				}
 
-				public void setContentId(int contentId) {
+				public void setContentId(String contentId) {
 					this.contentId = contentId;
 				}
 
@@ -240,7 +240,7 @@ public class AcReOther {
 					return isArticle;
 				}
 
-				public int getContentId() {
+				public String getContentId() {
 					return contentId;
 				}
 

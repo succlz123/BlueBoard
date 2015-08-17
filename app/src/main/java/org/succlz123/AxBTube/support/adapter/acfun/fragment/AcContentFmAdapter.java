@@ -23,7 +23,7 @@ public class AcContentFmAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return AcContentInfoFragment.newInstance();
             case 1:
-                return AcContentReplyFragment.newInstance();
+                return  AcContentReplyFragment.newInstance();
         }
         return null;
     }

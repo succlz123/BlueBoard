@@ -157,12 +157,12 @@ public class AcApi {
      *
      * @return 视频的评论信息
      */
-    public static HashMap getAcContentReplyUrl(String contentId, String pageSize, String PageNo) {
+    public static HashMap getAcContentReplyUrl(String contentId, String pageSize, String pageNo) {
         HashMap map = getBaseMap();
         map.put(AcString.VERSION, AcString.VERSION_NUM_4);
         map.put(AcString.CONTENT_ID, contentId);
         map.put(AcString.PAGE_SIZE, pageSize);
-        map.put(AcString.PAGE_NO, PageNo);
+        map.put(AcString.PAGE_NO, pageNo);
         return map;
     }
 
@@ -216,5 +216,27 @@ public class AcApi {
     public interface getAcBangumi {
         @GET(AcString.BANGUMI_WEEK)
         void onBangumiResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcBangumi> cb);
+    }
+
+    /**
+     * http://api.acfun.tv/apiserver/
+     * content/rank
+     * ?pageSize=20&pageNo=1
+     * &channelIds=96,97,98,99,100,93,94,95,101,102,103,104,105,86,87,88,89,121,106,107,108,109,67,120,90,91,92,122,83,84,85,82
+     * &app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+     *
+     * @return 每周新番时间表
+     */
+    public static HashMap getAcRankingUrl(String channelIds,String pageNo) {
+        HashMap map = getBaseMap();
+        map.put(AcString.CHANNEL_IDS, channelIds);
+        map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_20);
+        map.put(AcString.PAGE_NO, pageNo);
+        return map;
+    }
+
+    public interface getAcRanking {
+        @GET(AcString.CONTENT_RANK)
+        void onRankingResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
     }
 }

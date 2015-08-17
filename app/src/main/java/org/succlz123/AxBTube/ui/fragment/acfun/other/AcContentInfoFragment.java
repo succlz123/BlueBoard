@@ -1,5 +1,6 @@
 package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,13 +14,19 @@ import android.view.ViewGroup;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentInfoRvAdapter;
+import org.succlz123.AxBTube.support.config.RetrofitConfig;
+import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
+import org.succlz123.AxBTube.ui.activity.acfun.AcContentActivity;
 import org.succlz123.AxBTube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by succlz123 on 15/8/3.
@@ -41,6 +48,7 @@ public class AcContentInfoFragment extends BaseFragment {
 
     private boolean mIsPrepared;
     private AcContentInfoRvAdapter mAdapter;
+    private String mContentId;
 
     @Nullable
     @Override
@@ -67,29 +75,68 @@ public class AcContentInfoFragment extends BaseFragment {
             }
         });
         mRecyclerView.setAdapter(mAdapter);
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
-        mSwipeRefreshLayout.setRefreshing(true);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
         mIsPrepared = true;
+        lazyLoad();
 
         return view;
     }
 
-    public void onAcContentResult(AcContentInfo acContentInfo) {
-        mAdapter.setContentInfo(acContentInfo);
-
-
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
+    public void onAcContentResult(String contentId) {
+        this.mContentId = contentId;
     }
 
     @Override
     protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible) {
+        if (!mIsPrepared || !isVisible || mContentId == null) {
             return;
         } else {
+            if (mAdapter.getmAcContentInfo() == null) {
+                getHttpResult();
+            }
         }
+    }
+
+    private void getHttpResult() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        RetrofitConfig.getAcContentInfo()
+                .onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
+                    @Override
+                    public void success(final AcContentInfo acContentInfo, Response response) {
+                        //如果请求的视频被删除 未被审核 或者其他
+                        if (!acContentInfo.isSuccess()
+                                || acContentInfo.getStatus() == 404
+                                || acContentInfo.getStatus() == 403) {
+                            GlobalUtils.showToastShort(getActivity(), acContentInfo.getMsg());
+                        } else if (acContentInfo.getData() != null) {
+
+                            mAdapter.setContentInfo(acContentInfo);
+
+                            Context activity = getActivity();
+                            if (activity instanceof AcContentActivity) {
+                                ((AcContentActivity) activity).onFragmentBack(acContentInfo.getData().getFullContent());
+                            }
+
+                            if (mSwipeRefreshLayout != null) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                mSwipeRefreshLayout.setEnabled(false);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
     }
 }
