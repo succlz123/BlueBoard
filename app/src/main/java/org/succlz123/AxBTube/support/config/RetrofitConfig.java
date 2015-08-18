@@ -1,21 +1,28 @@
 package org.succlz123.AxBTube.support.config;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 /**
  * Created by succlz123 on 15/8/14.
  */
 public class RetrofitConfig {
 
-    private static RestAdapter restAdapterWithAcFunApiServer
-            = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
+    private static RestAdapter restAdapterWithAcFunApiServer = new RestAdapter
+            .Builder()
+            .setClient(new OkClient(MyApplication.okHttpClient()))
+            .setEndpoint(AcString.URL_ACFUN_API_SERVER)
+            .build();
 
-
-    private static RestAdapter restAdapterWithAcFunTV
-            = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_TV).build();
+    private static RestAdapter restAdapterWithAcFunTV = new RestAdapter
+            .Builder()
+            .setClient(new OkClient(MyApplication.okHttpClient()))
+            .setEndpoint(AcString.URL_ACFUN_TV)
+            .build();
 
     public static AcApi.getAcPartition getAcPartition() {
         AcApi.getAcPartition acPartition = restAdapterWithAcFunApiServer.create(AcApi.getAcPartition.class);

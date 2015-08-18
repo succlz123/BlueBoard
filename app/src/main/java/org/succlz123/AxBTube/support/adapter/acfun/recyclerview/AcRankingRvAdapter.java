@@ -14,7 +14,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
 
@@ -27,45 +26,27 @@ import butterknife.ButterKnife;
 /**
  * Created by succlz123 on 15/8/17.
  */
-public class AcHotRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AcRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private AcReOther mAcReOther;
-    private AcReHot mAcReHot;
-
-    private List<AcReOther.DataEntity.PageEntity.ListEntity> mEntityList = new ArrayList();
+    private List<AcReOther.DataEntity.PageEntity.ListEntity> mAcReOtherList = new ArrayList();
 
     public AcReOther getmAcReOther() {
         return mAcReOther;
     }
 
-    public AcReHot getmAcReHot() {
-        return mAcReHot;
+    public void setmAcReOther(AcReOther acReOther) {
+        this.mAcReOther = acReOther;
+        mAcReOtherList.clear();
+        mAcReOtherList.addAll(acReOther.getData().getPage().getList());
+        notifyDataSetChanged();
+    }
+
+    public void addAcReOtherDate(AcReOther acReOther) {
+        mAcReOtherList.addAll(acReOther.getData().getPage().getList());
+        notifyItemInserted(getItemCount());
     }
 
     private OnClickListener mOnClickListener;
-
-    public void setmAcReOther(AcReOther acReOther) {
-        this.mAcReOther = acReOther;
-        mEntityList.addAll(acReOther.getData().getPage().getList());
-        notifyDataSetChanged();
-    }
-
-//    public void setmAcLastPost(AcReOther acLastPost) {
-//        this.mAcLastPost = acLastPost;
-//        //下拉时保证重新填充
-//        mEntityList.clear();
-//        mEntityList.addAll(mAcLastPost.getData().getPage().getList());
-//        notifyDataSetChanged();
-//    }
-
-    public void setmAcReHot(AcReHot acReHot) {
-        this.mAcReHot = acReHot;
-        notifyDataSetChanged();
-    }
-
-    public void addDate(AcReOther acMostPopular) {
-        mEntityList.addAll(acMostPopular.getData().getPage().getList());
-        notifyItemInserted(getItemCount());
-    }
 
     public interface OnClickListener {
         void onClick(View view, int position, String contentId);
@@ -75,7 +56,7 @@ public class AcHotRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mOnClickListener = onClickListener;
     }
 
-    public class HotRankingVH extends RecyclerView.ViewHolder {
+    public class RankingVH extends RecyclerView.ViewHolder {
         @Bind(R.id.cv_vertical_with_click_info_tv_title)
         TextView tvTitleHot;
 
@@ -91,7 +72,7 @@ public class AcHotRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @Bind(R.id.cv_vertical_with_click_info)
         CardView cvVerticalWithClickInfo;
 
-        public HotRankingVH(View itemView) {
+        public RankingVH(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -99,40 +80,39 @@ public class AcHotRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View hot
+        View view
                 = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_vertical_with_click_info, parent, false);
 
-        return new HotRankingVH(hot);
+        return new RankingVH(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (mEntityList.size() != 0 && holder instanceof HotRankingVH) {
-            final AcReOther.DataEntity.PageEntity.ListEntity entity = mEntityList.get(position);
+        if (holder instanceof RankingVH && mAcReOtherList.size() != 0) {
 
-            ((HotRankingVH) holder).imgCoverHot
+            final AcReOther.DataEntity.PageEntity.ListEntity entity = mAcReOtherList.get(position);
+            ((RankingVH) holder).imgCoverHot
                     .setImageURI(Uri.parse(entity.getCover()));
-            ((HotRankingVH) holder).tvTitleHot
+            ((RankingVH) holder).tvTitleHot
                     .setText(entity.getTitle());
-            ((HotRankingVH) holder).tvClickHot
+            ((RankingVH) holder).tvClickHot
                     .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
-            ((HotRankingVH) holder).tvReplyHot
+            ((RankingVH) holder).tvReplyHot
                     .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
-            ((HotRankingVH) holder).cvVerticalWithClickInfo.setOnClickListener(new View.OnClickListener() {
+            ((RankingVH) holder).cvVerticalWithClickInfo.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     mOnClickListener.onClick(v, position, entity.getContentId());
                 }
             });
-
         }
     }
 
     @Override
     public int getItemCount() {
 
-        return mEntityList.size();
+        return mAcReOtherList.size();
     }
 
     //处理cardView中间的margin

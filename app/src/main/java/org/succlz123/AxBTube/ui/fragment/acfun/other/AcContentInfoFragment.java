@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentInfoRvAdapter;
@@ -77,13 +78,6 @@ public class AcContentInfoFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
 
         mIsPrepared = true;
         lazyLoad();
@@ -107,36 +101,43 @@ public class AcContentInfoFragment extends BaseFragment {
     }
 
     private void getHttpResult() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        RetrofitConfig.getAcContentInfo()
-                .onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
-                    @Override
-                    public void success(final AcContentInfo acContentInfo, Response response) {
-                        //如果请求的视频被删除 未被审核 或者其他
-                        if (!acContentInfo.isSuccess()
-                                || acContentInfo.getStatus() == 404
-                                || acContentInfo.getStatus() == 403) {
-                            GlobalUtils.showToastShort(getActivity(), acContentInfo.getMsg());
-                        } else if (acContentInfo.getData() != null) {
+        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
 
-                            mAdapter.setContentInfo(acContentInfo);
+        RetrofitConfig.getAcContentInfo().onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
+            @Override
+            public void success(final AcContentInfo acContentInfo, Response response) {
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    //如果请求的视频被删除 未被审核 或者其他
+                    if (!acContentInfo.isSuccess()
+                            || acContentInfo.getStatus() == 404
+                            || acContentInfo.getStatus() == 403) {
+                        GlobalUtils.showToastShort(getActivity(), acContentInfo.getMsg());
+                    } else if (acContentInfo.getData() != null) {
 
-                            Context activity = getActivity();
-                            if (activity instanceof AcContentActivity) {
-                                ((AcContentActivity) activity).onFragmentBack(acContentInfo.getData().getFullContent());
-                            }
+                        mAdapter.setContentInfo(acContentInfo);
 
-                            if (mSwipeRefreshLayout != null) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                                mSwipeRefreshLayout.setEnabled(false);
-                            }
+                        Context activity = getActivity();
+                        if (activity instanceof AcContentActivity) {
+                            ((AcContentActivity) activity).onFragmentBack(acContentInfo.getData().getFullContent());
+                        }
+
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(false);
                         }
                     }
+                }
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-
+            @Override
+            public void failure(RetrofitError error) {
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
-                });
+                }
+            }
+        });
     }
 }

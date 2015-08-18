@@ -35,6 +35,8 @@ public class AcPartitionActivity extends BaseActivity {
         activity.startActivity(intent);
     }
 
+    private String mPartitionType;
+
     @Bind(R.id.fragment_partition_tab_layout)
     TabLayout mTabLayout;
 
@@ -50,25 +52,25 @@ public class AcPartitionActivity extends BaseActivity {
         setContentView(R.layout.ac_activity_partition);
         ButterKnife.bind(this);
         //根据partitionType来判断什么分区
-        String partitionType = getIntent().getStringExtra(AcString.CHANNEL_IDS);
+        mPartitionType = getIntent().getStringExtra(AcString.CHANNEL_IDS);
 
-        ViewUtils.setToolbar(AcPartitionActivity.this, mToolbar, true, partitionType);
+        ViewUtils.setToolbar(AcPartitionActivity.this, mToolbar, true, mPartitionType);
 
-        AcPartitionFmAdapter adapter = new AcPartitionFmAdapter(getSupportFragmentManager(), partitionType);
+        AcPartitionFmAdapter adapter = new AcPartitionFmAdapter(getSupportFragmentManager(), mPartitionType);
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(5);
-        if (TextUtils.equals(partitionType, AcString.TITLE_HOT)) {
+        if (TextUtils.equals(mPartitionType, AcString.TITLE_HOT)) {
             mTabLayout.setVisibility(View.GONE);
         }
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    private void setHttpOrder(String order,String title) {
+    private void setHttpOrder(String order, String title) {
         SharedPreferences settings = getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(AcString.ORDER_BY, order);
-        editor.putString(AcString.TITLE,title);
+        editor.putString(AcString.TITLE, title);
         editor.commit();
 
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
@@ -80,10 +82,13 @@ public class AcPartitionActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem timeOrderItem = menu.add(Menu.NONE, 1, 100, AcString.TITLE_TIME_ORDER);
-        MenuItem lastPostItem = menu.add(Menu.NONE, 2, 100, AcString.TITLE_LAST_POST);
-        MenuItem mostReplyItem = menu.add(Menu.NONE, 3, 100, AcString.TITLE_MOST_REPLY);
-        MenuItem popularityItem = menu.add(Menu.NONE, 4, 100, AcString.TITLE_POPULARITY);
+        if (!TextUtils.equals(mPartitionType, AcString.TITLE_HOT)
+                && !TextUtils.equals(mPartitionType, AcString.TITLE_RANKING)) {
+            MenuItem timeOrderItem = menu.add(Menu.NONE, 1, 100, AcString.TITLE_TIME_ORDER);
+            MenuItem lastPostItem = menu.add(Menu.NONE, 2, 100, AcString.TITLE_LAST_POST);
+            MenuItem mostReplyItem = menu.add(Menu.NONE, 3, 100, AcString.TITLE_MOST_REPLY);
+            MenuItem popularityItem = menu.add(Menu.NONE, 4, 100, AcString.TITLE_POPULARITY);
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -95,16 +100,16 @@ public class AcPartitionActivity extends BaseActivity {
                 onBackPressed();
                 return true;
             case 1:
-                setHttpOrder(AcString.TIME_ORDER,AcString.TITLE_TIME_ORDER);
+                setHttpOrder(AcString.TIME_ORDER, AcString.TITLE_TIME_ORDER);
                 break;
             case 2:
-                setHttpOrder(AcString.LAST_POST,AcString.TITLE_LAST_POST);
+                setHttpOrder(AcString.LAST_POST, AcString.TITLE_LAST_POST);
                 break;
             case 3:
-                setHttpOrder(AcString.MOST_REPLY,AcString.TITLE_MOST_REPLY);
+                setHttpOrder(AcString.MOST_REPLY, AcString.TITLE_MOST_REPLY);
                 break;
             case 4:
-                setHttpOrder(AcString.POPULARITY,AcString.TITLE_POPULARITY);
+                setHttpOrder(AcString.POPULARITY, AcString.TITLE_POPULARITY);
                 break;
         }
         return super.onOptionsItemSelected(item);

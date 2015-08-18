@@ -71,6 +71,8 @@ public class AcRecommendFragment extends BaseFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new AcRecommendRvAdapter.MyDecoration());
         mAdapter = new AcRecommendRvAdapter();
+        //解决viewpager里滑动导致swipeReFreshLayout的出现
+        mAdapter.setSwipeRefreshLayout(mSwipeRefreshLayout);
         mAdapter.setOnClickListener(new AcRecommendRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, String partitionType, String contentId) {
@@ -112,7 +114,7 @@ public class AcRecommendFragment extends BaseFragment {
         if (!mIsPrepared || !isVisible) {
             return;
         } else {
-             if (mAdapter.getmAcReBanner() == null) {
+            if (mAdapter.getmAcReBanner() == null) {
                 getHttpResult(AcString.BANNER);
             }
             if (mAdapter.getmAcReHot() == null) {
@@ -160,7 +162,7 @@ public class AcRecommendFragment extends BaseFragment {
             });
         } else if (TextUtils.equals(httpGetType, AcString.HOT)) {
             //首页热门焦点
-            acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
+            acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(AcString.PAGE_NO_NUM_1), new Callback<AcReHot>() {
                 @Override
                 public void success(AcReHot acReHot, Response response) {
                     mAdapter.onAcReHotResult(acReHot);

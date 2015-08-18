@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,6 +50,16 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     private AcReOther mAcReScience;
     private AcReOther mAcReSport;
     private AcReOther mAcReTv;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    public SwipeRefreshLayout getmSwipeRefreshLayout() {
+        return mSwipeRefreshLayout;
+    }
+
+    public void setSwipeRefreshLayout(SwipeRefreshLayout mSwipeRefreshLayout) {
+        this.mSwipeRefreshLayout = mSwipeRefreshLayout;
+    }
 
     public AcReBanner getmAcReBanner() {
         return mAcReBanner;
@@ -158,6 +169,9 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Bind(R.id.ac_viewpager_dots)
         LinearLayout llDots;
 
+        @Bind(R.id.ac_recommend_banner)
+        CardView cardView;
+
         public ViewPagerVH(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -259,12 +273,25 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewPagerVH) {
-            if (mAcReBanner != null) {
-                ViewPager viewPager = ((ViewPagerVH) holder).vpBanner;
-                AcRecommendBannerAdapter adapter
-                        = new AcRecommendBannerAdapter(mAcReBanner, viewPager, ((ViewPagerVH) holder).llDots);
+            if (mAcReBanner != null && mOnClickListener != null) {
+                final ViewPager viewPager = ((ViewPagerVH) holder).vpBanner;
+                AcRecommendBannerAdapter adapter = new AcRecommendBannerAdapter(mAcReBanner,
+                        viewPager,
+                        ((ViewPagerVH) holder).llDots,
+                        mSwipeRefreshLayout,
+                        mOnClickListener);
                 viewPager.setAdapter(adapter);
+                viewPager.setFocusable(true);
                 viewPager.requestFocus();
+
+//                viewPager.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        viewPager.getParent().requestDisallowInterceptTouchEvent(true);
+//
+//                        return false;
+//                    }
+//                });
             }
         } else if (holder instanceof NavigationTitleVH) {
             ((NavigationTitleVH) holder).tvPartitionTitle.setText(AcString.getTitle(position));

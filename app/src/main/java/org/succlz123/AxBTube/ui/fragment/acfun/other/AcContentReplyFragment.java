@@ -1,5 +1,7 @@
 package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentReply;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentReplyRvAdapter;
@@ -103,7 +106,10 @@ public class AcContentReplyFragment extends BaseFragment {
     }
 
     private void getHttpResult() {
+//        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
         mSwipeRefreshLayout.setRefreshing(true);
+        AlarmManager manager = (AlarmManager) MyApplication.getsInstance().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
         //评论
         RetrofitConfig.getAcContentReply().onContentReplyResult(AcApi.getAcContentReplyUrl(mContentId,
                         AcString.PAGE_SIZE_NUM_50,
@@ -112,26 +118,35 @@ public class AcContentReplyFragment extends BaseFragment {
 
                     @Override
                     public void success(AcContentReply acContentReply, Response response) {
-                        if (acContentReply.getData().getPage().getList().size() == 0) {
-                            GlobalUtils.showToastShort(getActivity(), "评论为零");
-                        } else {
-                            mAdapter.setContentReply(sortListReply(acContentReply));
-                        }
+                        if (getActivity() != null && !getActivity().isDestroyed()) {
+                            if (acContentReply.getData().getPage().getList().size() == 0) {
+                                if (!getActivity().isDestroyed()) {
+                                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "并没有评论");
+                                }
+                            } else {
+                                mAdapter.setContentReply(sortListReply(acContentReply));
+                            }
 
-                        if (mSwipeRefreshLayout != null) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            mSwipeRefreshLayout.setEnabled(false);
+                            if (mSwipeRefreshLayout != null) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                mSwipeRefreshLayout.setEnabled(false);
+                            }
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-
+                        if (getActivity() != null && !getActivity().isDestroyed()) {
+                            GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                            if (mSwipeRefreshLayout != null) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
+                        }
                     }
                 });
     }
 
-    private ArrayList<AcContentReply.DataEntity.Entity> sortListReply(AcContentReply acContentReply){
+    private ArrayList<AcContentReply.DataEntity.Entity> sortListReply(AcContentReply acContentReply) {
         ArrayList<AcContentReply.DataEntity.Entity> replys = new ArrayList<>();
         List<Integer> replyIds = acContentReply.getData().getPage().getList();
         HashMap<String, AcContentReply.DataEntity.Entity> replyIdMap = acContentReply.getData().getPage().getMap();

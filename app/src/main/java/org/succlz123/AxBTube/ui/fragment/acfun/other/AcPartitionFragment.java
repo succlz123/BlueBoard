@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.succlz123.AxBTube.R;
-import org.succlz123.AxBTube.bean.acfun.AcReHot;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcPartitionRvAdapter;
 import org.succlz123.AxBTube.support.config.RetrofitConfig;
@@ -146,24 +145,11 @@ public class AcPartitionFragment extends BaseFragment {
 	private void getHttpResult(int type, final String pagerNoNum) {
 		SharedPreferences settings
 				= getActivity().getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
-		String order = settings.getString(AcString.ORDER_BY, AcString.TIME_ORDER);
-		mSwipeRefreshLayout.setRefreshing(true);
+		String order
+				= settings.getString(AcString.ORDER_BY, AcString.TIME_ORDER);
 
-		//热门焦点
-		if (type == TYPE_RECOMMEND_HOT) {
-			RetrofitConfig.getAcRecommend().onAcReHotResult(AcApi.getAcReHotUrl(), new Callback<AcReHot>() {
-				@Override
-				public void success(AcReHot acReHot, Response response) {
-					if (mSwipeRefreshLayout != null) {
-						mSwipeRefreshLayout.setRefreshing(false);
-					}
-				}
+ 		ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout,true);
 
-				@Override
-				public void failure(RetrofitError error) {
-				}
-			});
-		}
 		//人气最旺
 		if (type == TYPE_MOST_POPULAR) {
 			RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl(mPartitionType,
@@ -177,7 +163,7 @@ public class AcPartitionFragment extends BaseFragment {
 							&& acReOther.getData().getPage().getList().size() != 0) {
 						mAdapter.setmAcMostPopular(acReOther);
 					}
-					if (mSwipeRefreshLayout != null) {
+					if (!getActivity().isDestroyed() && mSwipeRefreshLayout != null) {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
 				}
@@ -208,7 +194,7 @@ public class AcPartitionFragment extends BaseFragment {
 							GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
 						}
 					}
-					if (mSwipeRefreshLayout != null) {
+					if (!getActivity().isDestroyed() && mSwipeRefreshLayout != null) {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
 				}

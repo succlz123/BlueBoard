@@ -6,8 +6,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.ui.fragment.acfun.main.AcEssayFragment;
-import org.succlz123.AxBTube.ui.fragment.acfun.other.AcHotRankingFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.other.AcHotFragment;
 import org.succlz123.AxBTube.ui.fragment.acfun.other.AcPartitionFragment;
+import org.succlz123.AxBTube.ui.fragment.acfun.other.AcRankingFragment;
 
 /**
  * Created by succlz123 on 15/8/10.
@@ -151,13 +152,13 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
     }
 
     public Fragment getHotFragment(int position) {
-        Fragment fragment = AcHotRankingFragment.newInstance(AcString.TITLE_HOT);
+        Fragment fragment = AcHotFragment.newInstance(AcString.TITLE_HOT);
 
         return fragment;
     }
 
     public Fragment getRankingFragment(int position) {
-        Fragment fragment = AcHotRankingFragment.newInstance(AcString.RANKING_TITLES_ID[position]);
+        Fragment fragment = AcRankingFragment.newInstance(AcString.RANKING_TITLES_ID[position]);
 
         return fragment;
     }

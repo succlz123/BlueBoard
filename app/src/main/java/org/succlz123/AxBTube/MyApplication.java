@@ -6,8 +6,11 @@ import android.content.Context;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.succlz123.AxBTube.support.config.FrescoConfig;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 
@@ -26,7 +29,18 @@ public class MyApplication extends Application {
 
     public static RefWatcher getRefWatcher(Context context) {
         MyApplication application = (MyApplication) context.getApplicationContext();
+
         return application.refWatcher;
+    }
+
+    public static OkHttpClient okHttpClient() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        //从主机读取数据超时
+        okHttpClient.setReadTimeout(15, TimeUnit.SECONDS);
+        //连接主机超时
+        okHttpClient.setConnectTimeout(20, TimeUnit.SECONDS);
+
+        return okHttpClient;
     }
 
     @Override
