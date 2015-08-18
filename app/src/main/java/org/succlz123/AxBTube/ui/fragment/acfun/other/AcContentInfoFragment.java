@@ -1,5 +1,7 @@
 package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcContentInfoRvA
 import org.succlz123.AxBTube.support.config.RetrofitConfig;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
+import org.succlz123.AxBTube.support.utils.LogUtils;
 import org.succlz123.AxBTube.support.utils.ViewUtils;
 import org.succlz123.AxBTube.ui.activity.VideoPlayActivity;
 import org.succlz123.AxBTube.ui.activity.acfun.AcContentActivity;
@@ -34,110 +37,156 @@ import retrofit.client.Response;
  */
 public class AcContentInfoFragment extends BaseFragment {
 
-    public static AcContentInfoFragment newInstance() {
-        AcContentInfoFragment fragment = new AcContentInfoFragment();
+	public static AcContentInfoFragment newInstance() {
+		AcContentInfoFragment fragment = new AcContentInfoFragment();
 //        Bundle bundle = new Bundle();
 //        fragment.setArguments(bundle);
-        return fragment;
-    }
+		return fragment;
+	}
 
-    @Bind(R.id.ac_fragment_content_reply_recycler_view)
-    RecyclerView mRecyclerView;
+	@Bind(R.id.ac_fragment_content_reply_recycler_view)
+	RecyclerView mRecyclerView;
 
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+	@Bind(R.id.swipe_fresh_layout)
+	SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private boolean mIsPrepared;
-    private AcContentInfoRvAdapter mAdapter;
-    private String mContentId;
+	private boolean mIsPrepared;
+	private AcContentInfoRvAdapter mAdapter;
+	private String mContentId;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.ac_fragment_content_info, container, false);
-        ButterKnife.bind(this, view);
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.ac_fragment_content_info, container, false);
+		ButterKnife.bind(this, view);
 
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new AcContentInfoRvAdapter();
-        mAdapter.setOnClickListener(new AcContentInfoRvAdapter.OnClickListener() {
-            @Override
-            public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
-                if (position == 0) {
-                    GlobalUtils.showToastShort(getActivity(), "哇哈哈 " + userId);
-                } else {
-                    VideoPlayActivity.startActivity(getActivity(),
-                            videoId,
-                            danmakuId,
-                            sourceId,
-                            sourceType);
-                }
-            }
-        });
-        mRecyclerView.setAdapter(mAdapter);
+		LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+		mRecyclerView.setLayoutManager(manager);
+		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+		mAdapter = new AcContentInfoRvAdapter();
+		mAdapter.setOnClickListener(new AcContentInfoRvAdapter.OnClickListener() {
+			@Override
+			public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
+				if (position == 0) {
+					GlobalUtils.showToastShort(getActivity(), "哇哈哈 " + userId);
+				} else {
+					VideoPlayActivity.startActivity(getActivity(),
+							videoId,
+							danmakuId,
+							sourceId,
+							sourceType);
+				}
+			}
+		});
+		mRecyclerView.setAdapter(mAdapter);
 
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
+		ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
-        mIsPrepared = true;
-        lazyLoad();
+		mIsPrepared = true;
+		lazyLoad();
 
-        return view;
-    }
+		return view;
+	}
 
-    public void onAcContentResult(String contentId) {
-        this.mContentId = contentId;
-    }
+	public void onAcContentResult(String contentId) {
+		this.mContentId = contentId;
+	}
 
-    @Override
-    protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible || mContentId == null) {
-            return;
-        } else {
-            if (mAdapter.getmAcContentInfo() == null) {
-                getHttpResult();
-            }
-        }
-    }
+	@Override
+	protected void lazyLoad() {
+		if (!mIsPrepared || !isVisible || mContentId == null) {
+			return;
+		} else {
+			if (mAdapter.getmAcContentInfo() == null) {
+				getHttpResult();
+			}
+		}
+	}
 
-    private void getHttpResult() {
-        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
+	private void getHttpResult() {
+		ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
+		AlarmManager am = (AlarmManager) MyApplication.getsInstance().getApplicationContext().getSystemService(Activity.ALARM_SERVICE);
 
-        RetrofitConfig.getAcContentInfo().onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
-            @Override
-            public void success(final AcContentInfo acContentInfo, Response response) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
-                    //如果请求的视频被删除 未被审核 或者其他
-                    if (!acContentInfo.isSuccess()
-                            || acContentInfo.getStatus() == 404
-                            || acContentInfo.getStatus() == 403) {
-                        GlobalUtils.showToastShort(getActivity(), acContentInfo.getMsg());
-                    } else if (acContentInfo.getData() != null) {
+//		final Handler handler = new Handler();
+//		Runnable runnable = new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				// handler自带方法实现定时器
+//				try {
+//					if (mAdapter.getmAcContentInfo() != null) {
+//						mSwipeRefreshLayout.setRefreshing(false);
+//					}
+//					LogUtils.d("fadf");
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		};
+//
+//		handler.postDelayed(runnable, 100);
 
-                        mAdapter.setContentInfo(acContentInfo);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (mAdapter.getmAcContentInfo() == null) {
+					try {
+						Thread.sleep(100);
+						if(mAdapter.getmAcContentInfo() != null){
+							mSwipeRefreshLayout.setRefreshing(false);
+							LogUtils.e("123");
+ 						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				LogUtils.e("321");
+			}
+		}).start();
+//        mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (mAdapter.getmAcContentInfo() == null) {
+//                    mSwipeRefreshLayout.setRefreshing(true);
+//                }
+//            }
+//        });
+//
+		RetrofitConfig.getAcContentInfo().onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
+			@Override
+			public void success(final AcContentInfo acContentInfo, Response response) {
+				if (getActivity() != null && !getActivity().isDestroyed()) {
+					//如果请求的视频被删除 未被审核 或者其他
+					if (!acContentInfo.isSuccess()
+							|| acContentInfo.getStatus() == 404
+							|| acContentInfo.getStatus() == 403) {
+						GlobalUtils.showToastShort(getActivity(), acContentInfo.getMsg());
+					} else if (acContentInfo.getData() != null) {
 
-                        Context activity = getActivity();
-                        if (activity instanceof AcContentActivity) {
-                            ((AcContentActivity) activity).onFragmentBack(acContentInfo.getData().getFullContent());
-                        }
+						mAdapter.setContentInfo(acContentInfo);
 
-                        if (mSwipeRefreshLayout != null) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            mSwipeRefreshLayout.setEnabled(false);
-                        }
-                    }
-                }
-            }
+						Context activity = getActivity();
+						if (activity instanceof AcContentActivity) {
+							((AcContentActivity) activity).onFragmentBack(acContentInfo.getData().getFullContent());
+						}
 
-            @Override
-            public void failure(RetrofitError error) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-            }
-        });
-    }
+						if (mSwipeRefreshLayout != null) {
+							mSwipeRefreshLayout.setRefreshing(false);
+							mSwipeRefreshLayout.setEnabled(false);
+						}
+					}
+				}
+			}
+
+			@Override
+			public void failure(RetrofitError error) {
+				if (getActivity() != null && !getActivity().isDestroyed()) {
+					GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+					if (mSwipeRefreshLayout != null) {
+						mSwipeRefreshLayout.setRefreshing(false);
+					}
+				}
+			}
+		});
+	}
 }

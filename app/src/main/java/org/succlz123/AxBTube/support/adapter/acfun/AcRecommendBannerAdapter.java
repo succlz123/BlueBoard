@@ -6,16 +6,13 @@ import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
-
 import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReBanner;
@@ -111,27 +108,27 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
                     }
                 });
 
-                simpleDraweeView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        swipeRefreshLayout.setEnabled(false);
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                swipeRefreshLayout.setEnabled(false);
-                                break;
-//                             case MotionEvent.ACTION_MOVE:
+//                simpleDraweeView.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        swipeRefreshLayout.setEnabled(false);
+//                        switch (event.getAction()) {
+//                            case MotionEvent.ACTION_DOWN:
 //                                swipeRefreshLayout.setEnabled(false);
 //                                break;
-                            case MotionEvent.ACTION_UP:
-                                swipeRefreshLayout.setEnabled(true);
-                                break;
-                            case MotionEvent.ACTION_CANCEL:
-                                swipeRefreshLayout.setEnabled(false);
-                                break;
-                        }
-                        return true;
-                    }
-                });
+////                             case MotionEvent.ACTION_MOVE:
+////                                swipeRefreshLayout.setEnabled(false);
+////                                break;
+//                            case MotionEvent.ACTION_UP:
+//                                swipeRefreshLayout.setEnabled(true);
+//                                break;
+//                            case MotionEvent.ACTION_CANCEL:
+//                                swipeRefreshLayout.setEnabled(false);
+//                                break;
+//                        }
+//                        return true;
+//                    }
+//                });
             }
         }
     }

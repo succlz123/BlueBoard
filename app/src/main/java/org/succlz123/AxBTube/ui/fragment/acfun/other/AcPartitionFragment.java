@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import org.succlz123.AxBTube.support.adapter.acfun.recyclerview.AcPartitionRvAdapter;
@@ -148,7 +149,7 @@ public class AcPartitionFragment extends BaseFragment {
 		String order
 				= settings.getString(AcString.ORDER_BY, AcString.TIME_ORDER);
 
- 		ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout,true);
+		ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
 
 		//人气最旺
 		if (type == TYPE_MOST_POPULAR) {
@@ -170,7 +171,12 @@ public class AcPartitionFragment extends BaseFragment {
 
 				@Override
 				public void failure(RetrofitError error) {
-
+					if (getActivity() != null && !getActivity().isDestroyed()) {
+						GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+						if (mSwipeRefreshLayout != null) {
+							mSwipeRefreshLayout.setRefreshing(false);
+						}
+					}
 				}
 			});
 		}
@@ -201,7 +207,12 @@ public class AcPartitionFragment extends BaseFragment {
 
 				@Override
 				public void failure(RetrofitError error) {
-
+					if (getActivity() != null && !getActivity().isDestroyed()) {
+						GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+						if (mSwipeRefreshLayout != null) {
+							mSwipeRefreshLayout.setRefreshing(false);
+						}
+					}
 				}
 			});
 		}
