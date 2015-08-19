@@ -81,10 +81,16 @@ public class RetrofitConfig {
         return acBangumi;
     }
 
-    public static AcApi.getAcContentVideo getAcContentVideo() {
-        AcApi.getAcContentVideo acContentVideo = restAdapterWithLeTv.create(AcApi.getAcContentVideo.class);
+    public static AcApi.getAcContentLeTvVideo getAcContentLeTvVideo() {
+        AcApi.getAcContentLeTvVideo acContentLeTvVideo = restAdapterWithLeTv.create(AcApi.getAcContentLeTvVideo.class);
 
-        return acContentVideo;
+        return acContentLeTvVideo;
+    }
+
+    public static AcApi.getAcContentHtml5Video getAcContentHtml5Video() {
+        AcApi.getAcContentHtml5Video acContentHtml5Video = restAdapterWithAcFunTV.create(AcApi.getAcContentHtml5Video.class);
+
+        return acContentHtml5Video;
     }
 
     public static AcApi.getAcContentDanMu getAcContentDanMu() {

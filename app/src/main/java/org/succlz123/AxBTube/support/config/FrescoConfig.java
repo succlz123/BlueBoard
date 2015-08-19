@@ -15,14 +15,12 @@ import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.interfaces.SimpleDraweeControllerBuilder;
 import com.facebook.drawee.view.DraweeView;
-import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.cache.MemoryCacheParams;
 import com.facebook.imagepipeline.common.ImageDecodeOptions;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.succlz123.AxBTube.R;
 
@@ -105,10 +103,10 @@ public class FrescoConfig {
 				.build();
 
 		//缓存图片配置
-//		ImagePipelineConfig.Builder configBuilder = ImagePipelineConfig.newBuilder(context)
+		ImagePipelineConfig.Builder configBuilder = ImagePipelineConfig.newBuilder(context)
 
-		ImagePipelineConfig.Builder configBuilder = OkHttpImagePipelineConfigFactory
-				.newBuilder(context, new OkHttpClient())
+//		ImagePipelineConfig.Builder configBuilder = OkHttpImagePipelineConfigFactory
+//				.newBuilder(context, new OkHttpClient())
 
 //            .setAnimatedImageFactory(AnimatedImageFactory animatedImageFactory)//图片加载动画
 				.setBitmapMemoryCacheParamsSupplier(mSupplierMemoryCacheParams)//内存缓存配置（一级缓存，已解码的图片）
