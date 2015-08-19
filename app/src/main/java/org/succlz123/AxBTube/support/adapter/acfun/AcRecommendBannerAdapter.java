@@ -107,28 +107,6 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
                         }
                     }
                 });
-
-//                simpleDraweeView.setOnTouchListener(new View.OnTouchListener() {
-//                    @Override
-//                    public boolean onTouch(View v, MotionEvent event) {
-//                        swipeRefreshLayout.setEnabled(false);
-//                        switch (event.getAction()) {
-//                            case MotionEvent.ACTION_DOWN:
-//                                swipeRefreshLayout.setEnabled(false);
-//                                break;
-////                             case MotionEvent.ACTION_MOVE:
-////                                swipeRefreshLayout.setEnabled(false);
-////                                break;
-//                            case MotionEvent.ACTION_UP:
-//                                swipeRefreshLayout.setEnabled(true);
-//                                break;
-//                            case MotionEvent.ACTION_CANCEL:
-//                                swipeRefreshLayout.setEnabled(false);
-//                                break;
-//                        }
-//                        return true;
-//                    }
-//                });
             }
         }
     }

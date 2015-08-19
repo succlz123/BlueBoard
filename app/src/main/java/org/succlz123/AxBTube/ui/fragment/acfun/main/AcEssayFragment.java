@@ -111,14 +111,19 @@ public class AcEssayFragment extends BaseFragment {
             return;
         } else {
             if (mAdapter.getmAcEssay() == null) {
-                getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getHttpResult(AcString.PAGE_NO_NUM_1);
+                    }
+                });
             }
         }
     }
 
     private void getHttpResult(final String pagerNoNum) {
-        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
-
+        //文章
         RetrofitConfig.getAcPartition().onEssayResult(AcApi.getAcPartitionUrl(mPartitionType,
                 AcString.POPULARITY,
                 AcString.ONE_WEEK,

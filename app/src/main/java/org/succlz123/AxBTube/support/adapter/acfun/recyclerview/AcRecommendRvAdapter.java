@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,47 +53,43 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public SwipeRefreshLayout getmSwipeRefreshLayout() {
-        return mSwipeRefreshLayout;
-    }
-
     public void setSwipeRefreshLayout(SwipeRefreshLayout mSwipeRefreshLayout) {
         this.mSwipeRefreshLayout = mSwipeRefreshLayout;
     }
 
-    public AcReBanner getmAcReBanner() {
+    public AcReBanner getAcReBanner() {
         return mAcReBanner;
     }
 
-    public AcReHot getmAcReHot() {
+    public AcReHot getAcReHot() {
         return mAcReHot;
     }
 
-    public AcReOther getmAcReAnimation() {
+    public AcReOther getAcReAnimation() {
         return mAcReAnimation;
     }
 
-    public AcReOther getmAcReFun() {
+    public AcReOther getAcReFun() {
         return mAcReFun;
     }
 
-    public AcReOther getmAcReMusic() {
+    public AcReOther getAcReMusic() {
         return mAcReMusic;
     }
 
-    public AcReOther getmAcReGame() {
+    public AcReOther getAcReGame() {
         return mAcReGame;
     }
 
-    public AcReOther getmAcReScience() {
+    public AcReOther getAcReScience() {
         return mAcReScience;
     }
 
-    public AcReOther getmAcReSport() {
+    public AcReOther getAcReSport() {
         return mAcReSport;
     }
 
-    public AcReOther getmAcReTv() {
+    public AcReOther getAcReTv() {
         return mAcReTv;
     }
 
@@ -271,32 +266,32 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         return null;
     }
 
-	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-		if (holder instanceof ViewPagerVH) {
-			if (mAcReBanner != null && mOnClickListener != null) {
-				final ViewPager viewPager = ((ViewPagerVH) holder).vpBanner;
-				AcRecommendBannerAdapter adapter = new AcRecommendBannerAdapter(mAcReBanner,
-						viewPager,
-						((ViewPagerVH) holder).llDots,
-						mSwipeRefreshLayout,
-						mOnClickListener);
-				viewPager.setAdapter(adapter);
-				viewPager.setFocusable(true);
-				viewPager.requestFocus();
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof ViewPagerVH) {
+            if (mAcReBanner != null && mOnClickListener != null) {
+                final ViewPager viewPager = ((ViewPagerVH) holder).vpBanner;
+                AcRecommendBannerAdapter adapter = new AcRecommendBannerAdapter(mAcReBanner,
+                        viewPager,
+                        ((ViewPagerVH) holder).llDots,
+                        mSwipeRefreshLayout,
+                        mOnClickListener);
+                viewPager.setAdapter(adapter);
+                viewPager.setFocusable(true);
+                viewPager.requestFocus();
 
-				viewPager.setOnTouchListener(new View.OnTouchListener() {
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						switch (event.getActionMasked()) {
-							case MotionEvent.ACTION_MOVE:
-								viewPager.getParent().requestDisallowInterceptTouchEvent(true);
-								break;
-						}
-						return false;
-					}
-				});
-			}
+                viewPager.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getActionMasked()) {
+                            case MotionEvent.ACTION_MOVE:
+                                viewPager.getParent().requestDisallowInterceptTouchEvent(true);
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
         } else if (holder instanceof NavigationTitleVH) {
             ((NavigationTitleVH) holder).tvPartitionTitle.setText(AcString.getTitle(position));
             if (mOnClickListener != null) {
@@ -324,6 +319,19 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         }
                     });
                 }
+            } else {
+                ((HotVH) holder).imgCoverHot.setImageURI(null);
+                ((HotVH) holder).tvTitleHot.setText("");
+                ((HotVH) holder).tvSubTitleHot.setText("");
+
+                if (mOnClickListener != null) {
+                    ((HotVH) holder).cardViewHot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                }
             }
         } else if (holder instanceof OtherVH) {
             if (position == 7 | position == 8 && mAcReAnimation != null) {
@@ -337,7 +345,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
             } else if (position == 10 | position == 11 && mAcReFun != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity =
                         mAcReFun.getData().getPage().getList().get(position - 10);
@@ -349,7 +357,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
             } else if (position == 13 | position == 14 && mAcReMusic != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
                         = mAcReMusic.getData().getPage().getList().get(position - 13);
@@ -361,7 +369,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
             } else if (position == 16 | position == 17 && mAcReGame != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
                         = mAcReGame.getData().getPage().getList().get(position - 16);
@@ -373,7 +381,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
             } else if (position == 19 | position == 20 && mAcReScience != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
                         = mAcReScience.getData().getPage().getList().get(position - 19);
@@ -385,7 +393,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
             } else if (position == 22 | position == 23 && mAcReSport != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
                         = mAcReSport.getData().getPage().getList().get(position - 22);
@@ -397,7 +405,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
             } else if (position == 25 | position == 26 && mAcReTv != null) {
                 AcReOther.DataEntity.PageEntity.ListEntity entity
                         = mAcReTv.getData().getPage().getList().get(position - 25);
@@ -409,10 +417,19 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                         ((OtherVH) holder).tvSubTitleOtherRight);
                 setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
                         null,
-                        String.valueOf(entity.getContentId()));
+                        entity.getContentId());
+            } else {
+                setCardViewInfo(null,
+                        ((OtherVH) holder).imgCoverOther,
+                        ((OtherVH) holder).tvTitleOther,
+                        ((OtherVH) holder).tvSubTitleOtherLeft,
+                        ((OtherVH) holder).tvSubTitleOtherRight);
+                setCardViewOtherOnClickListener(((OtherVH) holder).cardViewOther,
+                        null,
+                        null);
             }
         }
-        //			holder.setIsRecyclable(false);
+//        holder.setIsRecyclable(false);
     }
 
     @Override
@@ -430,20 +447,33 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void setCardViewInfo(AcReOther.DataEntity.PageEntity.ListEntity entity,
-                                ImageView imgCoverOther,
+                                SimpleDraweeView imgCoverOther,
                                 TextView tvTitleOther,
                                 TextView tvSubTitleOtherLeft,
                                 TextView tvSubTitleOtherRight) {
-        String url = entity.getCover();
-        Uri uri = Uri.parse(url);
-        imgCoverOther.setImageURI(uri);
-        tvTitleOther.setText(entity.getTitle());
-        tvSubTitleOtherLeft.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
-        tvSubTitleOtherRight.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+        if (entity != null) {
+            imgCoverOther.setImageURI(Uri.parse(entity.getCover()));
+            tvTitleOther.setText(entity.getTitle());
+            tvSubTitleOtherLeft.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+            tvSubTitleOtherRight.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+        } else {
+            imgCoverOther.setImageURI(null);
+            tvTitleOther.setText("");
+            tvSubTitleOtherLeft.setText("");
+            tvSubTitleOtherRight.setText("");
+        }
     }
 
     public void setCardViewOtherOnClickListener(CardView cardViewOther, final String partitionType, final String contentId) {
         if (mOnClickListener != null) {
+            if (partitionType == null && contentId == null) {
+                cardViewOther.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+            }
             cardViewOther.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

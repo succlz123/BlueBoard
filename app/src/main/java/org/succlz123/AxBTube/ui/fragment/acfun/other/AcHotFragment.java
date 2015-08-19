@@ -104,13 +104,18 @@ public class AcHotFragment extends BaseFragment {
             return;
         } else {
             if (mAdapter.getmAcReHot() == null) {
-                getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getHttpResult(AcString.PAGE_NO_NUM_1);
+                    }
+                });
             }
         }
     }
 
     private void getHttpResult(final String pagerNoNum) {
-        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
         //热门焦点
         RetrofitConfig.getAcRecommend().onAcReHotResult(AcApi.getAcReHotUrl(pagerNoNum), new Callback<AcReHot>() {
             @Override

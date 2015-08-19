@@ -90,19 +90,4 @@ public class ViewUtils {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
     }
-
-    /**
-     * 下拉刷新 显示刷新动画
-     *
-     * @param swipeRefreshLayout
-     * @param refreshing
-     */
-    public static void setSwipeRefreshLayoutRefreshing(final SwipeRefreshLayout swipeRefreshLayout, final boolean refreshing) {
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(refreshing);
-            }
-        });
-    }
 }

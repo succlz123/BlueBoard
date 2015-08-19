@@ -1,7 +1,5 @@
 package org.succlz123.AxBTube.ui.fragment.acfun.other;
 
-import android.app.AlarmManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -45,17 +43,15 @@ public class AcContentReplyFragment extends BaseFragment {
         return fragment;
     }
 
+    private boolean mIsPrepared;
+    private String mContentId;
+    private AcContentReplyRvAdapter mAdapter;
+
     @Bind(R.id.ac_fragment_content_reply_recycler_view)
     RecyclerView mRecyclerView;
 
     @Bind(R.id.swipe_fresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private boolean mIsPrepared;
-    private boolean mIsContentId;
-
-    private String mContentId;
-    private AcContentReplyRvAdapter mAdapter;
 
     @Nullable
     @Override
@@ -100,18 +96,21 @@ public class AcContentReplyFragment extends BaseFragment {
             return;
         } else {
             if (mAdapter.getmAcContentReply() == null) {
-                getHttpResult();
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getHttpResult();
+                    }
+                });
             }
         }
     }
 
     private void getHttpResult() {
-//        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
-        mSwipeRefreshLayout.setRefreshing(true);
-        AlarmManager manager = (AlarmManager) MyApplication.getsInstance().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
         //评论
-        RetrofitConfig.getAcContentReply().onContentReplyResult(AcApi.getAcContentReplyUrl(mContentId,
+        RetrofitConfig.getAcContentReply().onContentReplyResult(AcApi.getAcContentReplyUrl(
+                        mContentId,
                         AcString.PAGE_SIZE_NUM_50,
                         AcString.PAGE_NO_NUM_1),
                 new Callback<AcContentReply>() {

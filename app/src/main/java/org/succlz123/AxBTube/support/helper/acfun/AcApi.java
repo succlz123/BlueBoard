@@ -12,7 +12,9 @@ import org.succlz123.AxBTube.bean.acfun.AcReOther;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit.client.Response;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.QueryMap;
 
 /**
@@ -141,6 +143,7 @@ public class AcApi {
         HashMap map = getBaseMap();
         map.put(AcString.VERSION, AcString.VERSION_NUM_2);
         map.put(AcString.CONTENT_ID, contentId);
+
         return map;
     }
 
@@ -163,6 +166,7 @@ public class AcApi {
         map.put(AcString.CONTENT_ID, contentId);
         map.put(AcString.PAGE_SIZE, pageSize);
         map.put(AcString.PAGE_NO, pageNo);
+
         return map;
     }
 
@@ -191,12 +195,31 @@ public class AcApi {
         map.put(AcString.LETV_VER, AcString.LETV_VER_NUM);
         map.put(AcString.SIGN, AcString.SIGNXXXXX);
         map.put(AcString.VU, sourceId);
+
         return map;
     }
 
     public interface getAcContentVideo {
         @GET(AcString.LETV_URL_GPC)
         void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContentVideo> cb);
+    }
+
+    /**
+     * http://danmu.aixifan.com
+     * /2522561
+     * ?app_version=118&sys_name=android&sys_version=5.1.1&market=m360&resolution=1080x1776
+     *
+     * @return 弹幕信息地址
+     */
+    public static HashMap getAcContentDanMuUrl() {
+        HashMap map = getBaseMap();
+
+        return map;
+    }
+
+    public interface getAcContentDanMu {
+        @GET("/{sourceId}")
+        void onContentResult(@QueryMap() Map<String, String> options, @Path("sourceId") String sourceId, retrofit.Callback<Response> cb);
     }
 
     /**

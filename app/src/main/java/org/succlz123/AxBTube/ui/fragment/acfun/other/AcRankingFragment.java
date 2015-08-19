@@ -106,48 +106,52 @@ public class AcRankingFragment extends BaseFragment {
             return;
         } else {
             if (mAdapter.getmAcReOther() == null) {
-                getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getHttpResult(AcString.PAGE_NO_NUM_1);
+                    }
+                });
             }
         }
     }
 
     private void getHttpResult(final String pagerNoNum) {
-        ViewUtils.setSwipeRefreshLayoutRefreshing(mSwipeRefreshLayout, true);
-
-        RetrofitConfig.getAcRanking().onRankingResult(AcApi.getAcRankingUrl(mPartitionType, pagerNoNum),
-                new Callback<AcReOther>() {
-                    @Override
-                    public void success(AcReOther acReOther, Response response) {
-                        if (getActivity() != null && !getActivity().isDestroyed()) {
-                            if (acReOther.getData() != null) {
-                                if (acReOther.getData().getPage().getList().size() != 0) {
-                                    if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
-                                        mAdapter.addAcReOtherDate(acReOther);
-                                    } else {
-                                        mAdapter.setmAcReOther(acReOther);
-                                    }
-                                } else {
-                                    if (!getActivity().isDestroyed()) {
-                                        GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
-                                    }
-                                }
+        //排行榜
+        RetrofitConfig.getAcRanking().onRankingResult(AcApi.getAcRankingUrl(mPartitionType, pagerNoNum), new Callback<AcReOther>() {
+            @Override
+            public void success(AcReOther acReOther, Response response) {
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReOther.getData() != null) {
+                        if (acReOther.getData().getPage().getList().size() != 0) {
+                            if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
+                                mAdapter.addAcReOtherDate(acReOther);
+                            } else {
+                                mAdapter.setmAcReOther(acReOther);
                             }
-                            if (!getActivity().isDestroyed() && mSwipeRefreshLayout != null) {
-                                mSwipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            if (!getActivity().isDestroyed()) {
+                                GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
                             }
                         }
                     }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        if (getActivity() != null && !getActivity().isDestroyed()) {
-                            GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
-                            if (mSwipeRefreshLayout != null) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
+                    if (!getActivity().isDestroyed() && mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
-                });
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            }
+        });
 
     }
 }

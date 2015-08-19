@@ -61,6 +61,8 @@ public class AcString {
     public static final String URL_ACFUN_TV = "http://www.acfun.tv";
     /*请求新番详情url*/
     public static final String URL_ACFUN_ICAO = "http://icao.acfun.tv";
+    /*请求弹幕url*/
+    public static final String URL_AIXIFAN_DANMU = "http://danmu.aixifan.com";
     /*请求首页banner*/
     public static final String RECOMMEND_LIST = "/recommend/list";
     /*请求首页数据*/
@@ -151,7 +153,7 @@ public class AcString {
     public static final String[] GAME_TITLES = new String[]{
             "游戏集锦", "实况解说", "英雄联盟", "Mugen"};
     public static final String[] GAME_TITLES_ID = new String[]{
-            "83", "84", "85", "82"};
+            "83", "84", "85", "72"};
 
     /*科学区*/
     public static final String SCIENCE = "90,91,92,122";
@@ -291,6 +293,4 @@ public class AcString {
 
     public static final String BANGUMI_TYPES = "bangumiTypes";
     public static final String BANGUMI_TYPES_ANIMATION = "1";
-
-
 }

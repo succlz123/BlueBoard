@@ -2,8 +2,11 @@ package org.succlz123.AxBTube.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,11 +16,16 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentVideo;
+import org.succlz123.AxBTube.support.config.RetrofitConfig;
 import org.succlz123.AxBTube.support.helper.acfun.AcApi;
 import org.succlz123.AxBTube.support.helper.acfun.AcString;
 import org.succlz123.AxBTube.support.utils.GlobalUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,8 +35,20 @@ import io.vov.vitamio.MediaPlayer.OnInfoListener;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
+import master.flame.danmaku.controller.DrawHandler;
+import master.flame.danmaku.controller.IDanmakuView;
+import master.flame.danmaku.danmaku.loader.ILoader;
+import master.flame.danmaku.danmaku.loader.IllegalDataException;
+import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
+import master.flame.danmaku.danmaku.model.BaseDanmaku;
+import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.android.DanmakuGlobalConfig;
+import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
+import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.danmaku.parser.IDataSource;
+import master.flame.danmaku.danmaku.parser.android.AcFunDanmakuParser;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -61,11 +81,15 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
     @Bind(R.id.video_play_content)
     FrameLayout mFrameLayout;
 
+    @Bind(R.id.sv_danmaku)
+    IDanmakuView mDanmakuView;
+
     private String mVideoId;
     private String mDanmakuId;
     private String mSourceId;
     private String mSourceType;
     private boolean mIsVitamioReady;
+    private BaseDanmakuParser mParser;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -85,15 +109,31 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
 
         if (mSourceType != null && mIsVitamioReady) {
             if (TextUtils.equals(mSourceType, "letv")) {
-                RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.LETV_URL_BASE).build();
-                AcApi.getAcContentVideo acContentVideo = restAdapter.create(AcApi.getAcContentVideo.class);
-                acContentVideo.onContentResult(AcApi.getAcContentVideoUrl(mSourceId), new Callback<AcContentVideo>() {
+//                String url = "http://k.youku.com/player/getFlvPath/sid/643996472020810e38661_00/st/flv/fileid/030001040055D2760BEFD305F4B68257EA88BC-674F-2609-0E29-5954AE6F1D18?K=26397fddcf96b960282ab93b&ctype=10&ev=1&oip=2095617680&token=9156&ep=rxorLWgECaIoUrFtm0ExvpG2KW3BNqHQMtgrM3TJghVkbTJwcb6hW%2FYt%2B9StbgRQalftLgChvvGONAr4nVfJuANMPnvMgBUla31NIZwnag3fazHXhZkhnZ3QV4m4BsmT7rPcLI%2BVw24%3D&ymovie=1";
+//                setVideoView(url);
+
+                RetrofitConfig.getAcContentVideo().onContentResult(AcApi.getAcContentVideoUrl(mSourceId), new Callback<AcContentVideo>() {
 
                     @Override
                     public void success(AcContentVideo acContentVideo, Response response) {
                         String base64Url = acContentVideo.getData().getVideo_list().getVideo_4().getMain_url();
-                        String path = GlobalUtils.decodeByBase64(base64Url);
-                        setVideoView(path);
+                        final String path = GlobalUtils.decodeByBase64(base64Url);
+
+                        RetrofitConfig.getAcContentDanMu().onContentResult(AcApi.getAcContentDanMuUrl(), mDanmakuId, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                try {
+                                    setVideoView(path, response.getBody().in());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -102,22 +142,24 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
                     }
                 });
             } else if (TextUtils.equals(mSourceType, "youku")) {
-
+//                String x = mSourceId.replace("==", "");
+//                String url = "http://v.youku.com/v_show/id_XMTMxMjQ5MzA4OA.html";
+//                setVideoView(url);
+                GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "优酷 不支持的视频源");
             } else if (TextUtils.equals(mSourceType, "tudou")) {
-
+                GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "土豆 不支持的视频源");
             } else if (TextUtils.equals(mSourceType, "qq")) {
-
+                GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "企鹅 不支持的视频源");
             } else if (TextUtils.equals(mSourceType, "sina")) {
-
+                GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "渣浪 不支持的视频源");
             }
         }
-
     }
 
-    private void setVideoView(String path) {
+    private void setVideoView(String path, InputStream in) {
         Uri uri = Uri.parse(path);
-        mVideoView.setVideoURI(uri);
-        MediaController mediaController = new MyMediaController(VideoPlayActivity.this);
+//        mVideoView.setVideoURI(uri);
+        final MediaController mediaController = new MyMediaController(VideoPlayActivity.this);
         mVideoView.setMediaController(mediaController);
         mVideoView.requestFocus();
         mVideoView.setKeepScreenOn(true);
@@ -131,6 +173,45 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
                 mediaPlayer.setPlaybackSpeed(1.0f);
             }
         });
+
+        DanmakuGlobalConfig.DEFAULT
+                .setDanmakuStyle(DanmakuGlobalConfig.DANMAKU_STYLE_STROKEN, 3)
+                .setDuplicateMergingEnabled(false).setMaximumVisibleSizeInScreen(80)
+                .setCacheStuffer(new BackgroundCacheStuffer());
+        if (mDanmakuView != null) {
+            mParser = createParser(in);
+            mDanmakuView.setCallback(new DrawHandler.Callback() {
+                @Override
+                public void updateTimer(DanmakuTimer timer) {
+                }
+
+                @Override
+                public void prepared() {
+                    mDanmakuView.start();
+                }
+            });
+            mDanmakuView.prepare(mParser);
+            mDanmakuView.showFPS(true);
+            mDanmakuView.enableDanmakuDrawingCache(true);
+            ((View) mDanmakuView).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    mediaController.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+        if (mVideoView != null) {
+            mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.start();
+                }
+            });
+            mVideoView.setVideoURI(uri);
+            mDanmakuView.start();
+        }
     }
 
     private void initDate() {
@@ -189,5 +270,92 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         loadRateView.setText(percent + "%");
+    }
+
+    private BaseDanmakuParser createParser(InputStream stream) {
+
+        if (stream == null) {
+            return new BaseDanmakuParser() {
+
+                @Override
+                protected Danmakus parse() {
+                    return new Danmakus();
+                }
+            };
+        }
+
+        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_ACFUN);
+//        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
+
+        try {
+            loader.load(stream);
+        } catch (IllegalDataException e) {
+            e.printStackTrace();
+        }
+        BaseDanmakuParser parser = new AcFunDanmakuParser();
+//        BaseDanmakuParser parser = new BiliDanmukuParser();
+
+        IDataSource<?> dataSource = loader.getDataSource();
+        parser.load(dataSource);
+
+        return parser;
+    }
+
+    private static class BackgroundCacheStuffer extends SpannedCacheStuffer {
+        // 通过扩展SimpleTextCacheStuffer或SpannedCacheStuffer个性化你的弹幕样式
+        final Paint paint = new Paint();
+
+        @Override
+        public void measure(BaseDanmaku danmaku, TextPaint paint) {
+            danmaku.padding = 10;  // 在背景绘制模式下增加padding
+            super.measure(danmaku, paint);
+        }
+
+        @Override
+        public void drawBackground(BaseDanmaku danmaku, Canvas canvas, float left, float top) {
+            paint.setColor(0x8125309b);
+            canvas.drawRect(left + 2, top + 2, left + danmaku.paintWidth - 2, top + danmaku.paintHeight - 2, paint);
+        }
+
+        @Override
+        public void drawStroke(BaseDanmaku danmaku, String lineText, Canvas canvas, float left, float top, Paint paint) {
+            // 禁用描边绘制
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mDanmakuView != null && mDanmakuView.isPrepared()) {
+            mDanmakuView.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mDanmakuView != null && mDanmakuView.isPrepared() && mDanmakuView.isPaused()) {
+            mDanmakuView.resume();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDanmakuView != null) {
+            // dont forget release!
+            mDanmakuView.release();
+            mDanmakuView = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (mDanmakuView != null) {
+            // dont forget release!
+            mDanmakuView.release();
+            mDanmakuView = null;
+        }
     }
 }

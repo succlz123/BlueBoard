@@ -29,7 +29,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private AcContentInfo mAcContentInfo;
     private OnClickListener mOnClickListener;
 
-    public AcContentInfo getmAcContentInfo() {
+    public AcContentInfo getAcContentInfo() {
         return mAcContentInfo;
     }
 

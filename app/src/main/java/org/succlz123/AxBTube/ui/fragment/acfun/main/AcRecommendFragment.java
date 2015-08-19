@@ -76,10 +76,10 @@ public class AcRecommendFragment extends BaseFragment {
         mAdapter.setOnClickListener(new AcRecommendRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, String partitionType, String contentId) {
-                if (contentId == null) {
+                if (partitionType != null) {
                     //启动分区页面
                     AcPartitionActivity.startActivity(getActivity(), partitionType);
-                } else {
+                } else if (contentId != null) {
                     //启动视频信息页面
                     AcContentActivity.startActivity(getActivity(), contentId);
                 }
@@ -114,34 +114,47 @@ public class AcRecommendFragment extends BaseFragment {
         if (!mIsPrepared || !isVisible) {
             return;
         } else {
-            if (mAdapter.getmAcReBanner() == null) {
-                getHttpResult(AcString.BANNER);
+            if (mAdapter.getAcReBanner() == null) {
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getHttpResult(AcString.BANNER);
+                    }
+                });
             }
-            if (mAdapter.getmAcReHot() == null) {
-                getHttpResult(AcString.HOT);
+            if (mAdapter.getAcReHot() == null) {
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getHttpResult(AcString.HOT);
+                    }
+                });
             }
-            if (mAdapter.getmAcReAnimation() == null) {
+            if (mAdapter.getAcReAnimation() == null) {
                 getHttpResult(AcString.ANIMATION);
             }
-            if (mAdapter.getmAcReFun() == null) {
+            if (mAdapter.getAcReFun() == null) {
                 getHttpResult(AcString.FUN);
             }
-            if (mAdapter.getmAcReMusic() == null) {
+            if (mAdapter.getAcReMusic() == null) {
                 getHttpResult(AcString.MUSIC);
             }
-            if (mAdapter.getmAcReGame() == null) {
+            if (mAdapter.getAcReGame() == null) {
                 getHttpResult(AcString.GAME);
             }
-            if (mAdapter.getmAcReScience() == null) {
+            if (mAdapter.getAcReScience() == null) {
                 getHttpResult(AcString.SCIENCE);
             }
-            if (mAdapter.getmAcReSport() == null) {
+            if (mAdapter.getAcReSport() == null) {
                 getHttpResult(AcString.SPORT);
             }
-            if (mAdapter.getmAcReTv() == null) {
+            if (mAdapter.getAcReTv() == null) {
                 getHttpResult(AcString.TV);
             }
         }
+
     }
 
     private void getHttpResult(String httpGetType) {
