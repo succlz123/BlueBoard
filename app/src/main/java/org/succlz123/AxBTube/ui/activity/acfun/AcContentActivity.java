@@ -64,6 +64,7 @@ public class AcContentActivity extends BaseActivity {
         mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);
 
         ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
+        mCollapsingToolbarLayout.setTitle("AC" + mContentId);
 
         mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
@@ -128,8 +129,8 @@ public class AcContentActivity extends BaseActivity {
                         videosEntity.getType());
             }
         });
-        mCollapsingToolbarLayout.setTitle("AC" + fullContentEntity.getContentId());
-        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
+//        mCollapsingToolbarLayout.setTitle("AC" + fullContentEntity.getContentId());
+//        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
     }
 
     @Override

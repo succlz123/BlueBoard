@@ -163,14 +163,17 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReBannerResult(AcApi.getAcReBannerUrl(), new Callback<AcReBanner>() {
                 @Override
                 public void success(AcReBanner acReBanner, Response response) {
-                    mAdapter.onReBannerResult(acReBanner);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onReBannerResult(acReBanner);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
+
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.HOT)) {
@@ -178,14 +181,17 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(AcString.PAGE_NO_NUM_1), new Callback<AcReHot>() {
                 @Override
                 public void success(AcReHot acReHot, Response response) {
-                    mAdapter.onAcReHotResult(acReHot);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReHotResult(acReHot);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
+
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.ANIMATION)) {
@@ -193,9 +199,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.ANIMATION, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReOther, Response response) {
-                    mAdapter.onAcReAnimationResult(acReOther);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReAnimationResult(acReOther);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
@@ -209,9 +217,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.FUN, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReFun, Response response) {
-                    mAdapter.onAcReFunResult(acReFun);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReFunResult(acReFun);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
@@ -226,9 +236,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.MUSIC, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReMusic, Response response) {
-                    mAdapter.onAcReMusicResult(acReMusic);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReMusicResult(acReMusic);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
@@ -243,9 +255,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.GAME, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReGame, Response response) {
-                    mAdapter.onAcReGameResult(acReGame);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReGameResult(acReGame);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
@@ -260,9 +274,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.SCIENCE, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReScience, Response response) {
-                    mAdapter.onAcReScienceResult(acReScience);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReScienceResult(acReScience);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
@@ -277,9 +293,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.SPORT, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReSport, Response response) {
-                    mAdapter.onAcReSportResult(acReSport);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReSportResult(acReSport);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 
@@ -294,9 +312,11 @@ public class AcRecommendFragment extends BaseFragment {
             acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.TV, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
                 @Override
                 public void success(AcReOther acReTv, Response response) {
-                    mAdapter.onAcReTvResult(acReTv);
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                        mAdapter.onAcReTvResult(acReTv);
+                        if (mSwipeRefreshLayout != null) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 }
 

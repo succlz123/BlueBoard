@@ -12,89 +12,75 @@ import retrofit.client.OkClient;
  */
 public class RetrofitConfig {
 
-    private static RestAdapter restAdapterWithAcFunApiServer = new RestAdapter
-            .Builder()
-            .setClient(new OkClient(MyApplication.okHttpClient()))
-            .setEndpoint(AcString.URL_ACFUN_API_SERVER)
-            .build();
+    private static RestAdapter getRestAdapter(String baseUrl) {
+        RestAdapter restAdapter = new RestAdapter
+                .Builder()
+                .setClient(new OkClient(MyApplication.okHttpClient()))
+                .setEndpoint(baseUrl)
+                .build();
 
-    private static RestAdapter restAdapterWithAcFunTV = new RestAdapter
-            .Builder()
-            .setClient(new OkClient(MyApplication.okHttpClient()))
-            .setEndpoint(AcString.URL_ACFUN_TV)
-            .build();
-
-    private static RestAdapter restAdapterWithAcFunIcao
-            = new RestAdapter
-            .Builder()
-            .setClient(new OkClient(MyApplication.okHttpClient()))
-            .setEndpoint(AcString.URL_ACFUN_ICAO)
-            .build();
-
-    private static RestAdapter restAdapterWithLeTv
-            = new RestAdapter
-            .Builder()
-            .setClient(new OkClient(MyApplication.okHttpClient()))
-            .setEndpoint(AcString.LETV_URL_BASE)
-            .build();
-
-    private static RestAdapter restAdapterWithAiXiFanDanMu
-            = new RestAdapter
-            .Builder()
-            .setClient(new OkClient(MyApplication.okHttpClient()))
-            .setEndpoint(AcString.URL_AIXIFAN_DANMU)
-            .build();
+        return restAdapter;
+    }
 
     public static AcApi.getAcPartition getAcPartition() {
-        AcApi.getAcPartition acPartition = restAdapterWithAcFunApiServer.create(AcApi.getAcPartition.class);
+        AcApi.getAcPartition acPartition
+                = getRestAdapter(AcString.URL_ACFUN_API_SERVER).create(AcApi.getAcPartition.class);
 
         return acPartition;
     }
 
     public static AcApi.getAcRecommend getAcRecommend() {
-        AcApi.getAcRecommend acRecommend = restAdapterWithAcFunApiServer.create(AcApi.getAcRecommend.class);
+        AcApi.getAcRecommend acRecommend
+                = getRestAdapter(AcString.URL_ACFUN_API_SERVER).create(AcApi.getAcRecommend.class);
 
         return acRecommend;
     }
 
     public static AcApi.getAcContentInfo getAcContentInfo() {
-        AcApi.getAcContentInfo acContent = restAdapterWithAcFunApiServer.create(AcApi.getAcContentInfo.class);
+        AcApi.getAcContentInfo acContent
+                = getRestAdapter(AcString.URL_ACFUN_API_SERVER).create(AcApi.getAcContentInfo.class);
 
         return acContent;
     }
 
     public static AcApi.getAcContentReply getAcContentReply() {
-        AcApi.getAcContentReply acContentReply = restAdapterWithAcFunTV.create(AcApi.getAcContentReply.class);
+        AcApi.getAcContentReply acContentReply
+                = getRestAdapter(AcString.URL_ACFUN_TV).create(AcApi.getAcContentReply.class);
 
         return acContentReply;
     }
 
     public static AcApi.getAcRanking getAcRanking() {
-        AcApi.getAcRanking acRanking = restAdapterWithAcFunApiServer.create(AcApi.getAcRanking.class);
+        AcApi.getAcRanking acRanking
+                = getRestAdapter(AcString.URL_ACFUN_API_SERVER).create(AcApi.getAcRanking.class);
 
         return acRanking;
     }
 
     public static AcApi.getAcBangumi getAcBangumi() {
-        AcApi.getAcBangumi acBangumi = restAdapterWithAcFunIcao.create(AcApi.getAcBangumi.class);
+        AcApi.getAcBangumi acBangumi
+                = getRestAdapter(AcString.URL_ACFUN_ICAO).create(AcApi.getAcBangumi.class);
 
         return acBangumi;
     }
 
     public static AcApi.getAcContentLeTvVideo getAcContentLeTvVideo() {
-        AcApi.getAcContentLeTvVideo acContentLeTvVideo = restAdapterWithLeTv.create(AcApi.getAcContentLeTvVideo.class);
+        AcApi.getAcContentLeTvVideo acContentLeTvVideo
+                = getRestAdapter(AcString.LETV_URL_BASE).create(AcApi.getAcContentLeTvVideo.class);
 
         return acContentLeTvVideo;
     }
 
     public static AcApi.getAcContentHtml5Video getAcContentHtml5Video() {
-        AcApi.getAcContentHtml5Video acContentHtml5Video = restAdapterWithAcFunTV.create(AcApi.getAcContentHtml5Video.class);
+        AcApi.getAcContentHtml5Video acContentHtml5Video
+                = getRestAdapter(AcString.URL_ACFUN_TV).create(AcApi.getAcContentHtml5Video.class);
 
         return acContentHtml5Video;
     }
 
     public static AcApi.getAcContentDanMu getAcContentDanMu() {
-        AcApi.getAcContentDanMu acContentDanMu = restAdapterWithAiXiFanDanMu.create(AcApi.getAcContentDanMu.class);
+        AcApi.getAcContentDanMu acContentDanMu
+                = getRestAdapter(AcString.URL_AIXIFAN_DANMU).create(AcApi.getAcContentDanMu.class);
 
         return acContentDanMu;
     }

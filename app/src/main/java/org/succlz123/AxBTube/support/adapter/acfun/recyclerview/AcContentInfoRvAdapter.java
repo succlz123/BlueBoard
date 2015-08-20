@@ -71,7 +71,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public class VideoItemViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_content_info_video)
+        @Bind(R.id.ac_recycle_view_content_info_video_tv)
         TextView tvVideo;
         @Bind(R.id.cv_content_video_item)
         CardView cardView;

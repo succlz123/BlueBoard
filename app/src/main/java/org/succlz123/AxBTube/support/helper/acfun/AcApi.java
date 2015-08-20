@@ -17,6 +17,7 @@ import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.QueryMap;
+import retrofit.http.Streaming;
 
 /**
  * Created by fashi on 2015/7/19.
@@ -282,5 +283,11 @@ public class AcApi {
 	public interface getAcRanking {
 		@GET(AcString.CONTENT_RANK)
 		void onRankingResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
+	}
+
+	public interface getDownLoad {
+		@GET(AcString.CONTENT_RANK)
+		@Streaming
+		Response getData(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
 	}
 }
