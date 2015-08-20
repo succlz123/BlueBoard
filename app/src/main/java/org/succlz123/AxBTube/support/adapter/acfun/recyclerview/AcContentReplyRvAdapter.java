@@ -49,16 +49,16 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public class TitleInfoViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_content_reply_name_tv)
+        @Bind(R.id.ac_rv_content_reply_name_tv)
         TextView tvName;
 
-        @Bind(R.id.ac_recycle_view_content_reply_time_tv)
+        @Bind(R.id.ac_rv_content_reply_time_tv)
         TextView tvTime;
 
-        @Bind(R.id.ac_recycle_view_content_reply_reply_tv)
+        @Bind(R.id.ac_rv_content_reply_reply_tv)
         TextView tvReply;
 
-        @Bind(R.id.ac_recycle_view_content_reply_user_img)
+        @Bind(R.id.ac_rv_content_reply_user_img)
         SimpleDraweeView userImg;
 
         @Bind(R.id.quote_reply_linear_layout)
@@ -76,7 +76,7 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View titleInfoView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_content_reply, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_content_reply, parent, false);
 
         return new TitleInfoViewHolder(titleInfoView);
     }

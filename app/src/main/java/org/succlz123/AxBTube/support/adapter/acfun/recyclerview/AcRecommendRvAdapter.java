@@ -246,13 +246,13 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View viewPage
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_recommend_viewpager, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_recommend_viewpager, parent, false);
         View title
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_title_with_button, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_title_with_button, parent, false);
         View hot
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_vertical_with_subtitle, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_vertical_with_subtitle, parent, false);
         View other
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_vertical_with_click_info, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_vertical_with_click_info, parent, false);
 
         if (viewType == TYPE_VIEW_PAGER) {
             return new ViewPagerVH(viewPage);

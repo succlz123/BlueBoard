@@ -25,7 +25,7 @@ public class BiliRecommendFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mView = inflater.inflate(R.layout.ac_recycleview_recommend_viewpager, container, false);
+		mView = inflater.inflate(R.layout.ac_rv_recommend_viewpager, container, false);
 		initViews();
 
 		String Url = BiliApi.BASE + BiliApi.DEVICE

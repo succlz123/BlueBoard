@@ -88,7 +88,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public class TitleVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_tv_title)
+        @Bind(R.id.ac_rv_tv_title)
         TextView tvTitle;
 
         public TitleVH(View itemView) {
@@ -161,11 +161,11 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View title
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_title, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_title, parent, false);
         View hot
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_vertical_with_click_info, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_vertical_with_click_info, parent, false);
         View other
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_horizontal_with_click_info, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_horizontal_with_click_info, parent, false);
 
         if (viewType == TYPE_TITle) {
             return new TitleVH(title);

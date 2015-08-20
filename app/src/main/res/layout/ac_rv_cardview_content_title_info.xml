@@ -13,16 +13,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/ac_recycle_view_content_info_title"
+            android:id="@+id/ac_rv_content_info_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/recycle_view_margin"
+            android:layout_margin="@dimen/rv_margin"
             android:textColor="@color/font_light"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/ac_recycle_view_content_info_description"
+            android:id="@+id/ac_rv_content_info_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -36,14 +36,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/ac_recycle_view_content_info_click"
+                android:id="@+id/ac_rv_content_info_click"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="14sp"/>
 
             <TextView
-                android:id="@+id/ac_recycle_view_content_info_stows"
+                android:id="@+id/ac_rv_content_info_stows"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -70,7 +70,7 @@
                 android:orientation="horizontal">
 
                 <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/ac_recycle_view_content_info_up_img"
+                    android:id="@+id/ac_rv_content_info_up_img"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_gravity="center"
@@ -83,7 +83,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/ac_recycle_view_content_info_up_name"
+                        android:id="@+id/ac_rv_content_info_up_name"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
@@ -92,7 +92,7 @@
                         android:textSize="14sp"/>
 
                     <TextView
-                        android:id="@+id/ac_recycle_view_content_info_up_level"
+                        android:id="@+id/ac_rv_content_info_up_level"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"

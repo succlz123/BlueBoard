@@ -16,12 +16,12 @@
         android:orientation="vertical">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/ac_recycle_view_bangumi_img"
+            android:id="@+id/ac_rv_bangumi_img"
             android:layout_width="match_parent"
             android:layout_height="170dp"/>
 
         <TextView
-            android:id="@+id/ac_recycle_view_bangumi_title_tv"
+            android:id="@+id/ac_rv_bangumi_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -32,7 +32,7 @@
             android:textSize="12sp"/>
 
         <TextView
-            android:id="@+id/ac_recycle_view_bangumi_num_tv"
+            android:id="@+id/ac_rv_bangumi_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

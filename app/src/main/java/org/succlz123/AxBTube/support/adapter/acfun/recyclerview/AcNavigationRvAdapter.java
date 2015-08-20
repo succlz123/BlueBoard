@@ -36,7 +36,7 @@ public class AcNavigationRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public class TitleViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_tv_title)
+        @Bind(R.id.ac_rv_tv_title)
         TextView tvTitle;
 
         public TitleViewHolder(View itemView) {
@@ -47,13 +47,13 @@ public class AcNavigationRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class ButtonViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.ac_recycle_view_navigation_img)
+        @Bind(R.id.ac_rv_navigation_img)
         ImageView imgButton;
 
-        @Bind(R.id.ac_recycle_view_navigation_tv)
+        @Bind(R.id.ac_rv_navigation_tv)
         TextView tvButton;
 
-        @Bind(R.id.ac_recycle_view_navigation_cv)
+        @Bind(R.id.ac_rv_navigation_cv)
         CardView cvButon;
 
         public ButtonViewHolder(View itemView) {
@@ -74,9 +74,9 @@ public class AcNavigationRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View titleView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_title, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_title, parent, false);
         View buttonView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_navigation_button, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_navigation_button, parent, false);
 
         if (viewType == NAVIGATION_TITLE) {
             return new TitleViewHolder(titleView);

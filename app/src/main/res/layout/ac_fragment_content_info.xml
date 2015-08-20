@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="@dimen/recycle_view_bottom"
-        android:paddingLeft="@dimen/recycle_view_margin"
-        android:paddingRight="@dimen/recycle_view_margin"
-        android:paddingTop="@dimen/recycle_view_margin"
+        android:paddingBottom="@dimen/rv_bottom"
+        android:paddingLeft="@dimen/rv_margin"
+        android:paddingRight="@dimen/rv_margin"
+        android:paddingTop="@dimen/rv_margin"
         android:scrollbars="none"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

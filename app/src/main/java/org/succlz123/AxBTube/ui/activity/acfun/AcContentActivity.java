@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,46 +33,46 @@ import butterknife.ButterKnife;
  */
 public class AcContentActivity extends BaseActivity {
 
-    public static void startActivity(Context activity, String contentId) {
-        Intent intent = new Intent(activity, AcContentActivity.class);
-        intent.putExtra(AcString.CONTENT_ID, contentId);
-        activity.startActivity(intent);
-    }
+	public static void startActivity(Context activity, String contentId) {
+		Intent intent = new Intent(activity, AcContentActivity.class);
+		intent.putExtra(AcString.CONTENT_ID, contentId);
+		activity.startActivity(intent);
+	}
 
-    private String mContentId;
-    private AcContentFmAdapter mAdapter;
+	private String mContentId;
+	private AcContentFmAdapter mAdapter;
 
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
+	@Bind(R.id.toolbar)
+	Toolbar mToolbar;
 
-    @Bind(R.id.collapsing_toolbar_content)
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
+	@Bind(R.id.collapsing_toolbar_content)
+	CollapsingToolbarLayout mCollapsingToolbarLayout;
 
-    @Bind(R.id.img_content_title)
-    SimpleDraweeView mTitleImg;
+	@Bind(R.id.img_content_title)
+	SimpleDraweeView mTitleImg;
 
-    @Bind(R.id.tab_layout_content)
-    TabLayout mTabLayout;
+	@Bind(R.id.tab_layout_content)
+	TabLayout mTabLayout;
 
-    @Bind(R.id.viewpager_content_info)
-    ViewPager mViewPager;
+	@Bind(R.id.viewpager_content_info)
+	ViewPager mViewPager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_activity_content);
-        ButterKnife.bind(this);
-        mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.ac_activity_content);
+		ButterKnife.bind(this);
+		mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);
 
-        ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
-        mCollapsingToolbarLayout.setTitle("AC" + mContentId);
+		ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
+		mCollapsingToolbarLayout.setTitle("AC" + mContentId);
 
-        mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+		mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
+		mViewPager.setAdapter(mAdapter);
+		mViewPager.setOffscreenPageLimit(2);
 
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        mTabLayout.setupWithViewPager(mViewPager);
+		mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+		mTabLayout.setupWithViewPager(mViewPager);
 
 //        View contentView = findViewById(android.R.id.content);
 //        contentView.getViewTreeObserver()
@@ -95,51 +96,73 @@ public class AcContentActivity extends BaseActivity {
 //                    }
 //                });
 
-        if (mContentId != null) {
-            for (int i = 0; i < mAdapter.getCount(); i++) {
-                Fragment fragment = (Fragment) mAdapter.instantiateItem(mViewPager, i);
+		if (mContentId != null) {
+			for (int i = 0; i < mAdapter.getCount(); i++) {
+				Fragment fragment = (Fragment) mAdapter.instantiateItem(mViewPager, i);
+				if (fragment instanceof AcContentInfoFragment) {
+					((AcContentInfoFragment) fragment).onAcContentResult(mContentId);
+				} else if (fragment instanceof AcContentReplyFragment) {
+					((AcContentReplyFragment) fragment).onAcContentResult(mContentId);
+				}
+			}
+		}
 
-                if (fragment instanceof AcContentInfoFragment) {
+	}
 
-                    ((AcContentInfoFragment) fragment).onAcContentResult(mContentId);
+	public void onFragmentBack(final AcContentInfo.DataEntity.FullContentEntity fullContentEntity) {
+		//加载标题图片并点击播放默认第一个视频
+		mTitleImg.setImageURI(Uri.parse(fullContentEntity.getCover()));
+		mTitleImg.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
+						= fullContentEntity.getVideos().get(0);
 
-                } else if (fragment instanceof AcContentReplyFragment) {
-
-                    ((AcContentReplyFragment) fragment).onAcContentResult(mContentId);
-                }
-
-            }
-        }
-
-    }
-
-    public void onFragmentBack(final AcContentInfo.DataEntity.FullContentEntity fullContentEntity) {
-        //加载标题图片并点击播放默认第一个视频
-        mTitleImg.setImageURI(Uri.parse(fullContentEntity.getCover()));
-        mTitleImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
-                        = fullContentEntity.getVideos().get(0);
-
-                VideoPlayActivity.startActivity(AcContentActivity.this,
-                        String.valueOf(videosEntity.getVideoId()),
-                        String.valueOf(videosEntity.getDanmakuId()),
-                        videosEntity.getSourceId(),
-                        videosEntity.getType());
-            }
-        });
+				VideoPlayActivity.startActivity(AcContentActivity.this,
+						String.valueOf(videosEntity.getVideoId()),
+						String.valueOf(videosEntity.getDanmakuId()),
+						videosEntity.getSourceId(),
+						videosEntity.getType());
+			}
+		});
 //        mCollapsingToolbarLayout.setTitle("AC" + fullContentEntity.getContentId());
 //        mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
+	}
+
+	private void xx(boolean b){
+		if (mContentId != null) {
+			for (int i = 0; i < mAdapter.getCount(); i++) {
+				Fragment fragment = (Fragment) mAdapter.instantiateItem(mViewPager, i);
+				if (fragment instanceof AcContentInfoFragment) {
+					((AcContentInfoFragment) fragment).onIsDlCheckBoxShow(b);
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem downLoadSelectItem = menu.add(Menu.NONE, 1, 100, "选择下载");
+		MenuItem downLoadAllItem = menu.add(Menu.NONE, 2, 100, "下载全部");
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+			case 1:
+				xx(true);
+ 				break;
+			case 2:
+				xx(true);
+ 				break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

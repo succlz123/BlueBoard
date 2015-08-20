@@ -53,22 +53,22 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	}
 
 	public class CardViewHolder extends RecyclerView.ViewHolder {
-		@Bind(R.id.ac_recycle_view_essay_cv_title)
+		@Bind(R.id.ac_rv_essay_cv_title)
 		TextView tvTitle;
 
-		@Bind(R.id.ac_recycle_view_essay_cv_name)
+		@Bind(R.id.ac_rv_essay_cv_name)
 		TextView tvName;
 
-		@Bind(R.id.ac_recycle_view_essay_cv_time)
+		@Bind(R.id.ac_rv_essay_cv_time)
 		TextView tvTime;
 
-		@Bind(R.id.ac_recycle_view_essay_cv_click)
+		@Bind(R.id.ac_rv_essay_cv_click)
 		TextView tvClick;
 
-		@Bind(R.id.ac_recycle_view_essay_cv_reply)
+		@Bind(R.id.ac_rv_essay_cv_reply)
 		TextView tvReply;
 
-		@Bind(R.id.ac_recycle_view_essay_cv)
+		@Bind(R.id.ac_rv_essay_cv)
 		CardView cardView;
 
 		public CardViewHolder(View itemView) {
@@ -80,7 +80,7 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View cardView
-				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_essay, parent, false);
+				= LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_cardview_essay, parent, false);
 
 		return new CardViewHolder(cardView);
 	}

@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/ac_recycle_view_content_reply_user_img"
+            android:id="@+id/ac_rv_content_reply_user_img"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center_horizontal|start|top"
@@ -36,7 +36,7 @@
                 android:gravity="center">
 
                 <TextView
-                    android:id="@+id/ac_recycle_view_content_reply_name_tv"
+                    android:id="@+id/ac_rv_content_reply_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxEms="9"
@@ -45,7 +45,7 @@
                     android:textSize="12sp"/>
 
                 <TextView
-                    android:id="@+id/ac_recycle_view_content_reply_time_tv"
+                    android:id="@+id/ac_rv_content_reply_time_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -62,7 +62,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/ac_recycle_view_content_reply_reply_tv"
+                android:id="@+id/ac_rv_content_reply_reply_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

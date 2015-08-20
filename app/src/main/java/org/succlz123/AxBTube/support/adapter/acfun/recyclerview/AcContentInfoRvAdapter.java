@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,9 @@ import org.succlz123.AxBTube.MyApplication;
 import org.succlz123.AxBTube.R;
 import org.succlz123.AxBTube.bean.acfun.AcContentInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -23,153 +27,182 @@ import butterknife.ButterKnife;
  * Created by succlz123 on 15/8/4.
  */
 public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int CONTENT_INFO_TITLE_INFO = 0;
-    private static final int CONTENT_INFO_VIDEO_ITEM = 1;
+	private static final int VIDEO_INFO = 0;
+	private static final int VIDEO_ITEM = 1;
+	private static final int VIDEO_DOWNLOAD = 2;
 
-    private AcContentInfo mAcContentInfo;
-    private OnClickListener mOnClickListener;
+	private AcContentInfo mAcContentInfo;
+	private OnClickListener mOnClickListener;
+	private List<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> mVideoList = new ArrayList<>();
 
-    public AcContentInfo getAcContentInfo() {
-        return mAcContentInfo;
-    }
+	private boolean isShowDlCheckBox;
 
-    public interface OnClickListener {
-        void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType);
-    }
+	public void setIsShowDlCheckBox(boolean isShowDlCheckBox) {
+		this.isShowDlCheckBox = isShowDlCheckBox;
+		notifyDataSetChanged();
+	}
 
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.mOnClickListener = onClickListener;
-    }
+	public AcContentInfo getAcContentInfo() {
+		return mAcContentInfo;
+	}
 
-    public void setContentInfo(AcContentInfo acContentInfo) {
-        this.mAcContentInfo = acContentInfo;
-        notifyDataSetChanged();
-    }
+	public interface OnClickListener {
+		void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType);
+	}
 
-    public class TitleInfoViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_content_info_title)
-        TextView tvTitle;
-        @Bind(R.id.ac_recycle_view_content_info_description)
-        TextView tvDescription;
-        @Bind(R.id.ac_recycle_view_content_info_click)
-        TextView tvClick;
-        @Bind(R.id.ac_recycle_view_content_info_stows)
-        TextView tvStows;
-        @Bind(R.id.ac_recycle_view_content_info_up_img)
-        SimpleDraweeView simpleDraweeView;
-        @Bind(R.id.ac_recycle_view_content_info_up_name)
-        TextView tvName;
-        @Bind(R.id.ac_recycle_view_content_info_up_level)
-        TextView tvUid;
-        @Bind(R.id.cv_content_title_info_frame_layout)
-        FrameLayout frameLayout;
+	public void setOnClickListener(OnClickListener onClickListener) {
+		this.mOnClickListener = onClickListener;
+	}
 
-        public TitleInfoViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
+	public void setContentInfo(AcContentInfo acContentInfo) {
+		this.mAcContentInfo = acContentInfo;
+		mVideoList = acContentInfo.getData().getFullContent().getVideos();
+		notifyDataSetChanged();
+	}
 
-    public class VideoItemViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_content_info_video_tv)
-        TextView tvVideo;
-        @Bind(R.id.cv_content_video_item)
-        CardView cardView;
+	public class VideoInfoVH extends RecyclerView.ViewHolder {
+		@Bind(R.id.ac_rv_content_info_title)
+		TextView tvTitle;
+		@Bind(R.id.ac_rv_content_info_description)
+		TextView tvDescription;
+		@Bind(R.id.ac_rv_content_info_click)
+		TextView tvClick;
+		@Bind(R.id.ac_rv_content_info_stows)
+		TextView tvStows;
+		@Bind(R.id.ac_rv_content_info_up_img)
+		SimpleDraweeView simpleDraweeView;
+		@Bind(R.id.ac_rv_content_info_up_name)
+		TextView tvName;
+		@Bind(R.id.ac_rv_content_info_up_level)
+		TextView tvUid;
+		@Bind(R.id.cv_content_title_info_frame_layout)
+		FrameLayout frameLayout;
 
-        public VideoItemViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
+		public VideoInfoVH(View itemView) {
+			super(itemView);
+			ButterKnife.bind(this, itemView);
+		}
+	}
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return CONTENT_INFO_TITLE_INFO;
-        } else {
-            return CONTENT_INFO_VIDEO_ITEM;
-        }
-    }
+	public class VideoItemVH extends RecyclerView.ViewHolder {
+		@Bind(R.id.ac_rv_content_info_video_tv)
+		TextView tvVideo;
+		@Bind(R.id.ac_rv_content_info_video_cb)
+		CheckBox cbVideo;
+		@Bind(R.id.cv_content_video_item)
+		CardView cardView;
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View titleInfoView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_content_title_info, parent, false);
-        View videoItemView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_content_video_item, parent, false);
+		public VideoItemVH(View itemView) {
+			super(itemView);
+			ButterKnife.bind(this, itemView);
+		}
+	}
 
-        if (viewType == CONTENT_INFO_TITLE_INFO) {
-            return new TitleInfoViewHolder(titleInfoView);
-        } else if (viewType == CONTENT_INFO_VIDEO_ITEM) {
-            return new VideoItemViewHolder(videoItemView);
-        }
-        return null;
-    }
+	public class DownLoadItemVH extends RecyclerView.ViewHolder {
+		@Bind(R.id.ac_rv_content_download_cv)
+		CardView cardView;
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (mAcContentInfo != null) {
-            final AcContentInfo.DataEntity.FullContentEntity contentEntity = mAcContentInfo.getData().getFullContent();
+		public DownLoadItemVH(View itemView) {
+			super(itemView);
+			ButterKnife.bind(this, itemView);
+		}
+	}
 
-            if (holder instanceof TitleInfoViewHolder) {
-                ((TitleInfoViewHolder) holder).tvTitle
-                        .setText(contentEntity.getTitle());
-                ((TitleInfoViewHolder) holder).tvDescription
-                        .setText(Html.fromHtml(contentEntity.getDescription()));
-                ((TitleInfoViewHolder) holder).tvClick
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + contentEntity.getViews());
-                ((TitleInfoViewHolder) holder).tvStows
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.stows) + " " + contentEntity.getStows());
-                ((TitleInfoViewHolder) holder).simpleDraweeView
-                        .setImageURI(Uri.parse(contentEntity.getUser().getUserImg()));
-                ((TitleInfoViewHolder) holder).tvName
-                        .setText(contentEntity.getUser().getUsername());
-                ((TitleInfoViewHolder) holder).tvUid
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.uid) + " " + contentEntity.getUser().getUserId());
+	@Override
+	public int getItemViewType(int position) {
+		if (position == 0) {
+			return VIDEO_INFO;
+		} else if (getItemCount() - position == 1 && isShowDlCheckBox) {
+			return VIDEO_DOWNLOAD;
+		} else {
+			return VIDEO_ITEM;
+		}
+	}
 
-                if (mOnClickListener != null) {
-                    ((TitleInfoViewHolder) holder).frameLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnClickListener.onClick(v,
-                                    position,
-                                    String.valueOf(contentEntity.getUser().getUserId()),
-                                    null, null, null, null);
-                        }
-                    });
-                }
-            } else if (holder instanceof VideoItemViewHolder) {
-                if (mAcContentInfo != null) {
-                    final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
-                            = contentEntity.getVideos().get(position - 1);
+	@Override
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+		View titleInfoView = inflater.inflate(R.layout.ac_rv_cardview_content_title_info, parent, false);
+		View videoItemView = inflater.inflate(R.layout.ac_rv_cardview_content_video_item, parent, false);
+		View downLoadItemView = inflater.inflate(R.layout.ac_rv_content_download, parent, false);
 
-                    ((VideoItemViewHolder) holder).tvVideo
-                            .setText((position) + ". " + videosEntity.getName());
+		if (viewType == VIDEO_INFO) {
+			return new VideoInfoVH(titleInfoView);
+		} else if (viewType == VIDEO_ITEM) {
+			return new VideoItemVH(videoItemView);
+		} else if (viewType == VIDEO_DOWNLOAD) {
+			return new DownLoadItemVH(downLoadItemView);
+		}
+		return null;
+	}
 
-                    if (mOnClickListener != null) {
-                        ((VideoItemViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnClickListener.onClick(v,
-                                        position,
-                                        null,
-                                        String.valueOf(videosEntity.getVideoId()),
-                                        String.valueOf(videosEntity.getDanmakuId()),
-                                        videosEntity.getSourceId(),
-                                        videosEntity.getType());
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    }
+	@Override
+	public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+		if (mAcContentInfo != null) {
+			final AcContentInfo.DataEntity.FullContentEntity contentEntity = mAcContentInfo.getData().getFullContent();
 
-    @Override
-    public int getItemCount() {
-        if (mAcContentInfo != null) {
-            return mAcContentInfo.getData().getFullContent().getVideos().size() + 1;
-        }
-        return 0;
-    }
+			if (holder instanceof VideoInfoVH) {
+				((VideoInfoVH) holder).tvTitle
+						.setText(contentEntity.getTitle());
+				((VideoInfoVH) holder).tvDescription
+						.setText(Html.fromHtml(contentEntity.getDescription()));
+				((VideoInfoVH) holder).tvClick
+						.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + contentEntity.getViews());
+				((VideoInfoVH) holder).tvStows
+						.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.stows) + " " + contentEntity.getStows());
+				((VideoInfoVH) holder).simpleDraweeView
+						.setImageURI(Uri.parse(contentEntity.getUser().getUserImg()));
+				((VideoInfoVH) holder).tvName
+						.setText(contentEntity.getUser().getUsername());
+				((VideoInfoVH) holder).tvUid
+						.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.uid) + " " + contentEntity.getUser().getUserId());
+
+				if (mOnClickListener != null) {
+					((VideoInfoVH) holder).frameLayout.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							mOnClickListener.onClick(v,
+									position,
+									String.valueOf(contentEntity.getUser().getUserId()),
+									null, null, null, null);
+						}
+					});
+				}
+			} else if (holder instanceof VideoItemVH) {
+				if (mAcContentInfo != null) {
+					final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
+							= mVideoList.get(position - 1);
+
+					((VideoItemVH) holder).tvVideo
+							.setText((position) + ". " + videosEntity.getName());
+
+					if (!isShowDlCheckBox && mOnClickListener != null) {
+						((VideoItemVH) holder).cardView.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								mOnClickListener.onClick(v,
+										position,
+										null,
+										String.valueOf(videosEntity.getVideoId()),
+										String.valueOf(videosEntity.getDanmakuId()),
+										videosEntity.getSourceId(),
+										videosEntity.getType());
+							}
+						});
+						((VideoItemVH) holder).cbVideo.setVisibility(View.GONE);
+					} else {
+						((VideoItemVH) holder).cbVideo.setVisibility(View.VISIBLE);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public int getItemCount() {
+		if (isShowDlCheckBox) {
+			return mVideoList.size() + 2;
+		}
+		return mVideoList.size() + 1;
+	}
 }

@@ -44,13 +44,13 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class CardViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_recycle_view_bangumi_img)
+        @Bind(R.id.ac_rv_bangumi_img)
         SimpleDraweeView imgBangumi;
 
-        @Bind(R.id.ac_recycle_view_bangumi_title_tv)
+        @Bind(R.id.ac_rv_bangumi_title_tv)
         TextView tvTitle;
 
-        @Bind(R.id.ac_recycle_view_bangumi_num_tv)
+        @Bind(R.id.ac_rv_bangumi_num_tv)
         TextView tvNum;
 
         @Bind(R.id.cv_bangumi)
@@ -65,7 +65,7 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View cardView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_recycleview_cardview_bangumi, parent, false);
+                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_bangumi, parent, false);
 
         return new CardViewHolder(cardView);
     }
