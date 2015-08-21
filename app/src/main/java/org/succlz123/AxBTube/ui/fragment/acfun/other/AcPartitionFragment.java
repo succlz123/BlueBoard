@@ -96,7 +96,6 @@ public class AcPartitionFragment extends BaseFragment {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
                         && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
                     mSwipeRefreshLayout.setRefreshing(true);
-                    mPagerNoNum++;
                     getHttpResult(TYPE_LAST_POST, "" + mPagerNoNum);
                 }
             }
@@ -125,7 +124,7 @@ public class AcPartitionFragment extends BaseFragment {
         if (!mIsPrepared || !isVisible) {
             return;
         } else {
-            if (mAdapter.getmAcMostPopular() == null) {
+            if (mAdapter.getAcMostPopular() == null) {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
@@ -134,7 +133,7 @@ public class AcPartitionFragment extends BaseFragment {
                     }
                 });
             }
-            if (mAdapter.getmAcLastPost() == null) {
+            if (mAdapter.getAcLastPost() == null) {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
@@ -168,7 +167,7 @@ public class AcPartitionFragment extends BaseFragment {
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         if (acReOther.getData() != null
                                 && acReOther.getData().getPage().getList().size() != 0) {
-                            mAdapter.setmAcMostPopular(acReOther);
+                            mAdapter.setAcMostPopular(acReOther);
                         }
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
@@ -202,7 +201,8 @@ public class AcPartitionFragment extends BaseFragment {
                                 if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
                                     mAdapter.addDate(acReOther);
                                 } else {
-                                    mAdapter.setmAcLastPost(acReOther);
+                                    mAdapter.setAcLastPost(acReOther);
+                                    mPagerNoNum++;
                                 }
                             } else {
                                 GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");

@@ -80,7 +80,6 @@ public class AcRankingFragment extends BaseFragment {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
                         && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
                     mSwipeRefreshLayout.setRefreshing(true);
-                    mPagerNoNum++;
                     getHttpResult("" + mPagerNoNum);
                 }
             }
@@ -129,6 +128,7 @@ public class AcRankingFragment extends BaseFragment {
                                 mAdapter.addAcReOtherDate(acReOther);
                             } else {
                                 mAdapter.setmAcReOther(acReOther);
+                                mPagerNoNum++;
                             }
                         } else {
                             if (!getActivity().isDestroyed()) {

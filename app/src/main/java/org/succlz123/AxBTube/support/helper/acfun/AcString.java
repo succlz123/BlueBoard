@@ -27,6 +27,7 @@ public class AcString {
 	public static final String DANMAKU_ID = "danmakuId";
 	public static final String SOURCE_ID = "sourceId";
 	public static final String SOURCE_TYPE = "sourceType";
+	public static final String DOWNLOAD_LIST = "downloadList";
 
 	public static final String[] MAIN_TITLES = new String[]{
 			"首页推荐", "分区导航", "新番专题", "文章专区"};

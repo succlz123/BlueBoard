@@ -63,7 +63,7 @@ public class AcContentReplyFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new AcContentReplyRvAdapter();
-//        mAdapter.setOnClickListener(new AcContentInfoRvAdapter.OnClickListener() {
+//        mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnClickListener() {
 //            @Override
 //            public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
 //                if (position == 0) {

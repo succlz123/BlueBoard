@@ -42,26 +42,26 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private List<AcReOther.DataEntity.PageEntity.ListEntity> mEntityList = new ArrayList();
 
-    public AcReOther getmAcMostPopular() {
+    public AcReOther getAcMostPopular() {
         return mAcMostPopular;
     }
 
-    public AcReOther getmAcLastPost() {
+    public AcReOther getAcLastPost() {
         return mAcLastPost;
     }
 
-    public AcReHot getmAcReHot() {
+    public AcReHot getAcReHot() {
         return mAcReHot;
     }
 
     private OnClickListener mOnClickListener;
 
-    public void setmAcMostPopular(AcReOther acMostPopular) {
+    public void setAcMostPopular(AcReOther acMostPopular) {
         this.mAcMostPopular = acMostPopular;
         notifyDataSetChanged();
     }
 
-    public void setmAcLastPost(AcReOther acLastPost) {
+    public void setAcLastPost(AcReOther acLastPost) {
         this.mAcLastPost = acLastPost;
         //下拉时保证重新填充
         mEntityList.clear();
@@ -69,7 +69,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyDataSetChanged();
     }
 
-    public void setmAcReHot(AcReHot acReHot) {
+    public void setAcReHot(AcReHot acReHot) {
         this.mAcReHot = acReHot;
         notifyDataSetChanged();
     }

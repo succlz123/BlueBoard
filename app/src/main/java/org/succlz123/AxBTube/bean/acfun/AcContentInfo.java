@@ -1,5 +1,8 @@
 package org.succlz123.AxBTube.bean.acfun;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -227,7 +230,7 @@ public class AcContentInfo {
                 return comments;
             }
 
-            public static class VideosEntity {
+            public static class VideosEntity implements Parcelable {
                 /**
                  * startTime : 0
                  * sourceType : letv
@@ -243,10 +246,10 @@ public class AcContentInfo {
                 private String sourceType;
                 private int time;
                 private String name;
-                private int danmakuId;
-                private int videoId;
+                private String danmakuId;
+                private String videoId;
                 private String type;
-                private int commentId;
+                private String commentId;
                 private String sourceId;
 
                 public void setStartTime(int startTime) {
@@ -265,11 +268,11 @@ public class AcContentInfo {
                     this.name = name;
                 }
 
-                public void setDanmakuId(int danmakuId) {
+                public void setDanmakuId(String danmakuId) {
                     this.danmakuId = danmakuId;
                 }
 
-                public void setVideoId(int videoId) {
+                public void setVideoId(String videoId) {
                     this.videoId = videoId;
                 }
 
@@ -277,7 +280,7 @@ public class AcContentInfo {
                     this.type = type;
                 }
 
-                public void setCommentId(int commentId) {
+                public void setCommentId(String commentId) {
                     this.commentId = commentId;
                 }
 
@@ -301,11 +304,11 @@ public class AcContentInfo {
                     return name;
                 }
 
-                public int getDanmakuId() {
+                public String getDanmakuId() {
                     return danmakuId;
                 }
 
-                public int getVideoId() {
+                public String getVideoId() {
                     return videoId;
                 }
 
@@ -313,13 +316,56 @@ public class AcContentInfo {
                     return type;
                 }
 
-                public int getCommentId() {
+                public String getCommentId() {
                     return commentId;
                 }
 
                 public String getSourceId() {
                     return sourceId;
                 }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel dest, int flags) {
+                    dest.writeInt(this.startTime);
+                    dest.writeString(this.sourceType);
+                    dest.writeInt(this.time);
+                    dest.writeString(this.name);
+                    dest.writeString(this.danmakuId);
+                    dest.writeString(this.videoId);
+                    dest.writeString(this.type);
+                    dest.writeString(this.commentId);
+                    dest.writeString(this.sourceId);
+                }
+
+                public VideosEntity() {
+                }
+
+                protected VideosEntity(Parcel in) {
+                    this.startTime = in.readInt();
+                    this.sourceType = in.readString();
+                    this.time = in.readInt();
+                    this.name = in.readString();
+                    this.danmakuId = in.readString();
+                    this.videoId = in.readString();
+                    this.type = in.readString();
+                    this.commentId = in.readString();
+                    this.sourceId = in.readString();
+                }
+
+                public static final Parcelable.Creator<VideosEntity> CREATOR = new Parcelable.Creator<VideosEntity>() {
+                    public VideosEntity createFromParcel(Parcel source) {
+                        return new VideosEntity(source);
+                    }
+
+                    public VideosEntity[] newArray(int size) {
+                        return new VideosEntity[size];
+                    }
+                };
             }
 
             public static class UserEntity {
