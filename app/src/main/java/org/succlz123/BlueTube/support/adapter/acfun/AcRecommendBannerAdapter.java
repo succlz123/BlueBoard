@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.adapter.acfun;
+package org.succlz123.bluetube.support.adapter.acfun;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,18 +9,21 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcReBanner;
-import org.succlz123.BlueTube.support.adapter.acfun.recyclerview.AcRecommendRvAdapter;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
+
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcReBanner;
+import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcRecommendRvAdapter;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by chinausky on 2015/7/24.

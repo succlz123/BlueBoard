@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.config;
+package org.succlz123.bluetube.support.config;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,7 +22,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
-import org.succlz123.BlueTube.R;
+import org.succlz123.bluetube.R;
 
 /**
  * Created by fashi on 2015/8/8.

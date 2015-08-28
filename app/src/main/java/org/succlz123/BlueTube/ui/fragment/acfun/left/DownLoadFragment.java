@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.fragment.acfun.left;
+package org.succlz123.bluetube.ui.fragment.acfun.left;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,16 +11,16 @@ import com.github.snowdream.android.app.DownloadListener;
 import com.github.snowdream.android.app.DownloadManager;
 import com.github.snowdream.android.app.DownloadTask;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcContentVideo;
-import org.succlz123.BlueTube.bean.acfun.AcGetH5ByVid;
-import org.succlz123.BlueTube.support.config.RetrofitConfig;
-import org.succlz123.BlueTube.support.helper.acfun.AcApi;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
-import org.succlz123.BlueTube.support.utils.LogUtils;
-import org.succlz123.BlueTube.ui.fragment.BaseFragment;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcContentVideo;
+import org.succlz123.bluetube.bean.acfun.AcGetH5ByVid;
+import org.succlz123.bluetube.support.config.RetrofitConfig;
+import org.succlz123.bluetube.support.helper.acfun.AcApi;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.support.utils.LogUtils;
+import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import java.io.File;
 

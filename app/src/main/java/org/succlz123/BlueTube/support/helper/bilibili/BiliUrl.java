@@ -1,7 +1,7 @@
-package org.succlz123.BlueTube.support.helper.bilibili;
+package org.succlz123.bluetube.support.helper.bilibili;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

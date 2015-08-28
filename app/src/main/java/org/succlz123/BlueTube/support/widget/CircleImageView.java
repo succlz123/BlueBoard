@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.succlz123.BlueTube.support.widget;
+package org.succlz123.bluetube.support.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

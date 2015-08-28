@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.utils;
+package org.succlz123.bluetube.support.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +19,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import org.succlz123.BlueTube.R;
+import org.succlz123.bluetube.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

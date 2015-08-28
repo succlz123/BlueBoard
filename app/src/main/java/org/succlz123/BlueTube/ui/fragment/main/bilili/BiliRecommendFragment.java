@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.fragment.main.bilili;
+package org.succlz123.bluetube.ui.fragment.main.bilili;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.support.helper.bilibili.BiliApi;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
-import org.succlz123.BlueTube.support.utils.LogUtils;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.support.helper.bilibili.BiliApi;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.support.utils.LogUtils;
 
 
 /**

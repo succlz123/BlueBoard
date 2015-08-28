@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.fragment.acfun.main;
+package org.succlz123.bluetube.ui.fragment.acfun.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.support.adapter.acfun.recyclerview.AcNavigationRvAdapter;
-import org.succlz123.BlueTube.ui.activity.acfun.AcPartitionActivity;
-import org.succlz123.BlueTube.ui.fragment.BaseFragment;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcNavigationRvAdapter;
+import org.succlz123.bluetube.ui.activity.acfun.AcPartitionActivity;
+import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

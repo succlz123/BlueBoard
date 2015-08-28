@@ -1,13 +1,13 @@
-package org.succlz123.BlueTube.ui.activity.acfun;
+package org.succlz123.bluetube.ui.activity.acfun;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcContentInfo;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.ui.activity.BaseActivity;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcContentInfo;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.ui.activity.BaseActivity;
 
 import java.util.ArrayList;
 

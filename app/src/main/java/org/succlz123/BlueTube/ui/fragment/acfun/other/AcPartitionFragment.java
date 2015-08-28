@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.fragment.acfun.other;
+package org.succlz123.bluetube.ui.fragment.acfun.other;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -13,17 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcReOther;
-import org.succlz123.BlueTube.support.adapter.acfun.recyclerview.AcPartitionRvAdapter;
-import org.succlz123.BlueTube.support.config.RetrofitConfig;
-import org.succlz123.BlueTube.support.helper.acfun.AcApi;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
-import org.succlz123.BlueTube.support.utils.ViewUtils;
-import org.succlz123.BlueTube.ui.activity.acfun.AcContentActivity;
-import org.succlz123.BlueTube.ui.fragment.BaseFragment;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcReOther;
+import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcPartitionRvAdapter;
+import org.succlz123.bluetube.support.config.RetrofitConfig;
+import org.succlz123.bluetube.support.helper.acfun.AcApi;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.support.utils.ViewUtils;
+import org.succlz123.bluetube.ui.activity.acfun.AcContentActivity;
+import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

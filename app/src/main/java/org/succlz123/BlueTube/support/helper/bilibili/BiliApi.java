@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.helper.bilibili;
+package org.succlz123.bluetube.support.helper.bilibili;
 
 /**
  * Created by fashi on 2015/7/19.

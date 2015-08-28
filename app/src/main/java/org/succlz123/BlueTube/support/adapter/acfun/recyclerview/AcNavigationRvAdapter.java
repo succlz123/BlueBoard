@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.adapter.acfun.recyclerview;
+package org.succlz123.bluetube.support.adapter.acfun.recyclerview;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

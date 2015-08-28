@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.activity;
+package org.succlz123.bluetube.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,14 +16,14 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcContentVideo;
-import org.succlz123.BlueTube.bean.acfun.AcGetH5ByVid;
-import org.succlz123.BlueTube.support.config.RetrofitConfig;
-import org.succlz123.BlueTube.support.helper.acfun.AcApi;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcContentVideo;
+import org.succlz123.bluetube.bean.acfun.AcGetH5ByVid;
+import org.succlz123.bluetube.support.config.RetrofitConfig;
+import org.succlz123.bluetube.support.helper.acfun.AcApi;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.bean.bilibili;
+package org.succlz123.bluetube.bean.bilibili;
 
 import java.util.List;
 

@@ -7,4 +7,3 @@ Acfun&BiliBili Android
 ![4](https://github.com/succlz123/BlueTube/blob/master/screenshot/4.jpg "")
 ![5](https://github.com/succlz123/BlueTube/blob/master/screenshot/5.jpg "")
 ![6](https://github.com/succlz123/BlueTube/blob/master/screenshot/6.jpg "")
-![7](https://github.com/succlz123/BlueTube/blob/master/screenshot/7.jpg "")

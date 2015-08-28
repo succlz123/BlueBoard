@@ -1,8 +1,8 @@
-package org.succlz123.BlueTube.support.config;
+package org.succlz123.bluetube.support.config;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.support.helper.acfun.AcApi;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.support.helper.acfun.AcApi;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
 
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;

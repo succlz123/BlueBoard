@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.bean.acfun;
+package org.succlz123.bluetube.bean.acfun;
 
 /**
  * Created by succlz123 on 15/8/4.

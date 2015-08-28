@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.widget;
+package org.succlz123.bluetube.support.widget;
 
 import android.graphics.Color;
 

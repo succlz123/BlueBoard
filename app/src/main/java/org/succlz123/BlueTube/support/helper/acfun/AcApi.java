@@ -1,14 +1,14 @@
-package org.succlz123.BlueTube.support.helper.acfun;
+package org.succlz123.bluetube.support.helper.acfun;
 
-import org.succlz123.BlueTube.bean.acfun.AcBangumi;
-import org.succlz123.BlueTube.bean.acfun.AcContentInfo;
-import org.succlz123.BlueTube.bean.acfun.AcContentReply;
-import org.succlz123.BlueTube.bean.acfun.AcContentVideo;
-import org.succlz123.BlueTube.bean.acfun.AcEssay;
-import org.succlz123.BlueTube.bean.acfun.AcGetH5ByVid;
-import org.succlz123.BlueTube.bean.acfun.AcReBanner;
-import org.succlz123.BlueTube.bean.acfun.AcReHot;
-import org.succlz123.BlueTube.bean.acfun.AcReOther;
+import org.succlz123.bluetube.bean.acfun.AcBangumi;
+import org.succlz123.bluetube.bean.acfun.AcContentInfo;
+import org.succlz123.bluetube.bean.acfun.AcContentReply;
+import org.succlz123.bluetube.bean.acfun.AcContentVideo;
+import org.succlz123.bluetube.bean.acfun.AcEssay;
+import org.succlz123.bluetube.bean.acfun.AcGetH5ByVid;
+import org.succlz123.bluetube.bean.acfun.AcReBanner;
+import org.succlz123.bluetube.bean.acfun.AcReHot;
+import org.succlz123.bluetube.bean.acfun.AcReOther;
 
 import java.util.HashMap;
 import java.util.Map;

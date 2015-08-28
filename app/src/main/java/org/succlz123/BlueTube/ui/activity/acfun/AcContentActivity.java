@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.activity.acfun;
+package org.succlz123.bluetube.ui.activity.acfun;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,15 +15,15 @@ import android.view.View;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcContentInfo;
-import org.succlz123.BlueTube.support.adapter.acfun.fragment.AcContentFmAdapter;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.support.utils.ViewUtils;
-import org.succlz123.BlueTube.ui.activity.BaseActivity;
-import org.succlz123.BlueTube.ui.activity.VideoPlayActivity;
-import org.succlz123.BlueTube.ui.fragment.acfun.other.AcContentInfoFragment;
-import org.succlz123.BlueTube.ui.fragment.acfun.other.AcContentReplyFragment;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcContentInfo;
+import org.succlz123.bluetube.support.adapter.acfun.fragment.AcContentFmAdapter;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.ViewUtils;
+import org.succlz123.bluetube.ui.activity.BaseActivity;
+import org.succlz123.bluetube.ui.activity.VideoPlayActivity;
+import org.succlz123.bluetube.ui.fragment.acfun.other.AcContentInfoFragment;
+import org.succlz123.bluetube.ui.fragment.acfun.other.AcContentReplyFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

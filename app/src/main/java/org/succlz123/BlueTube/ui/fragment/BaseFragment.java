@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.fragment;
+package org.succlz123.bluetube.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.squareup.leakcanary.RefWatcher;
 
-import org.succlz123.BlueTube.MyApplication;
+import org.succlz123.bluetube.MyApplication;
 
 import butterknife.ButterKnife;
 

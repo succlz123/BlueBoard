@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.bean.acfun;
+package org.succlz123.bluetube.bean.acfun;
 
 import java.util.HashMap;
 import java.util.List;

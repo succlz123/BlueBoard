@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.utils;
+package org.succlz123.bluetube.support.utils;
 
 import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
 
 /**
  * Created by fashi on 2015/7/7.

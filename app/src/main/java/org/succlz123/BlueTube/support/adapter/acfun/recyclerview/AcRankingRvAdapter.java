@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.support.adapter.acfun.recyclerview;
+package org.succlz123.bluetube.support.adapter.acfun.recyclerview;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -12,10 +12,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.bean.acfun.AcReOther;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.acfun.AcReOther;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 
 import java.util.ArrayList;
 import java.util.List;

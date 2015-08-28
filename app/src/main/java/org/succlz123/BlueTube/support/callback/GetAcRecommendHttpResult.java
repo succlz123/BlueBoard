@@ -1,8 +1,8 @@
-package org.succlz123.BlueTube.support.callback;
+package org.succlz123.bluetube.support.callback;
 
-import org.succlz123.BlueTube.bean.acfun.AcReOther;
-import org.succlz123.BlueTube.bean.acfun.AcReBanner;
-import org.succlz123.BlueTube.bean.acfun.AcReHot;
+import org.succlz123.bluetube.bean.acfun.AcReOther;
+import org.succlz123.bluetube.bean.acfun.AcReBanner;
+import org.succlz123.bluetube.bean.acfun.AcReHot;
 
 /**
  * Created by succlz123 on 2015/7/28.

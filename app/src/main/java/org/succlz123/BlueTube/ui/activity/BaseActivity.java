@@ -1,11 +1,11 @@
-package org.succlz123.BlueTube.ui.activity;
+package org.succlz123.bluetube.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.squareup.leakcanary.RefWatcher;
 
-import org.succlz123.BlueTube.MyApplication;
+import org.succlz123.bluetube.MyApplication;
 
 /**
  * Created by fashi on 2015/7/8.

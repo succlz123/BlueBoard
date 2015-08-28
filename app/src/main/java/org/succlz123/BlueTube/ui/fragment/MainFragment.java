@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.fragment;
+package org.succlz123.bluetube.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.support.adapter.acfun.fragment.AcMainFmAdapter;
-import org.succlz123.BlueTube.support.utils.ViewUtils;
-import org.succlz123.BlueTube.ui.activity.MainActivity;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.support.adapter.acfun.fragment.AcMainFmAdapter;
+import org.succlz123.bluetube.support.utils.ViewUtils;
+import org.succlz123.bluetube.ui.activity.MainActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

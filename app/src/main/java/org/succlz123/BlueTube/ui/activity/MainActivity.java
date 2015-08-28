@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.activity;
+package org.succlz123.bluetube.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -8,8 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.ui.fragment.MainFragment;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.ui.fragment.MainFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

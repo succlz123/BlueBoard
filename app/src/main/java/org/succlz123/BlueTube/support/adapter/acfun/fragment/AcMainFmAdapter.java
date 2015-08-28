@@ -1,14 +1,14 @@
-package org.succlz123.BlueTube.support.adapter.acfun.fragment;
+package org.succlz123.bluetube.support.adapter.acfun.fragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.ui.fragment.acfun.main.AcNavigationFragment;
-import org.succlz123.BlueTube.ui.fragment.acfun.main.AcRecommendFragment;
-import org.succlz123.BlueTube.ui.fragment.acfun.main.AcBangumiFragment;
-import org.succlz123.BlueTube.ui.fragment.acfun.main.AcEssayFragment;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.ui.fragment.acfun.main.AcNavigationFragment;
+import org.succlz123.bluetube.ui.fragment.acfun.main.AcRecommendFragment;
+import org.succlz123.bluetube.ui.fragment.acfun.main.AcBangumiFragment;
+import org.succlz123.bluetube.ui.fragment.acfun.main.AcEssayFragment;
 
 /**
  * Created by succlz123 on 15/8/10.

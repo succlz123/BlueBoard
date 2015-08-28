@@ -1,7 +1,7 @@
-package org.succlz123.BlueTube.support.helper.acfun;
+package org.succlz123.bluetube.support.helper.acfun;
 
-import org.succlz123.BlueTube.MyApplication;
-import org.succlz123.BlueTube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.MyApplication;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 
 /**
  * Created by succlz123 on 2015/7/27.

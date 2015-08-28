@@ -1,10 +1,10 @@
-package org.succlz123.BlueTube.support.asynctask;
+package org.succlz123.bluetube.support.asynctask;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import org.succlz123.BlueTube.support.utils.LogUtils;
-import org.succlz123.BlueTube.support.widget.MyOkHttp;
+import org.succlz123.bluetube.support.utils.LogUtils;
+import org.succlz123.bluetube.support.widget.MyOkHttp;
 
 import java.io.File;
 import java.io.FileNotFoundException;

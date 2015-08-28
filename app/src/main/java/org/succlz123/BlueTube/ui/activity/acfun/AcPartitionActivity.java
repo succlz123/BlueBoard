@@ -1,4 +1,4 @@
-package org.succlz123.BlueTube.ui.activity.acfun;
+package org.succlz123.bluetube.ui.activity.acfun;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,12 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.succlz123.BlueTube.R;
-import org.succlz123.BlueTube.support.adapter.acfun.fragment.AcPartitionFmAdapter;
-import org.succlz123.BlueTube.support.helper.acfun.AcString;
-import org.succlz123.BlueTube.support.utils.ViewUtils;
-import org.succlz123.BlueTube.ui.activity.BaseActivity;
-import org.succlz123.BlueTube.ui.fragment.acfun.other.AcPartitionFragment;
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.support.adapter.acfun.fragment.AcPartitionFmAdapter;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.ViewUtils;
+import org.succlz123.bluetube.ui.activity.BaseActivity;
+import org.succlz123.bluetube.ui.fragment.acfun.other.AcPartitionFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
