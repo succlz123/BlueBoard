@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="org.succlz123.BuleTube"
+    package="org.succlz123.blueTube"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- network access -->

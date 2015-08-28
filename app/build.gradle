@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23"
     defaultConfig {
-        applicationId 'org.succlz123.buletube.app'
+        applicationId 'org.succlz123.bluetube.app'
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
