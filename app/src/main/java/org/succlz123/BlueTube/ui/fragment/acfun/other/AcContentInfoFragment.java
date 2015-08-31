@@ -68,7 +68,7 @@ public class AcContentInfoFragment extends BaseFragment {
             @Override
             public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
                 if (position == 0) {
-                    GlobalUtils.showToastShort(getActivity(), "哇哈哈 " + userId);
+                    GlobalUtils.showToastShort(getActivity(), "TODO " + userId);
                 } else {
                     VideoPlayActivity.startActivity(getActivity(),
                             videoId,
