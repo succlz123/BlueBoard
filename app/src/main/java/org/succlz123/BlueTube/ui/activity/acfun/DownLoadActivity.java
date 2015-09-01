@@ -5,25 +5,34 @@ import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.github.snowdream.android.app.DownloadListener;
 import com.github.snowdream.android.app.DownloadManager;
+import com.github.snowdream.android.app.DownloadStatus;
 import com.github.snowdream.android.app.DownloadTask;
 
 import org.succlz123.bluetube.R;
 import org.succlz123.bluetube.bean.acfun.AcContentInfo;
 import org.succlz123.bluetube.bean.acfun.AcContentVideo;
+import org.succlz123.bluetube.support.adapter.acfun.recyclerview.DownLoadRvAdapter;
 import org.succlz123.bluetube.support.config.RetrofitConfig;
 import org.succlz123.bluetube.support.helper.acfun.AcApi;
 import org.succlz123.bluetube.support.helper.acfun.AcString;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.bluetube.support.utils.LogUtils;
+import org.succlz123.bluetube.support.utils.ViewUtils;
 import org.succlz123.bluetube.ui.activity.BaseActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -41,16 +50,65 @@ public class DownLoadActivity extends BaseActivity {
         activity.startActivity(intent);
     }
 
+    private LinearLayoutManager mManager;
+    private DownLoadRvAdapter mAdapter;
+    private DownloadManager mDownloadManager;
+    private MyDownLoadListener mDownloadListener;
+
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @Bind(R.id.download_recycler_view)
+    RecyclerView mRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
         ButterKnife.bind(this);
 
+        ViewUtils.setToolbar(DownLoadActivity.this, mToolbar, true, "下载");
+
+        mManager = new LinearLayoutManager(DownLoadActivity.this);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new DownLoadRvAdapter();
+
+        mDownloadManager = new DownloadManager(DownLoadActivity.this);
+        mDownloadListener = new MyDownLoadListener();
+
+        mAdapter.setOnClickListener(new DownLoadRvAdapter.OnClickListener() {
+            @Override
+            public void onClick(View view, int position, DownloadTask downloadTask,int type) {
+
+                switch (downloadTask.getStatus()) {
+                    case DownloadStatus.STATUS_PENDING:
+                    case DownloadStatus.STATUS_FAILED:
+                    case DownloadStatus.STATUS_STOPPED:
+                    case DownloadStatus.STATUS_FINISHED:
+                        mDownloadManager.start(downloadTask, mDownloadListener);
+                        break;
+                    case DownloadStatus.STATUS_RUNNING:
+                        mDownloadManager.stop(downloadTask, mDownloadListener);
+                        break;
+                    default:
+                        break;
+                }
+                if(type==0){
+                    GlobalUtils.showToastShort(DownLoadActivity.this, "fadfsf");
+
+                    mDownloadManager.deleteforever(downloadTask,mDownloadListener);
+                }
+            }
+        });
+        mRecyclerView.setAdapter(mAdapter);
+
         ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList
                 = getIntent().getParcelableArrayListExtra(AcString.DOWNLOAD_LIST);
 
-        for (AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
+
+        for (final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
 
             String sourceType = videosEntity.getSourceType();
             final String sourceId = videosEntity.getSourceId();
@@ -67,16 +125,16 @@ public class DownLoadActivity extends BaseActivity {
                                 String fileName = sourceId + ".mp4";
                                 String filePathName = DownLoadActivity.this.getExternalFilesDir("video").getAbsolutePath() + File.separator + fileName;
 
-                                DownloadManager downloadManager = new DownloadManager(DownLoadActivity.this);
                                 DownloadTask task = new DownloadTask(DownLoadActivity.this);
                                 task.setUrl(path);
                                 task.setPath(filePathName);
 
-                                MyDownLoadListener listener = new MyDownLoadListener();
-                                downloadManager.add(task, listener); //Add the task
-                                downloadManager.start(task, listener); //Start the task
-                                downloadManager.stop(task, listener); //Stop the task if you exit your APP.
-                             }
+                                mDownloadManager.add(task, mDownloadListener); //Add the task
+                                mAdapter.setDownloadTask(task);
+                                mAdapter.setVideosEntity(videosEntity);
+                                //                                mDownloadManager.start(task, mDownloadListener); //Start the task
+//                                mDownloadManager.stop(task, mDownloadListener); //Stop the task if you exit your APP.
+                            }
 
                             @Override
                             public void failure(RetrofitError error) {
@@ -95,7 +153,7 @@ public class DownLoadActivity extends BaseActivity {
     private class MyDownLoadListener extends DownloadListener<Integer, DownloadTask> {
         /**
          * The download task has been added to the sqlite.
-         * <p/>
+         * <p>
          * operation of UI allowed.
          *
          * @param downloadTask the download task which has been added to the sqlite.
@@ -104,12 +162,11 @@ public class DownLoadActivity extends BaseActivity {
         public void onAdd(DownloadTask downloadTask) {
             super.onAdd(downloadTask);
             LogUtils.e("onAdd()");
-            LogUtils.e("" + downloadTask);
         }
 
         /**
          * The download task has been delete from the sqlite
-         * <p/>
+         * <p>
          * operation of UI allowed.
          *
          * @param downloadTask the download task which has been deleted to the sqlite.
@@ -122,7 +179,7 @@ public class DownLoadActivity extends BaseActivity {
 
         /**
          * The download task is stop
-         * <p/>
+         * <p>
          * operation of UI allowed.
          *
          * @param downloadTask the download task which has been stopped.
@@ -130,7 +187,8 @@ public class DownLoadActivity extends BaseActivity {
         @Override
         public void onStop(DownloadTask downloadTask) {
             super.onStop(downloadTask);
-            LogUtils.e("onStop()");
+            mAdapter.setIsDownloadStart(false);
+            GlobalUtils.showToastShort(DownLoadActivity.this, "暂停下载");
         }
 
         /**
@@ -139,7 +197,8 @@ public class DownLoadActivity extends BaseActivity {
         @Override
         public void onStart() {
             super.onStart();
-            LogUtils.e("onStart()");
+            mAdapter.setIsDownloadStart(true);
+            GlobalUtils.showToastShort(DownLoadActivity.this, "开始下载");
         }
 
         /**
@@ -151,8 +210,8 @@ public class DownLoadActivity extends BaseActivity {
         @Override
         public void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-//            ((DownloadTaskAdapter) getListAdapter()).notifyDataSetChanged();
-            LogUtils.e(values.toString());
+            mAdapter.notifyDataSetChanged();
+//            mAdapter.setValues(values[0]);
         }
 
         /**
@@ -184,7 +243,7 @@ public class DownLoadActivity extends BaseActivity {
         @Override
         public void onError(Throwable thr) {
             super.onError(thr);
-            LogUtils.e("onError()");
+            GlobalUtils.showToastShort(DownLoadActivity.this, "下载错误 请重试");
         }
 
         /**
@@ -197,7 +256,6 @@ public class DownLoadActivity extends BaseActivity {
             LogUtils.e("onFinish()");
         }
     }
-
 
 
     private class DownloadChangeObserver extends ContentObserver {

@@ -251,6 +251,15 @@ public class AcContentInfo {
                 private String type;
                 private String commentId;
                 private String sourceId;
+                private String videoTitle;
+
+                public String getVideoTitle() {
+                    return videoTitle;
+                }
+
+                public void setVideoTitle(String videoTitle) {
+                    this.videoTitle = videoTitle;
+                }
 
                 public void setStartTime(int startTime) {
                     this.startTime = startTime;
@@ -340,6 +349,7 @@ public class AcContentInfo {
                     dest.writeString(this.type);
                     dest.writeString(this.commentId);
                     dest.writeString(this.sourceId);
+                    dest.writeString(this.videoTitle);
                 }
 
                 public VideosEntity() {
@@ -355,6 +365,7 @@ public class AcContentInfo {
                     this.type = in.readString();
                     this.commentId = in.readString();
                     this.sourceId = in.readString();
+                    this.videoTitle = in.readString();
                 }
 
                 public static final Parcelable.Creator<VideosEntity> CREATOR = new Parcelable.Creator<VideosEntity>() {

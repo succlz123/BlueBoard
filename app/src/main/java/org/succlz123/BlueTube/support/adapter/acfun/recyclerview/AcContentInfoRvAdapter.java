@@ -258,8 +258,9 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         if (mCheckedList.size() != 0) {
                             mDownLoadList.clear();
                             for (int position : mCheckedList) {
-                                final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
+                                AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
                                         = mVideoList.get(position - 1);
+                                videosEntity.setVideoTitle(mAcContentInfo.getData().getFullContent().getTitle());
                                 mDownLoadList.add(videosEntity);
                             }
                             if (mOnDownLoadClickListener != null && mDownLoadList.size() != 0) {

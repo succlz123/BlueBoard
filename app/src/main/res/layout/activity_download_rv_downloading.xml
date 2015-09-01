@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/download_downloading_cv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
+    android:clickable="true"
+    android:foreground="?selectableItemBackground"
+    card_view:cardCornerRadius="@dimen/shape">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/pink_base"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/download_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/download_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:minHeight="40dp"
+            android:singleLine="true"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/download_stop_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/start"
+                android:tint="@color/pink_base"/>
+
+            <!--<Button-->
+            <!--android:id="@+id/download_stop_btn"-->
+            <!--android:layout_width="45dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:background="@color/pink_base"-->
+            <!--android:text="下载"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="10sp"/>-->
+
+            <ProgressBar
+                android:id="@+id/download_pro_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/download_percent_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="12sp"/>
+
+
+            <Button
+                android:id="@+id/download_delete_img"
+                android:layout_width="45dp"
+                android:layout_height="25dp"
+                android:background="@color/pink_base"
+                android:text="删除"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:textSize="10sp"/>
+
+            <!--<ImageView-->
+            <!--android:id="@+id/download_delete_img"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:background="@drawable/delete"/>-->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/download_size_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="已下载"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/download_total_size_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="总共大小"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
