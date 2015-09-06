@@ -17,6 +17,7 @@ import com.github.snowdream.android.app.DownloadManager;
 import com.github.snowdream.android.app.DownloadStatus;
 import com.github.snowdream.android.app.DownloadTask;
 
+import org.succlz123.bluetube.MyApplication;
 import org.succlz123.bluetube.R;
 import org.succlz123.bluetube.bean.acfun.AcContentInfo;
 import org.succlz123.bluetube.bean.acfun.AcContentVideo;
@@ -27,6 +28,7 @@ import org.succlz123.bluetube.support.helper.acfun.AcString;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.bluetube.support.utils.LogUtils;
 import org.succlz123.bluetube.support.utils.ViewUtils;
+import org.succlz123.bluetube.support.widget.MyOkHttp;
 import org.succlz123.bluetube.ui.activity.BaseActivity;
 
 import java.io.File;
@@ -34,8 +36,12 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.aigestudio.downloader.bizs.DLManager;
+import cn.aigestudio.downloader.interfaces.DLTaskListener;
 import retrofit.Callback;
+import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 /**
@@ -80,7 +86,7 @@ public class DownLoadActivity extends BaseActivity {
 
         mAdapter.setOnClickListener(new DownLoadRvAdapter.OnClickListener() {
             @Override
-            public void onClick(View view, int position, DownloadTask downloadTask,int type) {
+            public void onClick(View view, int position, DownloadTask downloadTask, int type) {
 
                 switch (downloadTask.getStatus()) {
                     case DownloadStatus.STATUS_PENDING:
@@ -95,10 +101,10 @@ public class DownLoadActivity extends BaseActivity {
                     default:
                         break;
                 }
-                if(type==0){
+                if (type == 0) {
                     GlobalUtils.showToastShort(DownLoadActivity.this, "fadfsf");
 
-                    mDownloadManager.deleteforever(downloadTask,mDownloadListener);
+                    mDownloadManager.deleteforever(downloadTask, mDownloadListener);
                 }
             }
         });
@@ -107,11 +113,12 @@ public class DownLoadActivity extends BaseActivity {
         ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList
                 = getIntent().getParcelableArrayListExtra(AcString.DOWNLOAD_LIST);
 
+        final android.app.DownloadManager downloadManager = (android.app.DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
 
         for (final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
 
             String sourceType = videosEntity.getSourceType();
-            final String sourceId = videosEntity.getSourceId();
 
             if (TextUtils.equals(sourceType, "letv")) {
                 RetrofitConfig.getAcContentLeTvVideo().onContentResult(
@@ -122,38 +129,116 @@ public class DownLoadActivity extends BaseActivity {
                                 String base64Url = acContentVideo.getData().getVideo_list().getVideo_4().getMain_url();
                                 String path = GlobalUtils.decodeByBase64(base64Url);
 
-                                String fileName = sourceId + ".mp4";
-                                String filePathName = DownLoadActivity.this.getExternalFilesDir("video").getAbsolutePath() + File.separator + fileName;
+//                                download(videosEntity.getSourceId(), path);
 
-                                DownloadTask task = new DownloadTask(DownLoadActivity.this);
-                                task.setUrl(path);
-                                task.setPath(filePathName);
+                                String okHttp = MyOkHttp.getInstance().getHeader(path);
+                                LogUtils.e(okHttp);
 
-                                mDownloadManager.add(task, mDownloadListener); //Add the task
-                                mAdapter.setDownloadTask(task);
-                                mAdapter.setVideosEntity(videosEntity);
-                                //                                mDownloadManager.start(task, mDownloadListener); //Start the task
+
+//                                DownloadTask task = new DownloadTask(DownLoadActivity.this);
+//                                task.setUrl(path);
+//                                    task.setPath(filePathName+"/123");
+//
+//                                mDownloadManager.add(task, mDownloadListener); //Add the task
+//                                mAdapter.setDownloadTask(task);
+//                                mAdapter.setVideosEntity(videosEntity);
+//                                mDownloadManager.start(task, mDownloadListener); //Start the task
 //                                mDownloadManager.stop(task, mDownloadListener); //Stop the task if you exit your APP.
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-
+                                String xx = "123";
                             }
                         });
 
             }
-
-
         }
 
     }
 
+    private void download(String sourceId, String path) {
+
+        final String fileName = sourceId + ".mp4";
+        final String filePathName = DownLoadActivity.this.getExternalFilesDir("video").getAbsolutePath()
+                + File.separator + fileName;
+
+        RestAdapter restAdapter = new RestAdapter
+                .Builder()
+                .setClient(new OkClient(MyApplication.okHttpClient()))
+                .setEndpoint("http://g3.letv.cn")
+                .build();
+        AcApi.getVideoDownloadUrl videoDownloadUrl = restAdapter.create(AcApi.getVideoDownloadUrl.class);
+
+        videoDownloadUrl.onResult(path.replace("http://g3.letv.cn/", ""), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String url = response.getUrl();
+
+                DLManager.getInstance(getApplicationContext()).dlStart(url, filePathName, new DLTaskListener() {
+                    @Override
+                    public void onStart(String fileName, String url) {
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "fdfadsfsf");
+                        LogUtils.e("1");
+
+                    }
+
+                    @Override
+                    public boolean onConnect(int type, String msg) {
+                        LogUtils.e("2");
+
+                        return super.onConnect(type, msg);
+                    }
+
+                    @Override
+                    public void onProgress(int progress) {
+                        super.onProgress(progress);
+                        LogUtils.e("3");
+
+                    }
+
+                    @Override
+                    public void onFinish(File file) {
+                        super.onFinish(file);
+                        LogUtils.e("4");
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        super.onError(error);
+                        LogUtils.e("5");
+
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "123");
+
+                    }
+                });
+//                                        android.app.DownloadManager.Request request = new android.app.DownloadManager.Request(Uri.parse(url));
+//
+//                                        request.setDestinationInExternalFilesDir(DownLoadActivity.this, "video", fileName);
+//                                        request.setAllowedNetworkTypes(android.app.DownloadManager.Request.NETWORK_WIFI);
+//                                        request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE);
+//                                        request.setTitle(videosEntity.getVideoTitle());
+//                                        request.setDescription(videosEntity.getName());
+//                                        request.setAllowedOverRoaming(false);
+//
+//                                        long downloadId = downloadManager.enqueue(request);
+
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                int xx = 1;
+                error.getUrl();
+            }
+        });
+    }
 
     private class MyDownLoadListener extends DownloadListener<Integer, DownloadTask> {
         /**
          * The download task has been added to the sqlite.
-         * <p>
+         * <p/>
          * operation of UI allowed.
          *
          * @param downloadTask the download task which has been added to the sqlite.
@@ -166,7 +251,7 @@ public class DownLoadActivity extends BaseActivity {
 
         /**
          * The download task has been delete from the sqlite
-         * <p>
+         * <p/>
          * operation of UI allowed.
          *
          * @param downloadTask the download task which has been deleted to the sqlite.
@@ -179,7 +264,7 @@ public class DownLoadActivity extends BaseActivity {
 
         /**
          * The download task is stop
-         * <p>
+         * <p/>
          * operation of UI allowed.
          *
          * @param downloadTask the download task which has been stopped.

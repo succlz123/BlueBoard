@@ -1,5 +1,7 @@
 package org.succlz123.bluetube.support.widget;
 
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -75,6 +77,34 @@ public class MyOkHttp {
         }
         return null;
     }
+
+    public String getHeader(String url) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+
+//        try {
+//            Response response = okHttpClient.newCall(request).execute();
+//            if (response.isSuccessful()) {
+//                return response.request().urlString();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                response.request().urlString();
+            }
+        });
+     }
 
     /*图片下载*/
     public InputStream doImageGet(String url) {

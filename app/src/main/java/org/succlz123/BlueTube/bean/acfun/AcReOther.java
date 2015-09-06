@@ -144,7 +144,7 @@ public class AcReOther {
 				 * channelId : 106
 				 * views : 2241
 				 */
-				private int stows;
+ 				private int stows;
 				private int isRecommend;
 				private int comments;
 				private long releaseDate;

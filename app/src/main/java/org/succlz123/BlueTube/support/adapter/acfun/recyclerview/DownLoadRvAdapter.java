@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -101,7 +100,7 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ProgressBar parBarDownloading;
 
         @Bind(R.id.download_stop_btn)
-        ImageView btnDownload;
+        Button btnDownload;
 
         @Bind(R.id.download_delete_img)
         Button imgDownloadDelete;
@@ -180,14 +179,14 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if (file.exists()) {
                     fileSize = file.length();
                     double showFileSize = ((double) fileSize / 1024 / 1024);
-                    ((DownloadingVH) holder).tvSize.setText(" 已下载 " + String.valueOf(df.format(showFileSize)) + "M");
+                    ((DownloadingVH) holder).tvSize.setText(" " + String.valueOf(df.format(showFileSize)) + "M");
                 }
 
                 int progress = 0;
                 if (mDownloadTask.getSize() > 0) {
                     progress = (int) (fileSize * 100 / mDownloadTask.getSize());
                     double totalSize = (double) mDownloadTask.getSize() / 1024 / 1024;
-                    ((DownloadingVH) holder).tvTotalSize.setText(" 总共大小 " + String.valueOf(df.format(totalSize) + "M"));
+                    ((DownloadingVH) holder).tvTotalSize.setText("/" + String.valueOf(df.format(totalSize) + "M"));
                     ((DownloadingVH) holder).tvPercent.setText(String.valueOf(progress) + "%");
                     ((DownloadingVH) holder).parBarDownloading.setMax(100);
                     ((DownloadingVH) holder).parBarDownloading.setProgress(progress);

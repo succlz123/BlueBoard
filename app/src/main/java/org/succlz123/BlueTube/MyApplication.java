@@ -8,6 +8,7 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.okhttp.OkHttpClient;
 
+
 import org.succlz123.bluetube.support.config.FrescoConfig;
 
 import java.util.concurrent.TimeUnit;
@@ -54,6 +55,9 @@ public class MyApplication extends Application {
         ButterKnife.setDebug(BuildConfig.DEBUG);
 
         Fresco.initialize(sInstance, FrescoConfig.getImagePipelineConfig(sInstance));
+
+
+
 
     }
 
