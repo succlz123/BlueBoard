@@ -51,6 +51,8 @@
             android:name=".ui.activity.acfun.DownLoadActivity">
         </activity>
 
+        <service android:name=".support.service.DownloadService"/>
+
     </application>
 
 </manifest>

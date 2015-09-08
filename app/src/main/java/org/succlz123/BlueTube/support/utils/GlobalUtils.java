@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import org.succlz123.bluetube.MyApplication;
 import org.succlz123.bluetube.R;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +43,11 @@ public class GlobalUtils {
      * @param tip
      */
     public static void showToastShort(Context context, String tip) {
-        Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
+        if (context == null) {
+            Toast.makeText(MyApplication.getsInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -52,7 +57,11 @@ public class GlobalUtils {
      * @param tip
      */
     public static void showToastLong(Context context, String tip) {
-        Toast.makeText(context, tip, Toast.LENGTH_LONG).show();
+        if (context == null) {
+            Toast.makeText(MyApplication.getsInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

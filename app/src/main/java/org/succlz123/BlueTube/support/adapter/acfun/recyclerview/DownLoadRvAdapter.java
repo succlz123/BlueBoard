@@ -11,14 +11,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.snowdream.android.app.DownloadTask;
-
 import org.succlz123.bluetube.R;
 import org.succlz123.bluetube.bean.acfun.AcContentInfo;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
-
-import java.io.File;
-import java.text.DecimalFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +29,6 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private AcContentInfo.DataEntity.FullContentEntity.VideosEntity mVideosEntity;
     private Integer mValues;
-    private DownloadTask mDownloadTask;
     private OnClickListener mOnClickListener;
 
     public Integer getValues() {
@@ -43,15 +37,6 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setValues(Integer values) {
         mValues = values;
-        notifyDataSetChanged();
-    }
-
-    public DownloadTask getDownloadTask() {
-        return mDownloadTask;
-    }
-
-    public void setDownloadTask(DownloadTask downloadTask) {
-        mDownloadTask = downloadTask;
         notifyDataSetChanged();
     }
 
@@ -73,7 +58,7 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnClickListener {
-        void onClick(View view, int position, DownloadTask downloadTask, int type);
+        void onClick(View view, int position, int type);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
@@ -165,56 +150,56 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DownloadingVH) {
 
-            if (mVideosEntity != null) {
-
-                ((DownloadingVH) holder).tvTitle.setText(mVideosEntity.getVideoTitle());
-                ((DownloadingVH) holder).tvItemTitle.setText(mVideosEntity.getName());
-            }
-
-            if (mDownloadTask != null) {
-                DecimalFormat df = new DecimalFormat("0.00");
-
-                long fileSize = 0l;
-                File file = new File(mDownloadTask.getPath());
-                if (file.exists()) {
-                    fileSize = file.length();
-                    double showFileSize = ((double) fileSize / 1024 / 1024);
-                    ((DownloadingVH) holder).tvSize.setText(" " + String.valueOf(df.format(showFileSize)) + "M");
-                }
-
-                int progress = 0;
-                if (mDownloadTask.getSize() > 0) {
-                    progress = (int) (fileSize * 100 / mDownloadTask.getSize());
-                    double totalSize = (double) mDownloadTask.getSize() / 1024 / 1024;
-                    ((DownloadingVH) holder).tvTotalSize.setText("/" + String.valueOf(df.format(totalSize) + "M"));
-                    ((DownloadingVH) holder).tvPercent.setText(String.valueOf(progress) + "%");
-                    ((DownloadingVH) holder).parBarDownloading.setMax(100);
-                    ((DownloadingVH) holder).parBarDownloading.setProgress(progress);
-                }
-
-//                if (isDownloadStart) {
-//                    ((DownloadingVH) holder).btnDownload.setText("下载中");
-//                } else {
-//                    ((DownloadingVH) holder).btnDownload.setText("暂停中");
+//            if (mVideosEntity != null) {
+//
+//                ((DownloadingVH) holder).tvTitle.setText(mVideosEntity.getVideoTitle());
+//                ((DownloadingVH) holder).tvItemTitle.setText(mVideosEntity.getName());
+//            }
+//
+//            if (mDownloadTask != null) {
+//                DecimalFormat df = new DecimalFormat("0.00");
+//
+//                long fileSize = 0l;
+//                File file = new File(mDownloadTask.getPath());
+//                if (file.exists()) {
+//                    fileSize = file.length();
+//                    double showFileSize = ((double) fileSize / 1024 / 1024);
+//                    ((DownloadingVH) holder).tvSize.setText(" " + String.valueOf(df.format(showFileSize)) + "M");
 //                }
-
-//                ((DownloadingVH) holder).btnDownload.setTin
-
-                        ((DownloadingVH) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        mOnClickListener.onClick(v, position, mDownloadTask, 1);
-                    }
-                });
-
-                ((DownloadingVH) holder).imgDownloadDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mOnClickListener.onClick(v, position, mDownloadTask, 0);
-                    }
-                });
-            }
+//
+//                int progress = 0;
+//                if (mDownloadTask.getSize() > 0) {
+//                    progress = (int) (fileSize * 100 / mDownloadTask.getSize());
+//                    double totalSize = (double) mDownloadTask.getSize() / 1024 / 1024;
+//                    ((DownloadingVH) holder).tvTotalSize.setText("/" + String.valueOf(df.format(totalSize) + "M"));
+//                    ((DownloadingVH) holder).tvPercent.setText(String.valueOf(progress) + "%");
+//                    ((DownloadingVH) holder).parBarDownloading.setMax(100);
+//                    ((DownloadingVH) holder).parBarDownloading.setProgress(progress);
+//                }
+//
+////                if (isDownloadStart) {
+////                    ((DownloadingVH) holder).btnDownload.setText("下载中");
+////                } else {
+////                    ((DownloadingVH) holder).btnDownload.setText("暂停中");
+////                }
+//
+////                ((DownloadingVH) holder).btnDownload.setTin
+//
+//                ((DownloadingVH) holder).btnDownload.setOnClickListener(new View.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(View v) {
+//                        mOnClickListener.onClick(v, position, mDownloadTask, 1);
+//                    }
+//                });
+//
+//                ((DownloadingVH) holder).imgDownloadDelete.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mOnClickListener.onClick(v, position, mDownloadTask, 0);
+//                    }
+//                });
+//            }
 
 
         } else if (holder instanceof DownloadCompleteVH) {

@@ -264,8 +264,9 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                 mDownLoadList.add(videosEntity);
                             }
                             if (mOnDownLoadClickListener != null && mDownLoadList.size() != 0) {
-                                mOnDownLoadClickListener.onClick(v,
-                                        position, mDownLoadList);
+                                mOnDownLoadClickListener.onClick(v, position, mDownLoadList);
+                                mIsShowDlCheckBox=false;
+                                notifyDataSetChanged();
                             }
                         }
                     }

@@ -1,6 +1,7 @@
 package org.succlz123.bluetube.ui.fragment.acfun.other;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,11 +18,11 @@ import org.succlz123.bluetube.bean.acfun.AcContentInfo;
 import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcContentInfoRvAdapter;
 import org.succlz123.bluetube.support.config.RetrofitConfig;
 import org.succlz123.bluetube.support.helper.acfun.AcApi;
+import org.succlz123.bluetube.support.service.DownloadService;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.bluetube.support.utils.ViewUtils;
 import org.succlz123.bluetube.ui.activity.VideoPlayActivity;
 import org.succlz123.bluetube.ui.activity.acfun.AcContentActivity;
-import org.succlz123.bluetube.ui.activity.acfun.DownLoadActivity;
 import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import java.util.ArrayList;
@@ -29,7 +30,9 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
+import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 /**
@@ -60,6 +63,7 @@ public class AcContentInfoFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_fragment_content_info, container, false);
         ButterKnife.bind(this, view);
 
+
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -81,7 +85,11 @@ public class AcContentInfoFragment extends BaseFragment {
         mAdapter.setOnDownLoadClickListener(new AcContentInfoRvAdapter.OnDownLoadClickListener() {
             @Override
             public void onClick(View view, int position, ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
-                DownLoadActivity.startActivity(getActivity(), downLoadList);
+                DownloadService.startService(getActivity(), downLoadList);
+
+
+
+
             }
         });
 
@@ -163,4 +171,5 @@ public class AcContentInfoFragment extends BaseFragment {
             }
         });
     }
+
 }

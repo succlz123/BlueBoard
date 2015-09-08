@@ -2,20 +2,13 @@ package org.succlz123.bluetube.ui.activity.acfun;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
-
-import com.github.snowdream.android.app.DownloadListener;
-import com.github.snowdream.android.app.DownloadManager;
-import com.github.snowdream.android.app.DownloadStatus;
-import com.github.snowdream.android.app.DownloadTask;
 
 import org.succlz123.bluetube.MyApplication;
 import org.succlz123.bluetube.R;
@@ -26,18 +19,13 @@ import org.succlz123.bluetube.support.config.RetrofitConfig;
 import org.succlz123.bluetube.support.helper.acfun.AcApi;
 import org.succlz123.bluetube.support.helper.acfun.AcString;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
-import org.succlz123.bluetube.support.utils.LogUtils;
 import org.succlz123.bluetube.support.utils.ViewUtils;
-import org.succlz123.bluetube.support.widget.MyOkHttp;
 import org.succlz123.bluetube.ui.activity.BaseActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.aigestudio.downloader.bizs.DLManager;
-import cn.aigestudio.downloader.interfaces.DLTaskListener;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -58,8 +46,7 @@ public class DownLoadActivity extends BaseActivity {
 
     private LinearLayoutManager mManager;
     private DownLoadRvAdapter mAdapter;
-    private DownloadManager mDownloadManager;
-    private MyDownLoadListener mDownloadListener;
+    private android.app.DownloadManager mDownloadManager;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -74,6 +61,7 @@ public class DownLoadActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         ViewUtils.setToolbar(DownLoadActivity.this, mToolbar, true, "下载");
+        mDownloadManager = (android.app.DownloadManager) MyApplication.getsInstance().getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
 
         mManager = new LinearLayoutManager(DownLoadActivity.this);
         mRecyclerView.setHasFixedSize(true);
@@ -81,40 +69,11 @@ public class DownLoadActivity extends BaseActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new DownLoadRvAdapter();
 
-        mDownloadManager = new DownloadManager(DownLoadActivity.this);
-        mDownloadListener = new MyDownLoadListener();
 
-        mAdapter.setOnClickListener(new DownLoadRvAdapter.OnClickListener() {
-            @Override
-            public void onClick(View view, int position, DownloadTask downloadTask, int type) {
-
-                switch (downloadTask.getStatus()) {
-                    case DownloadStatus.STATUS_PENDING:
-                    case DownloadStatus.STATUS_FAILED:
-                    case DownloadStatus.STATUS_STOPPED:
-                    case DownloadStatus.STATUS_FINISHED:
-                        mDownloadManager.start(downloadTask, mDownloadListener);
-                        break;
-                    case DownloadStatus.STATUS_RUNNING:
-                        mDownloadManager.stop(downloadTask, mDownloadListener);
-                        break;
-                    default:
-                        break;
-                }
-                if (type == 0) {
-                    GlobalUtils.showToastShort(DownLoadActivity.this, "fadfsf");
-
-                    mDownloadManager.deleteforever(downloadTask, mDownloadListener);
-                }
-            }
-        });
         mRecyclerView.setAdapter(mAdapter);
 
         ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList
                 = getIntent().getParcelableArrayListExtra(AcString.DOWNLOAD_LIST);
-
-        final android.app.DownloadManager downloadManager = (android.app.DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-
 
         for (final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
 
@@ -129,26 +88,13 @@ public class DownLoadActivity extends BaseActivity {
                                 String base64Url = acContentVideo.getData().getVideo_list().getVideo_4().getMain_url();
                                 String path = GlobalUtils.decodeByBase64(base64Url);
 
-//                                download(videosEntity.getSourceId(), path);
-
-                                String okHttp = MyOkHttp.getInstance().getHeader(path);
-                                LogUtils.e(okHttp);
-
-
-//                                DownloadTask task = new DownloadTask(DownLoadActivity.this);
-//                                task.setUrl(path);
-//                                    task.setPath(filePathName+"/123");
-//
-//                                mDownloadManager.add(task, mDownloadListener); //Add the task
-//                                mAdapter.setDownloadTask(task);
-//                                mAdapter.setVideosEntity(videosEntity);
-//                                mDownloadManager.start(task, mDownloadListener); //Start the task
-//                                mDownloadManager.stop(task, mDownloadListener); //Stop the task if you exit your APP.
+                                GlobalUtils.showToastShort(null, "耐心等待1-5分钟,也许会下载吧");
+                                download(videosEntity, path);
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-                                String xx = "123";
+
                             }
                         });
 
@@ -157,11 +103,12 @@ public class DownLoadActivity extends BaseActivity {
 
     }
 
-    private void download(String sourceId, String path) {
-
-        final String fileName = sourceId + ".mp4";
-        final String filePathName = DownLoadActivity.this.getExternalFilesDir("video").getAbsolutePath()
-                + File.separator + fileName;
+    private void download(AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity, String path) {
+        final String fileName = videosEntity.getSourceId() + ".mp4";
+//        final String filePathName = DownLoadActivity.this.getExternalFilesDir("video").getAbsolutePath()
+//                + File.separator + fileName;
+        final String title = videosEntity.getVideoTitle();
+        final String description = videosEntity.getName();
 
         RestAdapter restAdapter = new RestAdapter
                 .Builder()
@@ -175,189 +122,23 @@ public class DownLoadActivity extends BaseActivity {
             public void success(Response response, Response response2) {
                 String url = response.getUrl();
 
-                DLManager.getInstance(getApplicationContext()).dlStart(url, filePathName, new DLTaskListener() {
-                    @Override
-                    public void onStart(String fileName, String url) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "fdfadsfsf");
-                        LogUtils.e("1");
+                android.app.DownloadManager.Request request = new android.app.DownloadManager.Request(Uri.parse(url));
 
-                    }
+                request.setDestinationInExternalFilesDir(DownLoadActivity.this, "video", fileName);
+                request.setAllowedNetworkTypes(android.app.DownloadManager.Request.NETWORK_WIFI);
+                request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE);
+                request.setTitle(title);
+                request.setDescription(description);
+                request.setAllowedOverRoaming(false);
 
-                    @Override
-                    public boolean onConnect(int type, String msg) {
-                        LogUtils.e("2");
-
-                        return super.onConnect(type, msg);
-                    }
-
-                    @Override
-                    public void onProgress(int progress) {
-                        super.onProgress(progress);
-                        LogUtils.e("3");
-
-                    }
-
-                    @Override
-                    public void onFinish(File file) {
-                        super.onFinish(file);
-                        LogUtils.e("4");
-
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        super.onError(error);
-                        LogUtils.e("5");
-
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "123");
-
-                    }
-                });
-//                                        android.app.DownloadManager.Request request = new android.app.DownloadManager.Request(Uri.parse(url));
-//
-//                                        request.setDestinationInExternalFilesDir(DownLoadActivity.this, "video", fileName);
-//                                        request.setAllowedNetworkTypes(android.app.DownloadManager.Request.NETWORK_WIFI);
-//                                        request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE);
-//                                        request.setTitle(videosEntity.getVideoTitle());
-//                                        request.setDescription(videosEntity.getName());
-//                                        request.setAllowedOverRoaming(false);
-//
-//                                        long downloadId = downloadManager.enqueue(request);
-
-
+                long downloadId = mDownloadManager.enqueue(request);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                int xx = 1;
                 error.getUrl();
             }
         });
-    }
-
-    private class MyDownLoadListener extends DownloadListener<Integer, DownloadTask> {
-        /**
-         * The download task has been added to the sqlite.
-         * <p/>
-         * operation of UI allowed.
-         *
-         * @param downloadTask the download task which has been added to the sqlite.
-         */
-        @Override
-        public void onAdd(DownloadTask downloadTask) {
-            super.onAdd(downloadTask);
-            LogUtils.e("onAdd()");
-        }
-
-        /**
-         * The download task has been delete from the sqlite
-         * <p/>
-         * operation of UI allowed.
-         *
-         * @param downloadTask the download task which has been deleted to the sqlite.
-         */
-        @Override
-        public void onDelete(DownloadTask downloadTask) {
-            super.onDelete(downloadTask);
-            LogUtils.e("onDelete()");
-        }
-
-        /**
-         * The download task is stop
-         * <p/>
-         * operation of UI allowed.
-         *
-         * @param downloadTask the download task which has been stopped.
-         */
-        @Override
-        public void onStop(DownloadTask downloadTask) {
-            super.onStop(downloadTask);
-            mAdapter.setIsDownloadStart(false);
-            GlobalUtils.showToastShort(DownLoadActivity.this, "暂停下载");
-        }
-
-        /**
-         * Runs on the UI thread before doInBackground(Params...).
-         */
-        @Override
-        public void onStart() {
-            super.onStart();
-            mAdapter.setIsDownloadStart(true);
-            GlobalUtils.showToastShort(DownLoadActivity.this, "开始下载");
-        }
-
-        /**
-         * Runs on the UI thread after publishProgress(Progress...) is invoked. The
-         * specified values are the values passed to publishProgress(Progress...).
-         *
-         * @param values The values indicating progress.
-         */
-        @Override
-        public void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            mAdapter.notifyDataSetChanged();
-//            mAdapter.setValues(values[0]);
-        }
-
-        /**
-         * Runs on the UI thread after doInBackground(Params...). The specified
-         * result is the value returned by doInBackground(Params...). This method
-         * won't be invoked if the task was cancelled.
-         *
-         * @param downloadTask The result of the operation computed by
-         *                     doInBackground(Params...).
-         */
-        @Override
-        public void onSuccess(DownloadTask downloadTask) {
-            super.onSuccess(downloadTask);
-            LogUtils.e("onSuccess()");
-        }
-
-        /**
-         * Applications should preferably override onCancelled(Object). This method
-         * is invoked by the default implementation of onCancelled(Object). Runs on
-         * the UI thread after cancel(boolean) is invoked and
-         * doInBackground(Object[]) has finished.
-         */
-        @Override
-        public void onCancelled() {
-            super.onCancelled();
-            LogUtils.e("onCancelled()");
-        }
-
-        @Override
-        public void onError(Throwable thr) {
-            super.onError(thr);
-            GlobalUtils.showToastShort(DownLoadActivity.this, "下载错误 请重试");
-        }
-
-        /**
-         * Runs on the UI thread after doInBackground(Params...) when the task is
-         * finished or cancelled.
-         */
-        @Override
-        public void onFinish() {
-            super.onFinish();
-            LogUtils.e("onFinish()");
-        }
-    }
-
-
-    private class DownloadChangeObserver extends ContentObserver {
-
-        /**
-         * Creates a content observer.
-         *
-         * @param handler The handler to run {@link #onChange} on, or null if none.
-         */
-        public DownloadChangeObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-        }
     }
 
 }
