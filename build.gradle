@@ -4,7 +4,7 @@ buildscript {
         maven {
 //            url "http://127.0.0.1:8081/nexus/content/groups/public/"
 //            url "http://uk.maven.org/maven2/"
-//            url "http://repo1.maven.org/maven2/"
+//            url 'http://repo1.maven.org/maven2/'
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
     }

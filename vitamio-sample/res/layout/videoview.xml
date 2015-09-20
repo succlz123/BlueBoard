@@ -21,7 +21,7 @@
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="startPlay"
+            android:onToggle="startPlay"
             android:text="Play" />
     </LinearLayout>
 
@@ -34,7 +34,7 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="openVideo"
+        android:onToggle="openVideo"
         android:text="@string/openvideo1" />
 
 

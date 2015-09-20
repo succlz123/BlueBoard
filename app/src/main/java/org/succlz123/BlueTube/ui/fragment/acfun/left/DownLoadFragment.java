@@ -7,7 +7,7 @@
 //import android.view.LayoutInflater;
 //import android.view.View;
 //import android.view.ViewGroup;
-//import android.webkit.DownloadListener;
+//import android.webkit.NBDownloadListener;
 //
 //import org.succlz123.bluetube.MyApplication;
 //import org.succlz123.bluetube.R;
@@ -73,7 +73,7 @@
 //
 //							DownloadTask task = new DownloadTask(getActivity());
 //							task.setUrl(path);
-//							task.setPath(filePathName);
+//							task.setFilePath(filePathName);
 //
 //							downloadManager.add(task, listener); //Add the task
 //							downloadManager.start(task, listener); //Start the task
@@ -130,7 +130,7 @@
 //
 //	}
 //
-//	private DownloadListener listener = new DownloadListener<Integer, DownloadTask>() {
+//	private NBDownloadListener listener = new NBDownloadListener<Integer, DownloadTask>() {
 //		/**
 //		 * The download task has been added to the sqlite.
 //		 * <p/>

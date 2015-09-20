@@ -101,18 +101,12 @@ public class MyOkHttp {
                 String url = response.header("Location");
 //                String url = response.request().urlString();
 
-
-
-
-
                 OkHttpClient okHttpClient = new OkHttpClient();
                 Request request1 = new Request.Builder().url(url).build();
                 Call call = okHttpClient.newCall(request1);
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
-
-
                     }
 
                     @Override
@@ -123,7 +117,7 @@ public class MyOkHttp {
                         final String filePathName = MyApplication.getsInstance().getApplicationContext().getExternalFilesDir("video").getAbsolutePath();
 //                        + File.separator + fileName;
                         DownloadManager downloadManager = (DownloadManager) MyApplication.getsInstance().getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
-                                           DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
 
                          request.addRequestHeader("Connection", "Keep-Alive");
