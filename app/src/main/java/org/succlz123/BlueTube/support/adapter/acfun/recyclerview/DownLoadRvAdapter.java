@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.succlz123.bluetube.R;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.nbdownload.NBDownloadRequest;
+import org.succlz123.nbdownload.NBDownloadStatus;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -73,10 +74,16 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mAverageSpeed = averageSpeed;
         this.mRealTimeSpeed = realTimeSpeed;
 
-        if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - time) >= 1) {
+        if (downloadMap.size() != 0 && downloadMap.get(name) != null) {
+            notifyItemChanged(downloadMap.get(name));
+        } else if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - time) >= 1) {
             time = System.currentTimeMillis();
             notifyDataSetChanged();
         }
+    }
+
+    public void setFinish(String name) {
+
     }
 
     public String getName() {
@@ -157,6 +164,24 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 ((DownloadVH) holder).progressBar.setMax(100);
                 DecimalFormat df = new DecimalFormat("0.00");
 
+                if (filePath != null) {
+                    float cacheSize = (float) (new File(downloadRequest.getFilePath()).length()) / 1024 / 1024;
+                    float totalSize = (float) (downloadRequest.getTotalSize()) / 1024 / 1024;
+
+                    if (totalSize != 0) {
+                        ((DownloadVH) holder).tvFileSize.setText(df.format(cacheSize) + "M" + "/" + df.format(totalSize) + "M");
+                        ((DownloadVH) holder).progressBar.setProgress((int) (cacheSize / totalSize * 100));
+                    }
+
+                    if (cacheSize == totalSize) {
+                        ((DownloadVH) holder).tvFileSize.setText(downloadRequest.getTotalSize() / 1024 / 1024 + "M");
+                        ((DownloadVH) holder).btnToggle.setText("完成");
+                        ((DownloadVH) holder).progressBar.setProgress(100);
+                    } else if (cacheSize < totalSize) {
+                        ((DownloadVH) holder).btnToggle.setText("继续");
+                    }
+                }
+
                 if (mName != null && TextUtils.equals(mName, sourceId)) {
 
                     downloadMap.put(mName, position);
@@ -166,34 +191,20 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     ((DownloadVH) holder).tvFileSize.setText(df.format(cacheSize) + "M" + "/" + df.format(totalSize) + "M");
                     ((DownloadVH) holder).progressBar.setProgress(mProgress);
-                }
-                if (filePath != null) {
-                    float cacheSize = (float) (new File(downloadRequest.getFilePath()).length()) / 1024 / 1024;
-                    float totalSize = (float) (downloadRequest.getTotalSize()) / 1024 / 1024;
 
-                    ((DownloadVH) holder).tvFileSize.setText(df.format(cacheSize) + "M" + "/" + df.format(totalSize) + "M");
-
-                    if (totalSize != 0) {
-                        ((DownloadVH) holder).progressBar.setProgress((int) (cacheSize / totalSize * 100));
-                    }
-                    if (cacheSize == totalSize) {
-                        ((DownloadVH) holder).tvFileSize.setText(downloadRequest.getTotalSize() / 1024 / 1024 + "M");
-                        ((DownloadVH) holder).btnToggle.setText("完成");
-                        ((DownloadVH) holder).progressBar.setProgress(100);
-                    } else if (cacheSize < totalSize) {
-                        ((DownloadVH) holder).btnToggle.setText("继续");
-
-                        ((DownloadVH) holder).btnToggle.setOnClickListener(new View.OnClickListener() {
-
-                            @Override
-                            public void onClick(View v) {
-                                mOnClickListener.onToggle(v, position, downloadRequest.getName());
-                            }
-                        });
-
-                    }
+                    ((DownloadVH) holder).btnToggle.setText("下载");
                 }
 
+                if (downloadRequest.getStatus() != NBDownloadStatus.STATUS_FINISHED) {
+                    ((DownloadVH) holder).btnToggle.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            mOnClickListener.onToggle(v, position, downloadRequest.getName());
+                        }
+                    });
+
+                }
                 ((DownloadVH) holder).btnDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

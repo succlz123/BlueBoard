@@ -57,27 +57,27 @@ public class AcString {
 	}
 
 	/*请求基础url*/
-	public static final String URL_ACFUN_API_SERVER = "http://api.acfun.tv/apiserver";
+	public static final String URL_ACFUN_API_SERVER = "http://api.acfun.tv/apiserver/";
 	/*请求评论基础url*/
-	public static final String URL_ACFUN_TV = "http://www.acfun.tv";
+	public static final String URL_ACFUN_TV = "http://www.acfun.tv/";
 	/*请求新番详情url*/
-	public static final String URL_ACFUN_ICAO = "http://icao.acfun.tv";
+	public static final String URL_ACFUN_ICAO = "http://icao.acfun.tv/";
 	/*请求弹幕url*/
-	public static final String URL_AIXIFAN_DANMU = "http://danmu.aixifan.com";
+	public static final String URL_AIXIFAN_DANMU = "http://danmu.aixifan.com/";
 	/*请求首页banner*/
-	public static final String RECOMMEND_LIST = "/recommend/list";
+	public static final String RECOMMEND_LIST = "recommend/list";
 	/*请求首页数据*/
-	public static final String RECOMMEND_PAGE = "/recommend/page";
+	public static final String RECOMMEND_PAGE = "recommend/page";
 	/*请求分区数据*/
-	public static final String CONTENT_CHANNEL = "/content/channel";
+	public static final String CONTENT_CHANNEL = "content/channel";
 	/*请求视频数据*/
-	public static final String CONTENT_INFO = "/content/info";
+	public static final String CONTENT_INFO = "content/info";
 	/*请求视频评论数据*/
-	public static final String CONTENT_REPLY = "/comment/content/list";
+	public static final String CONTENT_REPLY = "comment/content/list";
 	/*请求每周新番时间表数据*/
-	public static final String BANGUMI_WEEK = "/bangumi/week";
+	public static final String BANGUMI_WEEK = "bangumi/week";
 	/*请求每周新番时间表数据*/
-	public static final String CONTENT_RANK = "/content/rank";
+	public static final String CONTENT_RANK = "content/rank";
 
 	/*各分区id*/
 	public static final String CHANNEL_IDS = "channelIds";

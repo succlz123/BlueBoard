@@ -17,7 +17,6 @@ import org.succlz123.bluetube.bean.acfun.AcContentInfo;
 import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcContentInfoRvAdapter;
 import org.succlz123.bluetube.support.config.RetrofitConfig;
 import org.succlz123.bluetube.support.helper.acfun.AcApi;
-import org.succlz123.bluetube.support.service.DownloadService;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.bluetube.support.utils.ViewUtils;
 import org.succlz123.bluetube.ui.activity.VideoPlayActivity;
@@ -29,9 +28,9 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by succlz123 on 15/8/3.
@@ -82,7 +81,7 @@ public class AcContentInfoFragment extends BaseFragment {
         mAdapter.setOnDownLoadClickListener(new AcContentInfoRvAdapter.OnDownLoadClickListener() {
             @Override
             public void onClick(View view, int position, ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
-                DownLoadActivity.startActivity(getActivity(),downLoadList);
+                DownLoadActivity.startActivity(getActivity(), downLoadList);
             }
         });
 
@@ -127,11 +126,16 @@ public class AcContentInfoFragment extends BaseFragment {
 
     private void getHttpResult() {
         //视频信息
-        RetrofitConfig.getAcContentInfo().onContentInfoResult(AcApi.getAcContentInfoUrl(mContentId), new Callback<AcContentInfo>() {
+        Call<AcContentInfo> call = RetrofitConfig.getAcContentInfo().onContentInfoResult
+                (AcApi.getAcContentInfoUrl(mContentId));
+        call.enqueue(new Callback<AcContentInfo>() {
             @Override
-            public void success(final AcContentInfo acContentInfo, Response response) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+            public void onResponse(Response<AcContentInfo> response) {
+                AcContentInfo acContentInfo = response.body();
+
+                if (acContentInfo != null && getActivity() != null && !getActivity().isDestroyed()) {
                     //如果请求的视频被删除 未被审核 或者其他
+
                     if (!acContentInfo.isSuccess()
                             || acContentInfo.getStatus() == 404
                             || acContentInfo.getStatus() == 403) {
@@ -154,7 +158,7 @@ public class AcContentInfoFragment extends BaseFragment {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
                 if (getActivity() != null && !getActivity().isDestroyed()) {
                     GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
                     if (mSwipeRefreshLayout != null) {

@@ -33,6 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/sub1"
         android:background="@drawable/mediacontroller_sreen_size_100"
-        android:onToggle="changeLayout" />
+        />
+        <!--android:onToggle="changeLayout" />-->
 
 </RelativeLayout>

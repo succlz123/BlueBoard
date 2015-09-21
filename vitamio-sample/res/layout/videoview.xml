@@ -21,8 +21,9 @@
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onToggle="startPlay"
+
             android:text="Play" />
+        <!--android:onToggle="startPlay"-->
     </LinearLayout>
 
     <io.vov.vitamio.widget.VideoView
@@ -34,8 +35,9 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onToggle="openVideo"
         android:text="@string/openvideo1" />
+    <!--android:onToggle="openVideo"-->
+
 
 
 </LinearLayout>

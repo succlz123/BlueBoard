@@ -27,9 +27,9 @@ import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by chinausky on 2015/7/27.
@@ -156,16 +156,18 @@ public class AcPartitionFragment extends BaseFragment {
                 = settings.getString(AcString.ORDER_BY, AcString.TIME_ORDER);
         //人气最旺
         if (type == TYPE_MOST_POPULAR) {
-            RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl(
-                    mPartitionType,
-                    AcString.POPULARITY,
-                    AcString.ONE_WEEK,
-                    AcString.PAGE_SIZE_NUM_10,
-                    AcString.PAGE_NO_NUM_1), new Callback<AcReOther>() {
+            Call<AcReOther> call = RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl
+                    (mPartitionType,
+                            AcString.POPULARITY,
+                            AcString.ONE_WEEK,
+                            AcString.PAGE_SIZE_NUM_10,
+                            AcString.PAGE_NO_NUM_1));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReOther, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReOther = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
-                        if (acReOther.getData() != null
+                        if (acReOther != null && acReOther.getData() != null
                                 && acReOther.getData().getPage().getList().size() != 0) {
                             mAdapter.setAcMostPopular(acReOther);
                         }
@@ -176,7 +178,7 @@ public class AcPartitionFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
                     if (getActivity() != null && !getActivity().isDestroyed() && AcPartitionFragment.this.getUserVisibleHint()) {
                         GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
                         if (mSwipeRefreshLayout != null) {
@@ -188,13 +190,16 @@ public class AcPartitionFragment extends BaseFragment {
         }
         //最新发布
         if (type == TYPE_LAST_POST) {
-            RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl(mPartitionType,
-                    order,
-                    AcString.ONE_WEEK,
-                    AcString.PAGE_SIZE_NUM_10,
-                    pagerNoNum), new Callback<AcReOther>() {
+            Call<AcReOther> call = RetrofitConfig.getAcPartition().onResult(AcApi.getAcPartitionUrl
+                    (mPartitionType,
+                            order,
+                            AcString.ONE_WEEK,
+                            AcString.PAGE_SIZE_NUM_10,
+                            pagerNoNum));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReOther, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReOther = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         if (acReOther.getData() != null) {
                             if (acReOther.getData().getPage().getList().size() != 0) {
@@ -215,7 +220,7 @@ public class AcPartitionFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && AcPartitionFragment.this.getUserVisibleHint()) {

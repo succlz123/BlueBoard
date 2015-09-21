@@ -27,9 +27,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by succlz123 on 15/8/3.
@@ -109,40 +109,39 @@ public class AcContentReplyFragment extends BaseFragment {
 
     private void getHttpResult() {
         //评论
-        RetrofitConfig.getAcContentReply().onContentReplyResult(AcApi.getAcContentReplyUrl(
-                        mContentId,
-                        AcString.PAGE_SIZE_NUM_50,
-                        AcString.PAGE_NO_NUM_1),
-                new Callback<AcContentReply>() {
+        Call<AcContentReply> call = RetrofitConfig.getAcContentReply().onContentReplyResult(AcApi.getAcContentReplyUrl
+                (mContentId, AcString.PAGE_SIZE_NUM_50, AcString.PAGE_NO_NUM_1));
+        call.enqueue(new Callback<AcContentReply>() {
 
-                    @Override
-                    public void success(AcContentReply acContentReply, Response response) {
-                        if (getActivity() != null && !getActivity().isDestroyed()) {
-                            if (acContentReply.getData().getPage().getList().size() == 0) {
-                                if (!getActivity().isDestroyed()) {
-                                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "并没有评论");
-                                }
-                            } else {
-                                mAdapter.setContentReply(sortListReply(acContentReply));
-                            }
-
-                            if (mSwipeRefreshLayout != null) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                                mSwipeRefreshLayout.setEnabled(false);
-                            }
+            @Override
+            public void onResponse(Response<AcContentReply> response) {
+                AcContentReply acContentReply = response.body();
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acContentReply.getData().getPage().getList().size() == 0) {
+                        if (!getActivity().isDestroyed()) {
+                            GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "并没有评论");
                         }
+                    } else {
+                        mAdapter.setContentReply(sortListReply(acContentReply));
                     }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        if (getActivity() != null && !getActivity().isDestroyed()) {
-                            GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
-                            if (mSwipeRefreshLayout != null) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
-                });
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                if (getActivity() != null && !getActivity().isDestroyed()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+            }
+        });
     }
 
     private ArrayList<AcContentReply.DataEntity.Entity> sortListReply(AcContentReply acContentReply) {

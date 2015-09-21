@@ -13,7 +13,7 @@ import org.succlz123.bluetube.bean.acfun.AcReOther;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.client.Response;
+import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.QueryMap;
@@ -91,13 +91,13 @@ public class AcApi {
     public interface getAcRecommend {
 
         @GET(AcString.RECOMMEND_LIST)
-        void onAcReBannerResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReBanner> cb);
+        Call<AcReBanner> onAcReBannerResult(@QueryMap() Map<String, String> options);
 
         @GET(AcString.RECOMMEND_PAGE)
-        void onAcReHotResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReHot> cb);
+        Call<AcReHot> onAcReHotResult(@QueryMap() Map<String, String> options);
 
         @GET(AcString.CONTENT_CHANNEL)
-        void onAcReOtherResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
+        Call<AcReOther> onAcReOtherResult(@QueryMap() Map<String, String> options);
     }
 
 
@@ -126,10 +126,10 @@ public class AcApi {
     public interface getAcPartition {
 
         @GET(AcString.CONTENT_CHANNEL)
-        void onResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
+        Call<AcReOther> onResult(@QueryMap() Map<String, String> options);
 
         @GET(AcString.CONTENT_CHANNEL)
-        void onEssayResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcEssay> cb);
+        Call<AcEssay> onEssayResult(@QueryMap() Map<String, String> options);
     }
 
 
@@ -151,7 +151,7 @@ public class AcApi {
 
     public interface getAcContentInfo {
         @GET(AcString.CONTENT_INFO)
-        void onContentInfoResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContentInfo> cb);
+        Call<AcContentInfo> onContentInfoResult(@QueryMap() Map<String, String> options);
     }
 
     /**
@@ -174,7 +174,7 @@ public class AcApi {
 
     public interface getAcContentReply {
         @GET(AcString.CONTENT_REPLY)
-        void onContentReplyResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContentReply> cb);
+        Call<AcContentReply> onContentReplyResult(@QueryMap() Map<String, String> options);
     }
 
     /**
@@ -203,7 +203,7 @@ public class AcApi {
 
     public interface getAcContentLeTvVideo {
         @GET(AcString.LETV_URL_GPC)
-        void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcContentVideo> cb);
+        Call<AcContentVideo> onContentResult(@QueryMap() Map<String, String> options);
     }
 
     /**
@@ -223,12 +223,12 @@ public class AcApi {
 
     public interface getAcContentHtml5Video {
         @GET(AcString.VIDEO_GET_H5_BY_VID)
-        void onContentResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcGetH5ByVid> cb);
+        Call<AcGetH5ByVid> onContentResult(@QueryMap() Map<String, String> options);
     }
 
     public interface getVideoDownloadUrl {
         @GET("/{url}")
-        void onResult(@Path(value = "url", encode = false) String url, retrofit.Callback<Response> cb);
+        Call onResult(@Path(value = "url", encoded = false) String url);
     }
 
     /**
@@ -245,8 +245,8 @@ public class AcApi {
     }
 
     public interface getAcContentDanMu {
-        @GET("/{sourceId}")
-        void onContentResult(@QueryMap() Map<String, String> options, @Path("sourceId") String sourceId, retrofit.Callback<Response> cb);
+        @GET("{sourceId}")
+        Call onContentResult(@QueryMap() Map<String, String> options, @Path("sourceId") String sourceId);
     }
 
     /**
@@ -265,7 +265,7 @@ public class AcApi {
 
     public interface getAcBangumi {
         @GET(AcString.BANGUMI_WEEK)
-        void onBangumiResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcBangumi> cb);
+        Call<AcBangumi> onBangumiResult(@QueryMap() Map<String, String> options);
     }
 
     /**
@@ -287,12 +287,12 @@ public class AcApi {
 
     public interface getAcRanking {
         @GET(AcString.CONTENT_RANK)
-        void onRankingResult(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
+        Call<AcReOther> onRankingResult(@QueryMap() Map<String, String> options);
     }
 
     public interface getDownLoad {
         @GET(AcString.CONTENT_RANK)
         @Streaming
-        Response getData(@QueryMap() Map<String, String> options, retrofit.Callback<AcReOther> cb);
+        Call<AcReOther> getData(@QueryMap() Map<String, String> options);
     }
 }

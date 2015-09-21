@@ -32,6 +32,11 @@ public class NBDownloadRequest {
     @DatabaseField
     private long finishTime;
     /**
+     *  下载暂停时  记录的文件大小
+     */
+    @DatabaseField
+    private long cacheSize;
+    /**
      * 下载文件的总大小
      */
     @DatabaseField
@@ -79,23 +84,12 @@ public class NBDownloadRequest {
         return url.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "NBDownloadRequest{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", filePath='" + filePath + '\'' +
-                ", startTime=" + startTime +
-                ", finishTime=" + finishTime +
-                ", totalSize=" + totalSize +
-                ", mimeType='" + mimeType + '\'' +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", sourceType='" + sourceType + '\'' +
-                ", sourceId='" + sourceId + '\'' +
-                '}';
+    public long getCacheSize() {
+        return cacheSize;
+    }
+
+    public void setCacheSize(long cacheSize) {
+        this.cacheSize = cacheSize;
     }
 
     public int getId() {

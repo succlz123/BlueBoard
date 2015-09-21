@@ -25,9 +25,9 @@ import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by chinausky on 2015/7/27.
@@ -118,9 +118,12 @@ public class AcRankingFragment extends BaseFragment {
 
     private void getHttpResult(final String pagerNoNum) {
         //排行榜
-        RetrofitConfig.getAcRanking().onRankingResult(AcApi.getAcRankingUrl(mPartitionType, pagerNoNum), new Callback<AcReOther>() {
+        Call<AcReOther> call = RetrofitConfig.getAcRanking().onRankingResult(AcApi.getAcRankingUrl
+                (mPartitionType, pagerNoNum));
+        call.enqueue(new Callback<AcReOther>() {
             @Override
-            public void success(AcReOther acReOther, Response response) {
+            public void onResponse(Response<AcReOther> response) {
+                AcReOther acReOther = response.body();
                 if (getActivity() != null && !getActivity().isDestroyed()) {
                     if (acReOther.getData() != null) {
                         if (acReOther.getData().getPage().getList().size() != 0) {
@@ -143,7 +146,7 @@ public class AcRankingFragment extends BaseFragment {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
                 if (getActivity() != null && !getActivity().isDestroyed()) {
                     GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
                     if (mSwipeRefreshLayout != null) {

@@ -16,6 +16,7 @@ import org.succlz123.bluetube.bean.acfun.AcReBanner;
 import org.succlz123.bluetube.bean.acfun.AcReHot;
 import org.succlz123.bluetube.bean.acfun.AcReOther;
 import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcRecommendRvAdapter;
+import org.succlz123.bluetube.support.config.RetrofitConfig;
 import org.succlz123.bluetube.support.helper.acfun.AcApi;
 import org.succlz123.bluetube.support.helper.acfun.AcString;
 import org.succlz123.bluetube.support.utils.ViewUtils;
@@ -25,10 +26,9 @@ import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by fashi on 2015/7/19.
@@ -49,10 +49,6 @@ public class AcRecommendFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_main_recommend, container, false);
         ButterKnife.bind(this, view);
-
-        //http请求
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AcString.URL_ACFUN_API_SERVER).build();
-        acRecommend = restAdapter.create(AcApi.getAcRecommend.class);
 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -158,12 +154,16 @@ public class AcRecommendFragment extends BaseFragment {
     }
 
     private void getHttpResult(String httpGetType) {
+        acRecommend = RetrofitConfig.getAcRecommend();
+
         if (TextUtils.equals(httpGetType, AcString.BANNER)) {
             //首页横幅
-            acRecommend.onAcReBannerResult(AcApi.getAcReBannerUrl(), new Callback<AcReBanner>() {
+            Call<AcReBanner> call = acRecommend.onAcReBannerResult(AcApi.getAcReBannerUrl());
+            call.enqueue(new Callback<AcReBanner>() {
                 @Override
-                public void success(AcReBanner acReBanner, Response response) {
+                public void onResponse(Response<AcReBanner> response) {
                     if (getActivity() != null && !getActivity().isDestroyed()) {
+                        AcReBanner acReBanner = response.body();
                         mAdapter.onReBannerResult(acReBanner);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
@@ -172,15 +172,18 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.HOT)) {
             //首页热门焦点
-            acRecommend.onAcReHotResult(AcApi.getAcReHotUrl(AcString.PAGE_NO_NUM_1), new Callback<AcReHot>() {
+            Call<AcReHot> call = acRecommend.onAcReHotResult(AcApi.getAcReHotUrl
+                    (AcString.PAGE_NO_NUM_1));
+            call.enqueue(new Callback<AcReHot>() {
                 @Override
-                public void success(AcReHot acReHot, Response response) {
+                public void onResponse(Response<AcReHot> response) {
+                    AcReHot acReHot = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReHotResult(acReHot);
                         if (mSwipeRefreshLayout != null) {
@@ -190,15 +193,18 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.ANIMATION)) {
             //动画区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.ANIMATION, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.ANIMATION, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReOther, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReOther = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReAnimationResult(acReOther);
                         if (mSwipeRefreshLayout != null) {
@@ -208,15 +214,18 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.FUN)) {
             //娱乐区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.FUN, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.FUN, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReFun, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReFun = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReFunResult(acReFun);
                         if (mSwipeRefreshLayout != null) {
@@ -226,16 +235,18 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
-
         } else if (TextUtils.equals(httpGetType, AcString.MUSIC)) {
             //音乐区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.MUSIC, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.MUSIC, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReMusic, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReMusic = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReMusicResult(acReMusic);
                         if (mSwipeRefreshLayout != null) {
@@ -245,16 +256,18 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
-
         } else if (TextUtils.equals(httpGetType, AcString.GAME)) {
             //游戏区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.GAME, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.GAME, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReGame, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReGame = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReGameResult(acReGame);
                         if (mSwipeRefreshLayout != null) {
@@ -264,16 +277,18 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
-
         } else if (TextUtils.equals(httpGetType, AcString.SCIENCE)) {
             //科学区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.SCIENCE, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.SCIENCE, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReScience, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReScience = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReScienceResult(acReScience);
                         if (mSwipeRefreshLayout != null) {
@@ -283,16 +298,19 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
 
         } else if (TextUtils.equals(httpGetType, AcString.SPORT)) {
             //体育区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.SPORT, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.SPORT, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReSport, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReSport = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReSportResult(acReSport);
                         if (mSwipeRefreshLayout != null) {
@@ -302,16 +320,19 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });
 
         } else if (TextUtils.equals(httpGetType, AcString.TV)) {
             //影视区
-            acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl(AcString.TV, AcString.LAST_POST, AcString.ONE_WEEK), new Callback<AcReOther>() {
+            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.getAcReOtherUrl
+                    (AcString.TV, AcString.LAST_POST, AcString.ONE_WEEK));
+            call.enqueue(new Callback<AcReOther>() {
                 @Override
-                public void success(AcReOther acReTv, Response response) {
+                public void onResponse(Response<AcReOther> response) {
+                    AcReOther acReTv = response.body();
                     if (getActivity() != null && !getActivity().isDestroyed()) {
                         mAdapter.onAcReTvResult(acReTv);
                         if (mSwipeRefreshLayout != null) {
@@ -321,7 +342,7 @@ public class AcRecommendFragment extends BaseFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
 
                 }
             });

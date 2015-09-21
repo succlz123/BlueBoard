@@ -45,13 +45,18 @@ public class NBDownloadTask {
         return sInstance;
     }
 
-    public void stop(RequestDao requestDao, NBDownloadRequest nbDownloadRequest, NBDownloadListener listener) {
-        String name = nbDownloadRequest.getName();
+    public void stop(RequestDao requestDao, NBDownloadRequest downloadRequest, NBDownloadListener listener) {
+        String name = downloadRequest.getName();
+        String filePath = downloadRequest.getFilePath();
 
         mOkHttpClient.cancel(name);
 
-        nbDownloadRequest.setStatus(NBDownloadStatus.STATUS_STOPPED);
-        requestDao.update(nbDownloadRequest);
+        downloadRequest.setStatus(NBDownloadStatus.STATUS_STOPPED);
+        if (filePath != null) {
+            long cacheSize = new File(filePath).length();
+            downloadRequest.setCacheSize(cacheSize);
+        }
+        requestDao.update(downloadRequest);
         listener.onStop(name);
     }
 
@@ -69,8 +74,9 @@ public class NBDownloadTask {
                     file.delete();
                 }
                 requestDao.delete(requestList.get(0));
-
-                listener.onCancel(downloadRequest);
+                if (listener != null) {
+                    listener.onCancel(downloadRequest);
+                }
             }
         }
     }

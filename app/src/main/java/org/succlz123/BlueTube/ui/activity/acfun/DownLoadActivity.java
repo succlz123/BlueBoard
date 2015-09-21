@@ -70,6 +70,7 @@ public class DownLoadActivity extends BaseActivity {
         mManager = new LinearLayoutManager(DownLoadActivity.this);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mManager);
+        mRecyclerView.setItemAnimator(null);
         mAdapter = new DownLoadRvAdapter();
 
         final RequestDao requestDao = RequestDao.newInstance(MyApplication.getsInstance().getApplicationContext());
@@ -84,7 +85,7 @@ public class DownLoadActivity extends BaseActivity {
                 }
 
                 NBDownloadRequest downloadRequest = new NBDownloadRequest();
-                String sourceId = videosEntity.getSourceId();
+                String sourceId = videosEntity.getDanmakuId();
                 String sourceType = videosEntity.getSourceType();
                 String filePath = MyApplication.getsInstance().getApplicationContext()
                         .getExternalFilesDir("video")

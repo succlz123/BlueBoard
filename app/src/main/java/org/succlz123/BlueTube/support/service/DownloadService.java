@@ -10,9 +10,8 @@ import android.text.TextUtils;
 
 import org.succlz123.bluetube.MyApplication;
 import org.succlz123.bluetube.bean.acfun.AcContentInfo;
-import org.succlz123.bluetube.bean.acfun.AcContentVideo;
+import org.succlz123.bluetube.bean.newacfun.NewAcVideo;
 import org.succlz123.bluetube.support.config.RetrofitConfig;
-import org.succlz123.bluetube.support.helper.acfun.AcApi;
 import org.succlz123.bluetube.support.helper.acfun.AcString;
 import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.bluetube.ui.activity.acfun.DownLoadActivity;
@@ -27,9 +26,9 @@ import org.succlz123.nbdownload.utils.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by succlz123 on 15/9/2.
@@ -80,7 +79,7 @@ public class DownloadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        RequestDao requestDao = RequestDao.newInstance(MyApplication.getsInstance().getApplicationContext());
+        final RequestDao requestDao = RequestDao.newInstance(MyApplication.getsInstance().getApplicationContext());
         List<NBDownloadRequest> downloadRequests
                 = requestDao.query("status", String.valueOf(NBDownloadStatus.STATUS_PENDING));
 
@@ -91,53 +90,55 @@ public class DownloadService extends Service {
                 String sourceType = downloadRequest.getSourceType();
 
                 if (TextUtils.equals(sourceType, "letv")) {
-                    RetrofitConfig.getAcContentLeTvVideo().onContentResult(
-                            AcApi.getAcContentVideoUrl(downloadRequest.getSourceId()), new Callback<AcContentVideo>() {
+                    Call<NewAcVideo> call = RetrofitConfig.getNewAcVideo().onResult(downloadRequest.getSourceId());
 
-                                @Override
-                                public void success(AcContentVideo acContentVideo, Response response) {
-                                    String base64Url = acContentVideo.getData().getVideo_list().getVideo_4().getMain_url();
-                                    String url = GlobalUtils.decodeByBase64(base64Url);
-                                    download(downloadRequest, url);
-                                }
+                    call.enqueue(new Callback<NewAcVideo>() {
+                        @Override
+                        public void onResponse(Response<NewAcVideo> response) {
+                            NewAcVideo acVideo = response.body();
 
-                                @Override
-                                public void failure(RetrofitError error) {
-                                }
-                            });
+
+                            if (acVideo != null && acVideo.getData() != null) {
+                                String url = acVideo.getData().getFiles().get(0).getUrl().get(0);
+
+                                download(downloadRequest, url);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+
+                        }
+                    });
+
+
+//                    Call<AcContentVideo> call = RetrofitConfig.getAcContentLeTvVideo().onContentResult
+//                            (AcApi.getAcContentVideoUrl(downloadRequest.getSourceId()));
+//                    call.enqueue(new Callback<AcContentVideo>() {
+//
+//                        @Override
+//                        public void onResponse(Response<AcContentVideo> response) {
+//                            AcContentVideo acContentVideo = response.body();
+//                            if (acContentVideo != null && acContentVideo.getData().getVideo_list() != null) {
+//                                AcContentVideo.DataEntity.VideoListEntity videoListEntity
+//                                        = acContentVideo.getData().getVideo_list();
+//
+//                                String base64Url = response.body().getData().getVideo_list().getVideo_1().getMain_url();
+//                                String url = GlobalUtils.decodeByBase64(base64Url);
+//                                download(downloadRequest, url);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Throwable t) {
+//
+//                        }
+//                    });
                 }
             }
-
         }
-
-//        if (intent.getParcelableArrayListExtra(AcString.DOWNLOAD_LIST) != null) {
-//
 //            ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList
 //                    = intent.getParcelableArrayListExtra(AcString.DOWNLOAD_LIST);
-//
-//            mDownloadManager = new NBDownloadManager(DownloadService.this);
-//
-//            for (final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
-//                String sourceType = videosEntity.getSourceType();
-//
-//                if (TextUtils.equals(sourceType, "letv")) {
-//                    RetrofitConfig.getAcContentLeTvVideo().onContentResult(
-//                            AcApi.getAcContentVideoUrl(videosEntity.getSourceId()), new Callback<AcContentVideo>() {
-//
-//                                @Override
-//                                public void success(AcContentVideo acContentVideo, Response response) {
-//                                    String base64Url = acContentVideo.getData().getVideo_list().getVideo_4().getMain_url();
-//                                    String url = GlobalUtils.decodeByBase64(base64Url);
-//                                    download(videosEntity, url);
-//                                }
-//
-//                                @Override
-//                                public void failure(RetrofitError error) {
-//                                }
-//                            });
-//                }
-//            }
-//        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -204,5 +205,15 @@ public class DownloadService extends Service {
         public DownloadService getService() {
             return DownloadService.this;
         }
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

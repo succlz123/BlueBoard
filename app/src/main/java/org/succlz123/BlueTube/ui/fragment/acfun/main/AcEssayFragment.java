@@ -24,9 +24,9 @@ import org.succlz123.bluetube.ui.fragment.BaseFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 
 /**
  * Created by fashi on 2015/5/2.
@@ -124,18 +124,16 @@ public class AcEssayFragment extends BaseFragment {
 
     private void getHttpResult(final String pagerNoNum) {
         //文章
-        RetrofitConfig.getAcPartition().onEssayResult(AcApi.getAcPartitionUrl(mPartitionType,
-                AcString.POPULARITY,
-                AcString.ONE_WEEK,
-                AcString.PAGE_SIZE_NUM_20,
-                pagerNoNum), new Callback<AcEssay>() {
+        Call<AcEssay> call = RetrofitConfig.getAcPartition().onEssayResult(AcApi.getAcPartitionUrl
+                (mPartitionType, AcString.POPULARITY, AcString.ONE_WEEK, AcString.PAGE_SIZE_NUM_20, pagerNoNum));
+        call.enqueue(new Callback<AcEssay>() {
             @Override
-            public void success(AcEssay acEssay, Response response) {
+            public void onResponse(Response<AcEssay> response) {
                 if (getActivity() != null && !getActivity().isDestroyed()) {
                     if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
-                        mAdapter.addData(acEssay);
+                        mAdapter.addData(response.body());
                     } else {
-                        mAdapter.setEssayInfo(acEssay);
+                        mAdapter.setEssayInfo(response.body());
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -144,7 +142,7 @@ public class AcEssayFragment extends BaseFragment {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
                 if (getActivity() != null && !getActivity().isDestroyed()) {
                     GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
                     if (mSwipeRefreshLayout != null) {
