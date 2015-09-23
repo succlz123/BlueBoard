@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.succlz123.bluetube.MyApplication;
 import org.succlz123.bluetube.R;
 import org.succlz123.bluetube.bean.acfun.AcReBanner;
 import org.succlz123.bluetube.bean.acfun.AcReHot;
@@ -19,6 +20,7 @@ import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcRecommendRvAd
 import org.succlz123.bluetube.support.config.RetrofitConfig;
 import org.succlz123.bluetube.support.helper.acfun.AcApi;
 import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
 import org.succlz123.bluetube.support.utils.ViewUtils;
 import org.succlz123.bluetube.ui.activity.acfun.AcContentActivity;
 import org.succlz123.bluetube.ui.activity.acfun.AcPartitionActivity;
@@ -96,6 +98,7 @@ public class AcRecommendFragment extends BaseFragment {
                 getHttpResult(AcString.SCIENCE);
                 getHttpResult(AcString.SPORT);
                 getHttpResult(AcString.TV);
+                mSwipeRefreshLayout.setEnabled(false);
             }
         });
 
@@ -114,8 +117,9 @@ public class AcRecommendFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(AcString.BANNER);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -123,8 +127,9 @@ public class AcRecommendFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(AcString.HOT);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -162,18 +167,30 @@ public class AcRecommendFragment extends BaseFragment {
             call.enqueue(new Callback<AcReBanner>() {
                 @Override
                 public void onResponse(Response<AcReBanner> response) {
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
-                        AcReBanner acReBanner = response.body();
+                    AcReBanner acReBanner = response.body();
+                    if (acReBanner != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onReBannerResult(acReBanner);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.HOT)) {
@@ -184,17 +201,29 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReHot> response) {
                     AcReHot acReHot = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReHot != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReHotResult(acReHot);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.ANIMATION)) {
@@ -205,17 +234,29 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReOther = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReOther != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReAnimationResult(acReOther);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.FUN)) {
@@ -226,17 +267,28 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReFun = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReFun != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReFunResult(acReFun);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                     }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.MUSIC)) {
@@ -247,17 +299,28 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReMusic = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReMusic != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReMusicResult(acReMusic);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                     }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.GAME)) {
@@ -268,17 +331,28 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReGame = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReGame != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReGameResult(acReGame);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                     }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         } else if (TextUtils.equals(httpGetType, AcString.SCIENCE)) {
@@ -289,17 +363,28 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReScience = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReScience != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReScienceResult(acReScience);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                     }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
 
@@ -311,17 +396,28 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReSport = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReSport != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReSportResult(acReSport);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                     }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
 
@@ -333,17 +429,28 @@ public class AcRecommendFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReTv = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReTv != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
                         mAdapter.onAcReTvResult(acReTv);
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()) {
+                     }
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
                 }
             });
         }

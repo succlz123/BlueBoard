@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -70,7 +72,6 @@ public class AcContentActivity extends BaseActivity {
         ViewUtils.setToolbar(AcContentActivity.this, mToolbar, true);
         mCollapsingToolbarLayout.setTitle("AC" + mContentId);
         mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleText);
-
         mAdapter = new AcContentFmAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(2);
@@ -165,9 +166,13 @@ public class AcContentActivity extends BaseActivity {
                 return true;
             case 1:
                 setOnDlCheckBoxShow(true, false);
+                MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 300, 600, 0);
+                MotionEvent event= MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_MOVE, 300, 100, 0);
+                MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 300, 100, 0);
+                mCollapsingToolbarLayout.onTouchEvent(event);
                 break;
             case 2:
-                setOnDlCheckBoxShow(true,true);
+                setOnDlCheckBoxShow(true, true);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -176,7 +181,7 @@ public class AcContentActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (getIsDlCheckBoxShow()) {
-            setOnDlCheckBoxShow(false,false);
+            setOnDlCheckBoxShow(false, false);
         } else {
             super.onBackPressed();
         }

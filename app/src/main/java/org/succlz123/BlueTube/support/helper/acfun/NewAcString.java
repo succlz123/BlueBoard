@@ -5,6 +5,7 @@ package org.succlz123.bluetube.support.helper.acfun;
  */
 public class NewAcString {
     public static final String API_AIXIFAN_COM = "http://api.aixifan.com/";
+    public static final String DANMU_AIXIFAN_COM = "http://danmu.aixifan.com/";
 
     public static final String VIDEOS = "videos";
 

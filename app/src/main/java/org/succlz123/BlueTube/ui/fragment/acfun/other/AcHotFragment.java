@@ -77,9 +77,11 @@ public class AcHotFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
                         && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                    mPagerNoNum++;
+
+                    int xx = mPagerNoNum;
                     getHttpResult("" + mPagerNoNum);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
                 }
             }
         });
@@ -89,6 +91,7 @@ public class AcHotFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.setEnabled(false);
             }
         });
 
@@ -107,8 +110,9 @@ public class AcHotFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(AcString.PAGE_NO_NUM_1);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -122,7 +126,11 @@ public class AcHotFragment extends BaseFragment {
             @Override
             public void onResponse(Response<AcReHot> response) {
                 AcReHot acReHot = response.body();
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                if (acReHot != null
+                        && getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcHotFragment.this.getUserVisibleHint()) {
                     if (acReHot.getData() != null) {
                         if (acReHot.getData().getPage().getList().size() != 0) {
                             if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
@@ -130,24 +138,28 @@ public class AcHotFragment extends BaseFragment {
                             } else {
                                 mAdapter.setmAcReHot(acReHot);
                             }
+                            mPagerNoNum++;
                         } else {
-                            if (!getActivity().isDestroyed()) {
-                                GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
-                            }
+                            GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
                         }
                     }
-                    if (!getActivity().isDestroyed() && mSwipeRefreshLayout != null) {
+                    if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                if (getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcHotFragment.this.getUserVisibleHint()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新太快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }

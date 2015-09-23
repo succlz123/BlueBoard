@@ -7,7 +7,6 @@ import org.succlz123.bluetube.support.utils.GlobalUtils;
  * Created by succlz123 on 2015/7/27.
  */
 public class AcString {
-
 	public static final String TITLE = "title";
 	public static final String TITLE_HOT = "热门焦点";
 	public static final String TITLE_RANKING = "排行榜";

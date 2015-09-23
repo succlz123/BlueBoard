@@ -84,9 +84,10 @@ public class AcEssayFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
                         && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                    mPagerNoNum++;
+
                     getHttpResult("" + mPagerNoNum);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
                 }
             }
         });
@@ -96,6 +97,7 @@ public class AcEssayFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.setEnabled(false);
             }
         });
 
@@ -114,8 +116,9 @@ public class AcEssayFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(AcString.PAGE_NO_NUM_1);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -129,24 +132,35 @@ public class AcEssayFragment extends BaseFragment {
         call.enqueue(new Callback<AcEssay>() {
             @Override
             public void onResponse(Response<AcEssay> response) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                AcEssay acEssay = response.body();
+                if (acEssay != null &&
+                        getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcEssayFragment.this.getUserVisibleHint()) {
                     if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
-                        mAdapter.addData(response.body());
+                        mAdapter.addData(acEssay);
                     } else {
-                        mAdapter.setEssayInfo(response.body());
+                        mAdapter.setEssayInfo(acEssay);
                     }
+                    mPagerNoNum++;
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                if (getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcEssayFragment.this.getUserVisibleHint()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }

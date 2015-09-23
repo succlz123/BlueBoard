@@ -16,11 +16,22 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.succlz123.bluetube.R;
-import org.succlz123.bluetube.support.helper.acfun.AcString;
-import org.succlz123.bluetube.support.utils.GlobalUtils;
+import com.squareup.okhttp.Request;
 
+import org.succlz123.bluetube.R;
+import org.succlz123.bluetube.bean.newacfun.NewAcVideo;
+import org.succlz123.bluetube.support.config.RetrofitConfig;
+import org.succlz123.bluetube.support.helper.acfun.AcString;
+import org.succlz123.bluetube.support.helper.acfun.NewAcString;
+import org.succlz123.bluetube.support.utils.GlobalUtils;
+import org.succlz123.bluetube.support.utils.OkHttpClientManager;
+import org.succlz123.bluetube.ui.activity.acfun.CompressionTools;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.zip.DataFormatException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,19 +41,19 @@ import io.vov.vitamio.MediaPlayer.OnInfoListener;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
-import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.controller.IDanmakuView;
 import master.flame.danmaku.danmaku.loader.ILoader;
 import master.flame.danmaku.danmaku.loader.IllegalDataException;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
-import master.flame.danmaku.danmaku.model.DanmakuTimer;
-import master.flame.danmaku.danmaku.model.android.DanmakuGlobalConfig;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.parser.IDataSource;
-import master.flame.danmaku.danmaku.parser.android.AcFunDanmakuParser;
+import master.flame.danmaku.danmaku.parser.android.BiliDanmukuParser;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
 
 /**
  * Created by succlz123 on 15/8/4.
@@ -101,36 +112,84 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
 
         if (mSourceType != null && mIsVitamioReady) {
             if (TextUtils.equals(mSourceType, "letv")) {
-//                RetrofitConfig.getAcContentLeTvVideo().onContentResult(AcApi.getAcContentVideoUrl(mSourceId), new Callback<AcContentVideo>() {
+
+                Call<NewAcVideo> call = RetrofitConfig.getNewAcVideo().onResult(mDanmakuId);
+
+                call.enqueue(new Callback<NewAcVideo>() {
+                    @Override
+                    public void onResponse(Response<NewAcVideo> response) {
+                        NewAcVideo acVideo = response.body();
+
+                        if (acVideo != null && acVideo.getData() != null) {
+                            final String url = acVideo.getData().getFiles().get(0).getUrl().get(0);
+
+//                            setVideoView(url);
+
+
+                            Request.Builder builder = new Request.Builder();
+                            builder.url("http://danmu.aixifan.com/" + mDanmakuId)
+                                    .addHeader(NewAcString.APP_VERSION, NewAcString.APP_VERSION_400)
+                                    .addHeader(NewAcString.DEVICETYPE, NewAcString.DEVICETYPE_1)
+                                    .addHeader(NewAcString.MARKET, NewAcString.MARKET_PORTAL)
+                                    .addHeader(NewAcString.PRODUCTID, NewAcString.PRODUCTID_2000)
+                                    .addHeader(NewAcString.RESOLUTION, NewAcString.RESOLUTION_WIDTH_HEIGHT)
+                                    .addHeader(NewAcString.UUID, NewAcString.UUID_X);
+
+                            Request request = builder.build();
+
+                            com.squareup.okhttp.Call call = OkHttpClientManager.getInstance().newCall(request);
+                            call.enqueue(new com.squareup.okhttp.Callback() {
+                                             @Override
+                                             public void onFailure(Request request, IOException e) {
+
+                                             }
+
+                                             @Override
+                                             public void onResponse(final com.squareup.okhttp.Response response) throws IOException {
+
+                                                 InputStream stream = null;
+                                                 try {
+                                                     stream = new ByteArrayInputStream(CompressionTools.decompressXML(response.body().bytes()));
+                                                 } catch (DataFormatException e) {
+                                                     e.printStackTrace();
+                                                 }
+
+                                                 runOnUiThread(new Runnable() {
+                                                     @Override
+                                                     public void run() {
+//                                                         setVideoView(url, stream);
+                                                     }
+                                                 });
+
+                                             }
+                                         }
+                            );
+
+//                            Call<NewAcDanmuku> danmakuCall = RetrofitConfig.getNewAcDanmaku().onResult(mDanmakuId);
+//                            danmakuCall.enqueue(new Callback<NewAcDanmuku>() {
 //
-//                    @Override
-//                    public void onResponse(Response<AcContentVideo> response) {
-//                        String base64Url = response.body().getData().getVideo_list().getVideo_4().getMain_url();
-//                        final String path = GlobalUtils.decodeByBase64(base64Url);
-//
-//                        RetrofitConfig.getAcContentDanMu().onContentResult(AcApi.getAcContentDanMuUrl(), mDanmakuId, new Callback<Response>() {
-//                            @Override
-//                            public void onResponse(Response<Response> response) {
-//                                try {
-//                                    setVideoView(path, response.raw().body().byteStream());
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
+//                                @Override
+//                                public void onResponse(Response<NewAcDanmuku> response) {
+//                                    try {
+//                                        setVideoView(url, response.raw().body().byteStream());
+//                                    } catch (IOException e) {
+////
+//                                    }
 //                                }
-//                            }
 //
-//                            @Override
-//                            public void onFailure(Throwable t) {
-//
-//                            }
-//                        });
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Throwable t) {
-//
-//                    }
-//                });
+//                                @Override
+//                                public void onFailure(Throwable t) {
+//                                    t.toString();
+//                                }
+//                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+
+                    }
+                });
             } else {
 //                RetrofitConfig.getAcContentHtml5Video().onContentResult(AcApi.getAcContentHtml5VideoUrl("2440995"), new Callback<AcGetH5ByVid>() {
 //
@@ -166,6 +225,7 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
     }
 
     private void setVideoView(String path, InputStream in) {
+
         Uri uri = Uri.parse(path);
 //        mVideoView.setVideoURI(uri);
         final MediaController mediaController = new MyMediaController(VideoPlayActivity.this);
@@ -182,45 +242,58 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
                 mediaPlayer.setPlaybackSpeed(1.0f);
             }
         });
+        HashMap<Integer, Integer> maxLinesPair = new HashMap<Integer, Integer>();
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 5); // 滚动弹幕最大显示3行
+        // 设置是否禁止重叠
+        HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<Integer, Boolean>();
+        overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
 
-        DanmakuGlobalConfig.DEFAULT
-                .setDanmakuStyle(DanmakuGlobalConfig.DANMAKU_STYLE_STROKEN, 3)
-                .setDuplicateMergingEnabled(false).setMaximumVisibleSizeInScreen(80)
-                .setCacheStuffer(new BackgroundCacheStuffer());
-        if (mDanmakuView != null) {
-            mParser = createParser(in);
-            mDanmakuView.setCallback(new DrawHandler.Callback() {
-                @Override
-                public void updateTimer(DanmakuTimer timer) {
-                }
-
-                @Override
-                public void prepared() {
-                    mDanmakuView.start();
-                }
-            });
-            mDanmakuView.prepare(mParser);
-            mDanmakuView.showFPS(true);
-            mDanmakuView.enableDanmakuDrawingCache(true);
-            ((View) mDanmakuView).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    mediaController.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-
-        if (mVideoView != null) {
-            mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    mediaPlayer.start();
-                }
-            });
-            mVideoView.setVideoURI(uri);
-            mDanmakuView.start();
-        }
+//        mDanmakuView = (IDanmakuView) findViewById(R.id.sv_danmaku);
+//        DanmakuGlobalConfig.DEFAULT
+//                .setDanmakuStyle(DanmakuGlobalConfig.DANMAKU_STYLE_STROKEN, 3)
+//                .setDuplicateMergingEnabled(false)
+//                .setScrollSpeedFactor(1.2f)
+//                .setScaleTextSize(1.2f)
+//                .setCacheStuffer(new SpannedCacheStuffer()); // 图文混排使用SpannedCacheStuffer
+////        .setCacheStuffer(new BackgroundCacheStuffer())  // 绘制背景使用BackgroundCacheStuffer
+////                .setMaximumLines(maxLinesPair)
+////                .preventOverlapping(overlappingEnablePair);
+//
+//        if (mDanmakuView != null) {
+        mParser = createParser(in);
+//            mDanmakuView.setCallback(new DrawHandler.Callback() {
+//                @Override
+//                public void updateTimer(DanmakuTimer timer) {
+//                }
+//
+//                @Override
+//                public void prepared() {
+//                    mDanmakuView.start();
+//                }
+//            });
+//            mDanmakuView.prepare(mParser);
+//            mDanmakuView.showFPS(true);
+//            mDanmakuView.enableDanmakuDrawingCache(true);
+//            ((View) mDanmakuView).setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View view) {
+//                    mediaController.setVisibility(View.VISIBLE);
+//                }
+//            });
+//        }
+//
+//        if (mVideoView != null) {
+//            mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                @Override
+//                public void onPrepared(MediaPlayer mediaPlayer) {
+//                    mediaPlayer.start();
+//                }
+//            });
+        mVideoView.setVideoURI(uri);
+//            mDanmakuView.start();
+//        }
     }
 
     private void initDate() {
@@ -260,7 +333,6 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
                     loadRateView.setText("");
                     downloadRateView.setVisibility(View.VISIBLE);
                     loadRateView.setVisibility(View.VISIBLE);
-
                 }
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
@@ -283,6 +355,32 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
 
     private BaseDanmakuParser createParser(InputStream stream) {
 
+//        if (stream == null) {
+//            return new BaseDanmakuParser() {
+//
+//                @Override
+//                protected Danmakus parse() {
+//                    return new Danmakus();
+//                }
+//            };
+//        }
+//
+//        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_ACFUN);
+////        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
+//
+//        try {
+//            loader.load(stream);
+//        } catch (IllegalDataException e) {
+//            e.printStackTrace();
+//        }
+//        BaseDanmakuParser parser = new AcFunDanmakuParser();
+////        BaseDanmakuParser parser = new BiliDanmukuParser();
+//
+//        IDataSource<?> dataSource = loader.getDataSource();
+//        parser.load(dataSource);
+//
+//        return parser;
+
         if (stream == null) {
             return new BaseDanmakuParser() {
 
@@ -293,17 +391,14 @@ public class VideoPlayActivity extends BaseActivity implements OnInfoListener, O
             };
         }
 
-        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_ACFUN);
-//        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
+        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
 
         try {
             loader.load(stream);
         } catch (IllegalDataException e) {
             e.printStackTrace();
         }
-        BaseDanmakuParser parser = new AcFunDanmakuParser();
-//        BaseDanmakuParser parser = new BiliDanmukuParser();
-
+        BaseDanmakuParser parser = new BiliDanmukuParser();
         IDataSource<?> dataSource = loader.getDataSource();
         parser.load(dataSource);
 

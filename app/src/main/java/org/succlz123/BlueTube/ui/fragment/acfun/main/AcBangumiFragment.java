@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.succlz123.bluetube.MyApplication;
 import org.succlz123.bluetube.R;
 import org.succlz123.bluetube.bean.acfun.AcBangumi;
 import org.succlz123.bluetube.support.adapter.acfun.recyclerview.AcBangumiRvAdapter;
@@ -65,6 +66,7 @@ public class AcBangumiFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getHttpResult();
+                mSwipeRefreshLayout.setEnabled(false);
             }
         });
 
@@ -83,8 +85,9 @@ public class AcBangumiFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult();
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -98,19 +101,30 @@ public class AcBangumiFragment extends BaseFragment {
         call.enqueue(new Callback<AcBangumi>() {
             @Override
             public void onResponse(Response<AcBangumi> response) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
-                    mAdapter.setBangumiInfo(response.body());
+                AcBangumi acBangumi = response.body();
+                if (acBangumi != null
+                        && getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcBangumiFragment.this.getUserVisibleHint()) {
+                    mAdapter.setBangumiInfo(acBangumi);
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                if (getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcBangumiFragment.this.getUserVisibleHint()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }

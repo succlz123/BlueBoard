@@ -95,8 +95,10 @@ public class AcPartitionFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
                         && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
-                    mSwipeRefreshLayout.setRefreshing(true);
+
                     getHttpResult(TYPE_LAST_POST, "" + mPagerNoNum);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
                 }
             }
         });
@@ -107,6 +109,7 @@ public class AcPartitionFragment extends BaseFragment {
             public void onRefresh() {
                 getHttpResult(TYPE_MOST_POPULAR, null);
                 getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.setEnabled(false);
             }
         });
 
@@ -128,8 +131,9 @@ public class AcPartitionFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(TYPE_MOST_POPULAR, null);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -137,8 +141,9 @@ public class AcPartitionFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -166,23 +171,32 @@ public class AcPartitionFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReOther = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
-                        if (acReOther != null && acReOther.getData() != null
+                    if (acReOther != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()
+                            && AcPartitionFragment.this.getUserVisibleHint()) {
+                        if (acReOther.getData() != null
                                 && acReOther.getData().getPage().getList().size() != 0) {
                             mAdapter.setAcMostPopular(acReOther);
                         }
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Throwable t) {
-                    if (getActivity() != null && !getActivity().isDestroyed() && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                    if (getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()
+                            && AcPartitionFragment.this.getUserVisibleHint()) {
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新太快或者网络连接异常");
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
@@ -200,21 +214,26 @@ public class AcPartitionFragment extends BaseFragment {
                 @Override
                 public void onResponse(Response<AcReOther> response) {
                     AcReOther acReOther = response.body();
-                    if (getActivity() != null && !getActivity().isDestroyed()) {
+                    if (acReOther != null
+                            && getActivity() != null
+                            && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()
+                            && AcPartitionFragment.this.getUserVisibleHint()) {
                         if (acReOther.getData() != null) {
                             if (acReOther.getData().getPage().getList().size() != 0) {
                                 if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
                                     mAdapter.addDate(acReOther);
                                 } else {
                                     mAdapter.setAcLastPost(acReOther);
-                                    mPagerNoNum++;
                                 }
+                                mPagerNoNum++;
                             } else {
                                 GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
                             }
                         }
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }
@@ -223,10 +242,12 @@ public class AcPartitionFragment extends BaseFragment {
                 public void onFailure(Throwable t) {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
+                            && !getActivity().isFinishing()
                             && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新太快或者网络连接异常");
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
                         }
                     }
                 }

@@ -133,9 +133,11 @@ public class AcContentInfoFragment extends BaseFragment {
             public void onResponse(Response<AcContentInfo> response) {
                 AcContentInfo acContentInfo = response.body();
 
-                if (acContentInfo != null && getActivity() != null && !getActivity().isDestroyed()) {
+                if (acContentInfo != null
+                        && getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()) {
                     //如果请求的视频被删除 未被审核 或者其他
-
                     if (!acContentInfo.isSuccess()
                             || acContentInfo.getStatus() == 404
                             || acContentInfo.getStatus() == 403) {
@@ -159,7 +161,9 @@ public class AcContentInfoFragment extends BaseFragment {
 
             @Override
             public void onFailure(Throwable t) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                if (getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()) {
                     GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);

@@ -116,11 +116,12 @@ public class AcContentReplyFragment extends BaseFragment {
             @Override
             public void onResponse(Response<AcContentReply> response) {
                 AcContentReply acContentReply = response.body();
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                if (acContentReply != null
+                        && getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()) {
                     if (acContentReply.getData().getPage().getList().size() == 0) {
-                        if (!getActivity().isDestroyed()) {
-                            GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "并没有评论");
-                        }
+                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "并没有评论");
                     } else {
                         mAdapter.setContentReply(sortListReply(acContentReply));
                     }
@@ -134,7 +135,9 @@ public class AcContentReplyFragment extends BaseFragment {
 
             @Override
             public void onFailure(Throwable t) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                if (getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()) {
                     GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -163,7 +166,6 @@ public class AcContentReplyFragment extends BaseFragment {
                 quoteId = currentReply.getQuoteId();
             }
         }
-
         return replys;
     }
 }

@@ -1,5 +1,11 @@
 package org.succlz123.bluetube.support.utils;
 
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Request;
+
+import org.succlz123.bluetube.support.helper.acfun.NewAcString;
+
+import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
@@ -27,4 +33,34 @@ public class OkHttpClientManager {
         }
         return sInstance;
     }
+
+
+    public void xx(String url) {
+
+        Request.Builder builder = new Request.Builder();
+        builder.url(url)
+                .addHeader(NewAcString.APP_VERSION, NewAcString.APP_VERSION_400)
+                .addHeader(NewAcString.DEVICETYPE, NewAcString.DEVICETYPE_1)
+                .addHeader(NewAcString.MARKET, NewAcString.MARKET_PORTAL)
+                .addHeader(NewAcString.PRODUCTID, NewAcString.PRODUCTID_2000)
+                .addHeader(NewAcString.RESOLUTION, NewAcString.RESOLUTION_WIDTH_HEIGHT)
+                .addHeader(NewAcString.UUID, NewAcString.UUID_X);
+
+        Request request = builder.build();
+
+        Call call = OkHttpClientManager.getInstance().newCall(request);
+        call.enqueue(new com.squareup.okhttp.Callback() {
+                         @Override
+                         public void onFailure(Request request, IOException e) {
+
+                         }
+
+                         @Override
+                         public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                             response.toString();
+                         }
+                     }
+        );
+    }
+
 }

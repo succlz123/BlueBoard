@@ -79,8 +79,10 @@ public class AcRankingFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
                         && mManager.findLastVisibleItemPosition() + 1 == mAdapter.getItemCount()) {
-                    mSwipeRefreshLayout.setRefreshing(true);
+
                     getHttpResult("" + mPagerNoNum);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
                 }
             }
         });
@@ -90,6 +92,7 @@ public class AcRankingFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.setEnabled(false);
             }
         });
 
@@ -108,8 +111,9 @@ public class AcRankingFragment extends BaseFragment {
                 mSwipeRefreshLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                         getHttpResult(AcString.PAGE_NO_NUM_1);
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 });
             }
@@ -124,37 +128,43 @@ public class AcRankingFragment extends BaseFragment {
             @Override
             public void onResponse(Response<AcReOther> response) {
                 AcReOther acReOther = response.body();
-                if (getActivity() != null && !getActivity().isDestroyed()) {
+                if (acReOther != null
+                        && getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcRankingFragment.this.getUserVisibleHint()) {
                     if (acReOther.getData() != null) {
                         if (acReOther.getData().getPage().getList().size() != 0) {
                             if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
                                 mAdapter.addAcReOtherDate(acReOther);
                             } else {
                                 mAdapter.setmAcReOther(acReOther);
-                                mPagerNoNum++;
                             }
+                            mPagerNoNum++;
                         } else {
-                            if (!getActivity().isDestroyed()) {
-                                GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
-                            }
+                            GlobalUtils.showToastShort(getActivity(), "没有更多了 (´･ω･｀)");
                         }
                     }
-                    if (!getActivity().isDestroyed() && mSwipeRefreshLayout != null) {
+                    if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                if (getActivity() != null && !getActivity().isDestroyed()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                if (getActivity() != null
+                        && !getActivity().isDestroyed()
+                        && !getActivity().isFinishing()
+                        && AcRankingFragment.this.getUserVisibleHint()) {
+                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
                     }
                 }
             }
         });
-
     }
 }

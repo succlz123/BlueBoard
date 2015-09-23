@@ -133,4 +133,14 @@ public class RetrofitConfig {
 
         return getNewAcVideo;
     }
+
+    public static NewAcApi.getNewAcDanmaku getNewAcDanmaku() {
+        Retrofit retrofit = new Retrofit
+                .Builder()
+                .client(OkHttpClientManager.getInstance())
+                 .baseUrl(NewAcString.DANMU_AIXIFAN_COM)
+                .build();
+
+        return retrofit.create(NewAcApi.getNewAcDanmaku.class);
+    }
 }

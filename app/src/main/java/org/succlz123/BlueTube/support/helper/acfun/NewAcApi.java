@@ -1,6 +1,7 @@
 package org.succlz123.bluetube.support.helper.acfun;
 
 import org.succlz123.bluetube.bean.newacfun.NewAcContent;
+import org.succlz123.bluetube.bean.newacfun.NewAcDanmuku;
 import org.succlz123.bluetube.bean.newacfun.NewAcVideo;
 
 import retrofit.Call;
@@ -36,5 +37,20 @@ public class NewAcApi {
         })
         @GET("plays/{contentId}/realSource")
         Call<NewAcVideo> onResult(@Path(value = "contentId") String contentId);
+    }
+
+    public interface getNewAcDanmaku {
+
+        @Headers({
+                NewAcString.APP_VERSION + ": " + NewAcString.APP_VERSION_400,
+                NewAcString.DEVICETYPE + ": " + NewAcString.DEVICETYPE_1,
+                NewAcString.MARKET + ": " + NewAcString.MARKET_PORTAL,
+                NewAcString.PRODUCTID + ": " + NewAcString.PRODUCTID_2000,
+                NewAcString.RESOLUTION + ": " + NewAcString.RESOLUTION_WIDTH_HEIGHT,
+                NewAcString.UUID + ": " + NewAcString.UUID_X
+
+        })
+        @GET("{danmakuId}")
+        Call<NewAcDanmuku> onResult(@Path(value = "danmakuId") String danmakuId);
     }
 }
