@@ -5,57 +5,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.vov.vitamio.widget.CenterLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <!--<com.google.android.exoplayer.AspectRatioFrameLayout-->
+    <!--android:id="@+id/video_frame"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="center">-->
 
-        <io.vov.vitamio.widget.VideoView
-            android:id="@+id/buffer"
+    <!--<SurfaceView-->
+    <!--android:id="@+id/surface_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="center"/>-->
+
+    <!--<View-->
+    <!--android:id="@+id/shutter"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@android:color/black"/>-->
+
+    <!--<com.google.android.exoplayer.text.SubtitleLayout-->
+    <!--android:id="@+id/subtitles"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+
+    <!--</com.google.android.exoplayer.AspectRatioFrameLayout>-->
+
+    <RelativeLayout xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
+                     android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+        <com.devbrackets.android.exomedia.EMVideoView
+            android:id="@+id/video_play_activity_video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
-    </io.vov.vitamio.widget.CenterLayout>
+            EMVideoView:defaultControlsEnabled="true"/>
+    </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/probar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+    <!--<ProgressBar-->
+        <!--android:id="@+id/probar"-->
+        <!--style="?android:attr/progressBarStyleLarge"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"/>-->
 
-    <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+    <!--<LinearLayout-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:orientation="vertical">-->
 
-        <TextView
-            android:id="@+id/download_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+        <!--<TextView-->
+            <!--android:id="@+id/download_rate"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text=""-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"/>-->
 
-        <TextView
-            android:id="@+id/load_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+        <!--<TextView-->
+            <!--android:id="@+id/load_rate"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text=""-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"/>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
-    <master.flame.danmaku.ui.widget.DanmakuView
-        android:id="@+id/sv_danmaku"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!--<master.flame.danmaku.ui.widget.DanmakuView-->
+        <!--android:id="@+id/sv_danmaku"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 
 </FrameLayout>

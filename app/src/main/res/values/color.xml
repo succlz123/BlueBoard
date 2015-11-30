@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
 
-    <color name="pink_base">#cc669b</color>
+    <color name="pink_base">#1e88e5</color>
     <color name="pink_base_dark">#7A3D5D</color>
     <color name="translucence_pink_base">#80cc669b</color>
+
+    <!--<color name="pink_base">#cc669b</color>-->
+    <!--<color name="pink_base_dark">#7A3D5D</color>-->
+    <!--<color name="translucence_pink_base">#80cc669b</color>-->
 
     <color name="blue_base">#1e88e5</color>
     <color name="blue_base_dark">#125289</color>
