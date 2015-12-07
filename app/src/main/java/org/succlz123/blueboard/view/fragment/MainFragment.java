@@ -45,7 +45,7 @@ public class MainFragment extends BaseFragment {
         if (activity instanceof AppCompatActivity) {
             ViewUtils.setToolbar((AppCompatActivity) activity, mToolbar, true);
             DrawerLayout drawerLayout = ((MainActivity) activity).mDrawerLayout;
-            ViewUtils.setDrawerToggle(activity, drawerLayout, mToolbar);
+            ViewUtils.setDrawer(activity, drawerLayout, mToolbar);
         }
 
         if (mTabLayout != null && mViewPager != null) {
@@ -67,5 +67,4 @@ public class MainFragment extends BaseFragment {
     protected void lazyLoad() {
 
     }
-
 }

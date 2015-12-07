@@ -1,84 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     android:id="@+id/video_play_content"
+    xmlns:OkExoPlayer="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<com.google.android.exoplayer.AspectRatioFrameLayout-->
-    <!--android:id="@+id/video_frame"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="center">-->
+    <org.succlz123.okplayer.view.OkVideoView
+        android:id="@+id/ok_video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        OkExoPlayer:ControlsEnabled="true"/>
 
-    <!--<SurfaceView-->
-    <!--android:id="@+id/surface_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="center"/>-->
-
-    <!--<View-->
-    <!--android:id="@+id/shutter"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:background="@android:color/black"/>-->
-
-    <!--<com.google.android.exoplayer.text.SubtitleLayout-->
-    <!--android:id="@+id/subtitles"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-
-    <!--</com.google.android.exoplayer.AspectRatioFrameLayout>-->
-
-    <RelativeLayout xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
-                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-        <com.devbrackets.android.exomedia.EMVideoView
-            android:id="@+id/video_play_activity_video_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            EMVideoView:defaultControlsEnabled="true"/>
-    </RelativeLayout>
+    <master.flame.danmaku.ui.widget.DanmakuView
+        android:id="@+id/sv_danmaku"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <!--<ProgressBar-->
-        <!--android:id="@+id/probar"-->
-        <!--style="?android:attr/progressBarStyleLarge"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"/>-->
+    <!--android:id="@+id/probar"-->
+    <!--style="?android:attr/progressBarStyleLarge"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"/>-->
 
     <!--<LinearLayout-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:orientation="vertical">-->
+    <!--android:layout_width="150dp"-->
+    <!--android:layout_height="60dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/download_rate"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text=""-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="18sp"-->
-            <!--android:textStyle="bold"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/download_rate"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:text=""-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="18sp"-->
+    <!--android:textStyle="bold"/>-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/load_rate"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text=""-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="18sp"-->
-            <!--android:textStyle="bold"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/load_rate"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:text=""-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="18sp"-->
+    <!--android:textStyle="bold"/>-->
 
     <!--</LinearLayout>-->
 
     <!--<master.flame.danmaku.ui.widget.DanmakuView-->
-        <!--android:id="@+id/sv_danmaku"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+    <!--android:id="@+id/sv_danmaku"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/video_title_bar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="46dp"-->
+    <!--android:background="@color/haha"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:visibility="gone">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/video_back"-->
+    <!--android:layout_width="27dp"-->
+    <!--android:layout_height="27dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginLeft="15dp"-->
+    <!--android:background="@drawable/ic_arrow_back_white_48dp"/>-->
+
+    <!--<TextView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginLeft="15dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:maxLines="1"-->
+    <!--android:singleLine="true"-->
+    <!--android:text="Belive"-->
+    <!--android:textColor="#FFFFFF"-->
+    <!--android:textSize="18sp"/>-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/video_hd"-->
+    <!--android:layout_width="27dp"-->
+    <!--android:layout_height="27dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginLeft="60dp"-->
+    <!--android:layout_marginRight="20dp"-->
+    <!--android:background="@drawable/ic_high_quality_white_48dp"/>-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/video_danmaku"-->
+    <!--android:layout_width="27dp"-->
+    <!--android:layout_height="27dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginRight="15dp"-->
+    <!--android:background="@drawable/ic_subtitles_white_48dp"/>-->
+
+    <!--</LinearLayout>-->
 
 </FrameLayout>

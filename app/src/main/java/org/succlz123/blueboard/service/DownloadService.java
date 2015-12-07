@@ -65,7 +65,7 @@ public class DownloadService extends Service {
         String sourceType = "";
 
         if (TextUtils.equals(sourceType, "letv")) {
-//            Call<NewAcVideo> call = RetrofitManager.getNewAcVideo().onResult("");
+//            Call<NewAcVideo> call = RetrofitManager.GetNewAcVideo().onResult("");
 //
 //            call.enqueue(new Callback<NewAcVideo>() {
 //                @Override

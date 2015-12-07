@@ -43,8 +43,9 @@
         <activity
             android:name=".view.activity.video.VideoPlayActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:process=":OkExoPlayer"
             android:screenOrientation="landscape">
+
+        <!--android:process=":OkExoPlayer"-->
         </activity>
 
         <activity

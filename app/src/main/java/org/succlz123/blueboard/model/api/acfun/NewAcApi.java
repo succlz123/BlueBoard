@@ -1,11 +1,13 @@
 package org.succlz123.blueboard.model.api.acfun;
 
+import com.squareup.okhttp.ResponseBody;
+
 import org.succlz123.blueboard.config.RetrofitManager;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcContent;
-import org.succlz123.blueboard.model.bean.newacfun.NewAcDanmuku;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
 
 import retrofit.Call;
+import retrofit.Response;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.Path;
@@ -16,7 +18,7 @@ import rx.Observable;
  */
 public class NewAcApi {
 
-    public interface getNewAcContent {
+    public interface GetNewAcContent {
 
         @Headers({
                 NewAcString.APP_VERSION + ": " + NewAcString.APP_VERSION_NUM,
@@ -26,11 +28,11 @@ public class NewAcApi {
         Call<NewAcContent> onResult(@Path(value = "contentId") String contentId);
     }
 
-    public static NewAcApi.getNewAcContent getNewAcContent() {
-        return RetrofitManager.getAiXiFanApi().create(NewAcApi.getNewAcContent.class);
+    public static GetNewAcContent getNewAcContent() {
+        return RetrofitManager.getAiXiFanApi().create(GetNewAcContent.class);
     }
 
-    public interface getNewAcVideo {
+    public interface GetNewAcVideo {
 
         @Headers({
                 NewAcString.APP_VERSION + ": " + NewAcString.APP_VERSION_NUM,
@@ -45,11 +47,11 @@ public class NewAcApi {
         Observable<NewAcVideo> onResult(@Path(value = "contentId") String contentId);
     }
 
-    public static NewAcApi.getNewAcVideo getNewAcVideo() {
-        return RetrofitManager.getAiXiFanApi().create(NewAcApi.getNewAcVideo.class);
+    public static GetNewAcVideo getNewAcVideo() {
+        return RetrofitManager.getAiXiFanApi().create(GetNewAcVideo.class);
     }
 
-    public interface getNewAcDanmaku {
+    public interface GetNewAcDanmaku {
 
         @Headers({
                 NewAcString.APP_VERSION + ": " + NewAcString.APP_VERSION_NUM,
@@ -57,14 +59,14 @@ public class NewAcApi {
                 NewAcString.MARKET + ": " + NewAcString.MARKET_NAME,
                 NewAcString.PRODUCTID + ": " + NewAcString.PRODUCTID_2000,
                 NewAcString.RESOLUTION + ": " + NewAcString.RESOLUTION_WIDTH_HEIGHT,
-                NewAcString.UUID + ": " + NewAcString.UUID_NUM
-
+                NewAcString.UUID + ": " + NewAcString.UUID_NUM,
+                NewAcString.UID + ": " + NewAcString.UID_NUM
         })
         @GET("{danmakuId}")
-        Call<NewAcDanmuku> onResult(@Path(value = "danmakuId") String danmakuId);
+        Observable<Response<ResponseBody>> onResult(@Path(value = "danmakuId") String danmakuId);
     }
 
-    public static NewAcApi.getNewAcDanmaku getNewAcDanmaku() {
-        return RetrofitManager.getAiXiFanDanMu().create(NewAcApi.getNewAcDanmaku.class);
+    public static GetNewAcDanmaku getNewAcDanmaku() {
+        return RetrofitManager.getAiXiFanDanMu().create(GetNewAcDanmaku.class);
     }
 }

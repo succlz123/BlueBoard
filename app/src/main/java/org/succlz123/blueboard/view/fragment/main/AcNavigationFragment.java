@@ -2,7 +2,6 @@ package org.succlz123.blueboard.view.fragment.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,6 +33,7 @@ public class AcNavigationFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_main_navigation, container, false);
         ButterKnife.bind(this, view);
+
         mIsPrepared = true;
 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
@@ -48,7 +48,6 @@ public class AcNavigationFragment extends BaseFragment {
         });
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new AcNavigationRvAdapter.MyDecoration());
         mAdapter = new AcNavigationRvAdapter();
         mAdapter.setOnClickListener(new AcNavigationRvAdapter.OnClickListener() {

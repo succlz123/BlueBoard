@@ -61,7 +61,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public interface OnVideoPlayClickListener {
-        void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType);
+        void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType);
     }
 
     public interface OnDownLoadClickListener {
@@ -191,7 +191,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             mOnVideoPlayClickListener.onClick(v,
                                     position,
                                     String.valueOf(contentEntity.getUser().getUserId()),
-                                    null, null, null, null);
+                                    null, null, null);
                         }
                     });
                 }
@@ -212,7 +212,6 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                     position,
                                     null,
                                     videosEntity.getVideoId(),
-                                    videosEntity.getDanmakuId(),
                                     videosEntity.getSourceId(),
                                     videosEntity.getType());
                         }
@@ -265,7 +264,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             }
                             if (mOnDownLoadClickListener != null && mDownLoadList.size() != 0) {
                                 mOnDownLoadClickListener.onClick(v, position, mDownLoadList);
-                                mIsShowDlCheckBox=false;
+                                mIsShowDlCheckBox = false;
                                 notifyDataSetChanged();
                             }
                         }

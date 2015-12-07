@@ -1,6 +1,7 @@
 package org.succlz123.blueboard.utils;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -9,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
 
 /**
@@ -54,14 +54,7 @@ public class ViewUtils {
         }
     }
 
-    /**
-     * 侧滑drawerToggle同步动画
-     *
-     * @param context
-     * @param drawerLayout
-     * @param toolbar
-     */
-    public static void setDrawerToggle(Activity context, DrawerLayout drawerLayout, Toolbar toolbar) {
+    public static void setDrawer(Activity context, DrawerLayout drawerLayout, Toolbar toolbar) {
         ActionBarDrawerToggle drawerToggle =
                 new ActionBarDrawerToggle(context, drawerLayout, toolbar, R.string.open, R.string.close) {
                     @Override
@@ -76,8 +69,15 @@ public class ViewUtils {
                 };
         drawerToggle.syncState();
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerLayout.setScrimColor(MyApplication.getsInstance()
-                .getApplicationContext().getResources().getColor(R.color.shadow_white));
+        drawerLayout.setScrimColor(Color.parseColor("#FFFFFF"));
+
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+//            drawerLayout.setScrimColor(MyApplication.getsInstance()
+//                    .getApplicationContext().getResources().getColor(R.color.shadow_white));
+//        } else {
+//            drawerLayout.setScrimColor(MyApplication.getsInstance()
+//                    .getApplicationContext().getColor(R.color.shadow_white));
+//        }
     }
 
     /**

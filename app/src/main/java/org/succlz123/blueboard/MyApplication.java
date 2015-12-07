@@ -6,7 +6,6 @@ import android.content.Context;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import org.succlz123.blueboard.config.FrescoConfig;
 
@@ -38,7 +37,7 @@ public class MyApplication extends Application {
         refWatcher = LeakCanary.install(sInstance);
 
 //        ButterKnife.setDebug(BuildConfig.DEBUG);
-        CrashReport.initCrashReport(this, "900012750", false);
+//        CrashReport.initCrashReport(this, "900012750", false);
 
         Fresco.initialize(sInstance, FrescoConfig.getImagePipelineConfig(sInstance));
 

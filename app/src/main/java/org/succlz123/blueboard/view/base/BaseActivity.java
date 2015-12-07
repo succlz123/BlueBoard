@@ -11,6 +11,7 @@ import org.succlz123.blueboard.MyApplication;
  * Created by succlz123 on 2015/7/8.
  */
 public class BaseActivity extends AppCompatActivity {
+    public String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

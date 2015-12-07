@@ -90,8 +90,7 @@ public class AcContentActivity extends BaseActivity {
                         = fullContentEntity.getVideos().get(0);
 
                 VideoPlayActivity.startActivity(AcContentActivity.this,
-                        String.valueOf(videosEntity.getVideoId()),
-                        String.valueOf(videosEntity.getDanmakuId()),
+                        videosEntity.getVideoId(),
                         videosEntity.getSourceId(),
                         videosEntity.getType());
             }
@@ -101,7 +100,7 @@ public class AcContentActivity extends BaseActivity {
 
     private void setOnDlCheckBoxShow(boolean isDlCheckBoxShow, boolean isDlCheckBoxSelectAll) {
 //        AcContentInfoFragment fragment = ((AcContentInfoFragment) getAcContentFragment(FRAGMENT_TPE_CONTENT_INFO));
-        BusProvider.getInstance().post(new DlCheckBox(isDlCheckBoxShow,isDlCheckBoxSelectAll));
+        BusProvider.getInstance().post(new DlCheckBox(isDlCheckBoxShow, isDlCheckBoxSelectAll));
 //        fragment.onIsDlCheckBoxShow(isDlCheckBoxShow, isDlCheckBoxSelectAll);
     }
 
@@ -117,8 +116,8 @@ public class AcContentActivity extends BaseActivity {
         private boolean isDlCheckBoxSelectAll;
 
         private DlCheckBox(boolean isDlCheckBoxShow, boolean isDlCheckBoxSelectAll) {
-            this.isDlCheckBoxShow=isDlCheckBoxShow;
-            this.isDlCheckBoxSelectAll=isDlCheckBoxSelectAll;
+            this.isDlCheckBoxShow = isDlCheckBoxShow;
+            this.isDlCheckBoxSelectAll = isDlCheckBoxSelectAll;
         }
 
         public boolean isDlCheckBoxShow() {

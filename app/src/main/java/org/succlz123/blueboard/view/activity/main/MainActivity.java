@@ -9,8 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.fragment.MainFragment;
 import org.succlz123.blueboard.view.base.BaseActivity;
+import org.succlz123.blueboard.view.fragment.MainFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,7 +32,6 @@ public class MainActivity extends BaseActivity {
 
         setUpDrawerContent(mNavigationView);
 
-
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.fragment_content, new MainFragment());
@@ -52,6 +51,7 @@ public class MainActivity extends BaseActivity {
                     }
                 });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

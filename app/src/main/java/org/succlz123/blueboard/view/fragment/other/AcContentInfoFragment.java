@@ -77,11 +77,11 @@ public class AcContentInfoFragment extends BaseFragment {
         mAdapter = new AcContentInfoRvAdapter();
         mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnVideoPlayClickListener() {
             @Override
-            public void onClick(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
+            public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType) {
                 if (position == 0) {
                     GlobalUtils.showToastShort(getActivity(), "TODO " + userId);
                 } else {
-                    VideoPlayActivity.startActivity(getActivity(), videoId, danmakuId, sourceId, sourceType);
+                    VideoPlayActivity.startActivity(getActivity(), videoId, sourceId, sourceType);
                 }
             }
         });
