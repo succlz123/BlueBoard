@@ -2,7 +2,7 @@ package org.succlz123.blueboard.model.api.acfun;
 
 import com.squareup.okhttp.ResponseBody;
 
-import org.succlz123.blueboard.config.RetrofitManager;
+import org.succlz123.blueboard.model.config.RetrofitManager;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcContent;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
 

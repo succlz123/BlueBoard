@@ -7,7 +7,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
-import org.succlz123.blueboard.config.FrescoConfig;
+import org.succlz123.blueboard.model.config.FrescoConfig;
 
 /**
  * Created by succlz123 on 2015/7/6.

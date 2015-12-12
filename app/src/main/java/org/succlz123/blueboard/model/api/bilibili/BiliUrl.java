@@ -1,7 +1,7 @@
 package org.succlz123.blueboard.model.api.bilibili;
 
 import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.utils.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

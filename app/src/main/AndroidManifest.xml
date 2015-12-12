@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".view.activity.main.MainActivity"
+            android:name=".controller.activity.main.MainActivity"
             android:theme="@style/TranslucentStatusTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -32,16 +32,16 @@
         </activity>
 
         <activity
-            android:name=".view.activity.acfun.AcPartitionActivity">
+            android:name=".controller.activity.acfun.AcPartitionActivity">
         </activity>
 
         <activity
-            android:name=".view.activity.acfun.AcContentActivity"
+            android:name=".controller.activity.acfun.AcContentActivity"
             android:theme="@style/TranslucentStatusTheme">
         </activity>
 
         <activity
-            android:name=".view.activity.video.VideoPlayActivity"
+            android:name=".controller.activity.video.VideoPlayActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape">
 
@@ -49,7 +49,7 @@
         </activity>
 
         <activity
-            android:name=".view.activity.acfun.DownLoadActivity">
+            android:name=".controller.activity.acfun.DownLoadActivity">
         </activity>
 
         <!--<service android:name=".support.service.DownloadService"/>-->

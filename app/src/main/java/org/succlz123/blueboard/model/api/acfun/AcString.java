@@ -1,7 +1,7 @@
 package org.succlz123.blueboard.model.api.acfun;
 
 import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.utils.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 
 /**
  * Created by succlz123 on 2015/7/27.

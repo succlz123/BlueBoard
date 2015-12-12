@@ -10,7 +10,7 @@ import android.text.TextUtils;
 
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
-import org.succlz123.blueboard.view.activity.acfun.DownLoadActivity;
+import org.succlz123.blueboard.controller.activity.acfun.DownLoadActivity;
 
 import java.util.ArrayList;
 

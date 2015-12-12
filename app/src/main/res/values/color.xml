@@ -23,7 +23,7 @@
     <color name="window_background">#FFF5F5F5</color>
     <color name="translucence">#08000000</color>
 
-    <color name="video_play_media_controller">#80000000</color>
+    <!--<color name="video_play_media_controller">#80000000</color>-->
     <color name="touming">#00000000</color>
 
     <!--白色-->
@@ -32,6 +32,9 @@
     <color name="black">#000000</color>
     <!--灰色 -->
     <color name="gray">#808080</color>
+
+
+    <color name="video_background">#B3000000</color>
 
 
     <color name="md_amber_100">#ffecb3</color>
