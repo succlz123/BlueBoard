@@ -13,8 +13,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.squareup.okhttp.ResponseBody;
@@ -26,13 +28,16 @@ import org.succlz123.blueboard.model.api.acfun.NewAcApi;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.SysUtils;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.model.utils.danmaku.DanmakuHelper;
-import org.succlz123.blueboard.model.utils.danmaku.DanmakuSurfaceView;
+import org.succlz123.okplayer.OkPlayer;
+import org.succlz123.okplayer.listener.OkPlayerListener;
+import org.succlz123.okplayer.view.OkVideoView;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,6 +54,7 @@ import master.flame.danmaku.danmaku.model.IDisplayer;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.ui.widget.DanmakuSurfaceView;
 import retrofit.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,13 +67,24 @@ import rx.schedulers.Schedulers;
  */
 public class VideoPlayActivity extends BaseActivity {
 
-    public static void startActivity(Context activity, String videoId, String sourceId, String sourceType) {
+    public static void newInstance(Context activity, String videoId, String sourceId, String sourceType, String sourceTitle) {
         Intent intent = new Intent(activity, VideoPlayActivity.class);
         intent.putExtra(AcString.VIDEO_ID, videoId);
         intent.putExtra(AcString.SOURCE_ID, sourceId);
         intent.putExtra(AcString.SOURCE_TYPE, sourceType);
+        intent.putExtra(AcString.SOURCE_TITLE, sourceTitle);
+
         activity.startActivity(intent);
     }
+
+    @Bind(R.id.fl_loading)
+    FrameLayout mFlLoading;
+
+    @Bind(R.id.fl_download_rate)
+    FrameLayout mFlDownloadRate;
+
+    @Bind(R.id.tv_download_rate)
+    TextView mTvDownloadRate;
 
     @Bind(R.id.ll_brightness)
     LinearLayout mLlBrightness;
@@ -81,17 +98,26 @@ public class VideoPlayActivity extends BaseActivity {
     @Bind(R.id.tv_volume)
     TextView mTvVolume;
 
-//    @Bind(R.id.probar)
-//    ProgressBar pb;
-
     @Bind(R.id.video_hd)
     ImageView mIvHD;
 
     @Bind(R.id.video_danmaku)
     ImageView mIvDanmaku;
 
+    @Bind(R.id.tv_title)
+    TextView mTvTitle;
+
     @Bind(R.id.video_title_bar)
     LinearLayout mTitleBar;
+
+    @Bind(R.id.iv_play)
+    ImageView mIvPlay;
+
+    @Bind(R.id.tv_rate)
+    TextView mTvRate;
+
+    @Bind(R.id.sb_rate)
+    SeekBar mPbRate;
 
     @Bind(R.id.video_controller_bar)
     LinearLayout mControllerBar;
@@ -100,15 +126,16 @@ public class VideoPlayActivity extends BaseActivity {
     DanmakuSurfaceView mDanmakuView;
 
     @Bind(R.id.ok_video_view)
-    xxx mOkVideoView;
+    OkVideoView mOkVideoView;
 
     private AudioManager mAudioManager;
-    private DecimalFormat mDf;
 
     private String mVideoId;
     private String mSourceId;
     private String mSourceType;
-
+    private String mSourceTitle;
+    private boolean isSeekBarThreadRun = false;
+    private boolean isPlayOver = false;
     private Uri mUri;
 
     private DanmakuContext mDanmakuContext;
@@ -120,13 +147,19 @@ public class VideoPlayActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        View decorView = getWindow().getDecorView();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ViewUtils.toggleHideyBar(decorView);
+
         setContentView(R.layout.activity_video_play);
         ButterKnife.bind(this);
+
         initDate();
         initDanmaku();
-
-        mDf = new DecimalFormat("0.00");
+        if (mSourceTitle != null) {
+            mTvTitle.setText(mSourceTitle);
+        }
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mGestureDetector = new GestureDetector(this, new CustomTouchListener());
 
@@ -140,8 +173,6 @@ public class VideoPlayActivity extends BaseActivity {
         } else {
             GlobalUtils.showToastShort(this, "非主站");
         }
-
-
     }
 
     private void initDanmaku() {
@@ -190,7 +221,7 @@ public class VideoPlayActivity extends BaseActivity {
                     @Override
                     public void call(NewAcVideo newAcVideo) {
                         List<NewAcVideo.DataEntity.FilesEntity> list = newAcVideo.getData().getFiles();
-//                        Collections.reverse(list);
+                        Collections.reverse(list);
                         mUri = Uri.parse(list.get(0).getUrl().get(0));
                         mOkVideoView.setVideoUri(mUri);
                         Log.w(TAG, "call: " + mUri.toString());
@@ -227,24 +258,67 @@ public class VideoPlayActivity extends BaseActivity {
 //                    Log.d("DFM", "onDanmakuClick danmakus size:" + danmakus.size());
                 }
             });
-            mDanmakuView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getActionMasked()) {
-                        case MotionEvent.ACTION_UP:
-                            mLlBrightness.setVisibility(View.GONE);
-                            mLlVolume.setVisibility(View.GONE);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    return mGestureDetector.onTouchEvent(event);
-                }
-            });
             mDanmakuView.prepare(mParser, mDanmakuContext);
             mDanmakuView.enableDanmakuDrawingCache(true);
-            mDanmakuView.showFPS(true);
+//            mDanmakuView.showFPS(true);
+
+            mOkVideoView.addListener(new OkPlayerListener() {
+                @Override
+                public void onStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playbackState == OkPlayer.STATE_ENDED) {
+                        isPlayOver = true;
+                        mPbRate.setMax((int) mOkVideoView.getDuration());
+                        mPbRate.setProgress((int) mOkVideoView.getDuration());
+                        mFlDownloadRate.setVisibility(View.GONE);
+
+                    } else if (playbackState == OkPlayer.STATE_READY) {
+                        mFlDownloadRate.setVisibility(View.GONE);
+
+                        if (playWhenReady) {
+                            mFlLoading.setVisibility(View.GONE);
+                            if (!isSeekBarThreadRun) {
+                                onSeekBarRun();
+                            }
+                        }
+                    } else if (playbackState == OkPlayer.STATE_BUFFERING) {
+                        mFlDownloadRate.setVisibility(View.VISIBLE);
+                    }
+                    Log.w(TAG, "" + playWhenReady + "/" + playbackState);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+
+                @Override
+                public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+
+                }
+            });
+            mPbRate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if (mOkVideoView.getPlaybackState() == OkPlayer.STATE_READY) {
+                        mOkVideoView.seekTo(seekBar.getProgress());
+                        mDanmakuView.seekTo((long) seekBar.getProgress());
+
+                        long duration = mOkVideoView.getDuration();
+                        long currentPosition = mOkVideoView.getCurrentPosition();
+                        showPlayerTime(duration, currentPosition);
+                    }
+                }
+            });
         }
     }
 
@@ -252,6 +326,7 @@ public class VideoPlayActivity extends BaseActivity {
         mVideoId = getIntent().getStringExtra(AcString.VIDEO_ID);
         mSourceId = getIntent().getStringExtra(AcString.SOURCE_ID);
         mSourceType = getIntent().getStringExtra(AcString.SOURCE_TYPE);
+        mSourceTitle = getIntent().getStringExtra(AcString.SOURCE_TITLE);
     }
 
     @Override
@@ -286,16 +361,54 @@ public class VideoPlayActivity extends BaseActivity {
             mDanmakuView.release();
             mDanmakuView = null;
         }
+        isPlayOver = true;
+    }
+
+    private void onSeekBarRun() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                isSeekBarThreadRun = true;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTvDownloadRate.setText(mOkVideoView.getBufferedPercentage() + "%");
+
+                        if (mOkVideoView.getPlaybackState() != OkPlayer.STATE_READY) {
+                            return;
+                        }
+
+                        long duration = mOkVideoView.getDuration();
+                        long currentPosition = mOkVideoView.getCurrentPosition();
+
+                        mPbRate.setMax((int) duration);
+                        mPbRate.setProgress((int) currentPosition);
+
+                        showPlayerTime(duration, currentPosition);
+                    }
+                });
+                if (isPlayOver) {
+                    isSeekBarThreadRun = false;
+                    return;
+                }
+                mHandler.postDelayed(this, 1000);
+            }
+        });
+    }
+
+    private synchronized void showPlayerTime(long duration, long currentPosition) {
+        String totalTime = GlobalUtils.getTimeFromMillisecond(duration);
+        String currentTime = GlobalUtils.getTimeFromMillisecond(currentPosition);
+        mTvRate.setText(currentTime + " / " + totalTime);
     }
 
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            int pos;
             switch (msg.what) {
                 case 1:
-//                    mediaController.hide();
-//                    titleBar.setVisibility(GONE);
+
                     break;
                 default:
                     break;
@@ -303,15 +416,18 @@ public class VideoPlayActivity extends BaseActivity {
         }
     };
 
-    @OnClick(R.id.sv_danmaku)
-    void onDanmakuView(View v) {
-
-    }
-
     @OnTouch(R.id.sv_danmaku)
-    boolean onDanmakuViewTouch(View v, MotionEvent ev) {
-        mGestureDetector.onTouchEvent(ev);
-        return true;
+    boolean onDanmakuViewTouch(View v, MotionEvent event) {
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_UP:
+                mLlBrightness.setVisibility(View.GONE);
+                mLlVolume.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+
+        return mGestureDetector.onTouchEvent(event);
     }
 
     @OnClick(R.id.video_back)
@@ -328,15 +444,33 @@ public class VideoPlayActivity extends BaseActivity {
     void onVideoDanmaku(View v) {
         if (mDanmakuView.isShown()) {
             mDanmakuView.hide();
+            GlobalUtils.showToastShort(this, "关闭弹幕");
         } else {
             mDanmakuView.show();
+            GlobalUtils.showToastShort(this, "打开弹幕");
+        }
+    }
+
+    @OnClick(R.id.iv_play)
+    void onPlayClick(View v) {
+//        View decorView = getWindow().getDecorView();
+//        ViewUtils.toggleHideyBar(decorView);
+        if (mOkVideoView.getPlaybackState() == OkPlayer.STATE_READY) {
+            boolean playWhenReady = mOkVideoView.getPlayWhenReady();
+            if (playWhenReady) {
+                mOkVideoView.setPlayWhenReady(false);
+                mDanmakuView.stop();
+                mIvPlay.setBackgroundResource(android.R.drawable.ic_media_pause);
+            } else {
+                mOkVideoView.setPlayWhenReady(true);
+                mDanmakuView.start(mOkVideoView.getCurrentPosition());
+                mIvPlay.setBackgroundResource(android.R.drawable.ic_media_play);
+            }
         }
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-//        return false;
-
         return super.dispatchTouchEvent(ev);
     }
 
@@ -432,10 +566,10 @@ public class VideoPlayActivity extends BaseActivity {
             return super.onSingleTapConfirmed(e);
         }
 
-        @Override
-        public boolean onContextClick(MotionEvent e) {
-            return super.onContextClick(e);
-        }
+//        @Override
+//        public boolean onContextClick(MotionEvent e) {
+//            return super.onContextClick(e);
+//        }
     }
 
 

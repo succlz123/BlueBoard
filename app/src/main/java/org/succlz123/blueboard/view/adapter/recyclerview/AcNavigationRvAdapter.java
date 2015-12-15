@@ -191,7 +191,7 @@ public class AcNavigationRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void setButtonInfo(ImageView imgButton, TextView tvButton, CardView cvButton, int drawable, int color, final String partitionType) {
         imgButton.setBackgroundResource(drawable);
         tvButton.setText(partitionType);
-        cvButton.setCardBackgroundColor(MyApplication.getsInstance().getResources().getColor(color));
+        cvButton.setCardBackgroundColor(MyApplication.getInstance().getResources().getColor(color));
         cvButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

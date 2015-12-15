@@ -2,18 +2,18 @@ package org.succlz123.blueboard.view.adapter.fragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.controller.fragment.tab.AcBangumiFragment;
 import org.succlz123.blueboard.controller.fragment.tab.AcEssayFragment;
 import org.succlz123.blueboard.controller.fragment.tab.AcNavigationFragment;
 import org.succlz123.blueboard.controller.fragment.tab.AcRecommendFragment;
+import org.succlz123.blueboard.model.api.acfun.AcString;
 
 /**
  * Created by succlz123 on 15/8/10.
  */
-public class AcMainFmAdapter extends FragmentStatePagerAdapter {
+public class AcMainFmAdapter extends FragmentPagerAdapter {
 
     public AcMainFmAdapter(FragmentManager fm) {
         super(fm);

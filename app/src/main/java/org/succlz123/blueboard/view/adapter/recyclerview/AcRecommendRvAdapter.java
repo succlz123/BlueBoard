@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,13 +18,14 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.callback.GetAcRecommendHttpResult;
-import org.succlz123.blueboard.view.adapter.AcRecommendBannerAdapter;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
 import org.succlz123.blueboard.model.bean.acfun.AcReHot;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.AcRecommendBannerAdapter;
+import org.succlz123.blueboard.view.callback.GetAcRecommendHttpResult;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -274,23 +274,22 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 AcRecommendBannerAdapter adapter = new AcRecommendBannerAdapter(mAcReBanner,
                         viewPager,
                         ((ViewPagerVH) holder).llDots,
-                        mSwipeRefreshLayout,
                         mOnClickListener);
                 viewPager.setAdapter(adapter);
-                viewPager.setFocusable(true);
-                viewPager.requestFocus();
+//                viewPager.setFocusable(true);
+//                viewPager.requestFocus();
 
-                viewPager.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getActionMasked()) {
-                            case MotionEvent.ACTION_MOVE:
-                                viewPager.getParent().requestDisallowInterceptTouchEvent(true);
-                                break;
-                        }
-                        return false;
-                    }
-                });
+//                viewPager.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        switch (event.getActionMasked()) {
+//                            case MotionEvent.ACTION_MOVE:
+////                                viewPager.getParent().requestDisallowInterceptTouchEvent(true);
+//                                break;
+//                        }
+//                        return false;
+//                    }
+//                });
             }
         } else if (holder instanceof NavigationTitleVH) {
             ((NavigationTitleVH) holder).tvPartitionTitle.setText(AcString.getTitle(position));
@@ -454,8 +453,8 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (entity != null) {
             imgCoverOther.setImageURI(Uri.parse(entity.getCover()));
             tvTitleOther.setText(entity.getTitle());
-            tvSubTitleOtherLeft.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
-            tvSubTitleOtherRight.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+            tvSubTitleOtherLeft.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+            tvSubTitleOtherRight.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
         } else {
             imgCoverOther.setImageURI(null);
             tvTitleOther.setText("");

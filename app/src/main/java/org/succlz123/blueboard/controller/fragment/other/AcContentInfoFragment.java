@@ -39,7 +39,7 @@ import rx.schedulers.Schedulers;
  */
 public class AcContentInfoFragment extends BaseFragment {
 
-    public static AcContentInfoFragment startFragment(String contentId) {
+    public static AcContentInfoFragment newInstance(String contentId) {
         AcContentInfoFragment fragment = new AcContentInfoFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CONTENT_ID, contentId);
@@ -77,11 +77,11 @@ public class AcContentInfoFragment extends BaseFragment {
         mAdapter = new AcContentInfoRvAdapter();
         mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnVideoPlayClickListener() {
             @Override
-            public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType) {
+            public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType, String sourceTitle) {
                 if (position == 0) {
                     GlobalUtils.showToastShort(getActivity(), "TODO " + userId);
                 } else {
-                    VideoPlayActivity.startActivity(getActivity(), videoId, sourceId, sourceType);
+                    VideoPlayActivity.newInstance(getActivity(), videoId, sourceId, sourceType, sourceTitle);
                 }
             }
         });

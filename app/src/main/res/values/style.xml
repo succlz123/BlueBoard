@@ -38,7 +38,12 @@
     <!--状态栏透明 DrawerLayout-->
     <style name="TranslucentStatusTheme" parent="AppTheme">
         <!--状态栏透明-->
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <!--状态栏透明 DrawerLayout-->
+    <style name="TranslucentNavigationTheme" parent="AppTheme">
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="progressBarColor">

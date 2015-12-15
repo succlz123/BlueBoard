@@ -114,9 +114,9 @@ public class MyOkHttp {
                         String url = response.request().urlString();
 
                         final String fileName = "cc.mp4";
-                        final String filePathName = MyApplication.getsInstance().getApplicationContext().getExternalFilesDir("video").getAbsolutePath();
+                        final String filePathName = MyApplication.getInstance().getApplicationContext().getExternalFilesDir("video").getAbsolutePath();
 //                        + File.separator + fileName;
-                        DownloadManager downloadManager = (DownloadManager) MyApplication.getsInstance().getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                        DownloadManager downloadManager = (DownloadManager) MyApplication.getInstance().getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
                         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
 

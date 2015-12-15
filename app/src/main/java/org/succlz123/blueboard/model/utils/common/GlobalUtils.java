@@ -36,6 +36,25 @@ import java.util.Iterator;
  * Created by succlz123 on 2015/7/6.
  */
 public class GlobalUtils {
+    private static Toast toast;
+
+    /**
+     * 全局Toast
+     *
+     * @param context
+     * @param tip
+     * @param duration
+     */
+    private synchronized static void globalToast(Context context, String tip, int duration) {
+        if (toast != null) {
+            toast.cancel();
+            toast.setText(tip);
+            toast.setDuration(duration);
+        } else {
+            toast = Toast.makeText(context, tip, duration);
+        }
+        toast.show();
+    }
 
     /**
      * 显示Toast 时间为short
@@ -48,9 +67,9 @@ public class GlobalUtils {
             tip = "未知错误";
         }
         if (context == null) {
-            Toast.makeText(MyApplication.getsInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT);
         } else {
-            Toast.makeText(context.getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+            globalToast(context.getApplicationContext(), tip, Toast.LENGTH_SHORT);
         }
     }
 
@@ -65,9 +84,9 @@ public class GlobalUtils {
             tip = "未知错误";
         }
         if (context == null) {
-            Toast.makeText(MyApplication.getsInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT).show();
+            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_LONG);
         } else {
-            Toast.makeText(context.getApplicationContext(), tip, Toast.LENGTH_LONG).show();
+            globalToast(context.getApplicationContext(), tip, Toast.LENGTH_LONG);
         }
     }
 
@@ -477,6 +496,30 @@ public class GlobalUtils {
         }
 
         return baos.toString("UTF-8");
+    }
+
+
+    /**
+     * 毫秒 转 小时:分钟:秒
+     */
+    public static String getTimeFromMillisecond(long Millisecond) {
+        if (Millisecond <= 0) {
+            return "00:00";
+        }
+
+        long days = Millisecond / (1000 * 60 * 60 * 24);
+        long hours = (Millisecond % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (Millisecond % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (Millisecond % (1000 * 60)) / 1000;
+
+        String hoursStr = hours >= 10 ? String.valueOf(hours) : "0" + String.valueOf(hours);
+        String minutesStr = minutes >= 10 ? String.valueOf(minutes) : "0" + String.valueOf(minutes);
+        String secondsStr = seconds >= 10 ? String.valueOf(seconds) : "0" + String.valueOf(seconds);
+
+        if (hours > 0) {
+            return hoursStr + ":" + minutesStr + ":" + secondsStr;
+        }
+        return minutesStr + ":" + secondsStr;
     }
 
     public static boolean isActivityLive(Activity activity) {

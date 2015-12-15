@@ -107,43 +107,43 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
                 entity = entity.getQuoteReply();
 
                 TextView floorAndNameTv
-                        = new TextView(MyApplication.getsInstance().getApplicationContext());
+                        = new TextView(MyApplication.getInstance().getApplicationContext());
                 LinearLayout.LayoutParams floorAndNameTvLp
                         = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 floorAndNameTvLp
-                        .setMargins(0, GlobalUtils.dip2px(MyApplication.getsInstance().getApplicationContext(), 8f), 0, 0);
+                        .setMargins(0, GlobalUtils.dip2px(MyApplication.getInstance().getApplicationContext(), 8f), 0, 0);
                 floorAndNameTv
                         .setLayoutParams(floorAndNameTvLp);
                 floorAndNameTv
                         .setTextSize(12);
                 floorAndNameTv
-                        .setTextColor(MyApplication.getsInstance().getApplicationContext().getResources().getColor(R.color.font_blue));
+                        .setTextColor(MyApplication.getInstance().getApplicationContext().getResources().getColor(R.color.font_blue));
                 floorAndNameTv
                         .setText("   #" + entity.getFloor() + " " + entity.getUsername());
 
                 TextView quoteContentTv
-                        = new TextView(MyApplication.getsInstance().getApplicationContext());
+                        = new TextView(MyApplication.getInstance().getApplicationContext());
                 LinearLayout.LayoutParams quoteContentTvLp
                         = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 quoteContentTvLp
-                        .setMargins(0, GlobalUtils.dip2px(MyApplication.getsInstance().getApplicationContext(), 4f), 0, GlobalUtils.dip2px(MyApplication.getsInstance().getApplicationContext(), 8f));
+                        .setMargins(0, GlobalUtils.dip2px(MyApplication.getInstance().getApplicationContext(), 4f), 0, GlobalUtils.dip2px(MyApplication.getInstance().getApplicationContext(), 8f));
                 quoteContentTv
                         .setLayoutParams(quoteContentTvLp);
                 floorAndNameTv
                         .setTextSize(12);
                 quoteContentTv
-                        .setTextColor(MyApplication.getsInstance().getApplicationContext().getResources().getColor(R.color.font_light));
+                        .setTextColor(MyApplication.getInstance().getApplicationContext().getResources().getColor(R.color.font_light));
                 quoteContentTv
                         .setText("   " + Html.fromHtml(entity.getContent()));
 
                 View driverView
-                        = new View(MyApplication.getsInstance().getApplicationContext());
+                        = new View(MyApplication.getInstance().getApplicationContext());
                 LinearLayout
-                        .LayoutParams viewLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, GlobalUtils.dip2px(MyApplication.getsInstance().getApplicationContext(), 1f));
+                        .LayoutParams viewLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, GlobalUtils.dip2px(MyApplication.getInstance().getApplicationContext(), 1f));
                 driverView
                         .setLayoutParams(viewLayoutParams);
                 driverView
-                        .setBackgroundColor(MyApplication.getsInstance().getApplicationContext().getResources().getColor(R.color.android_base));
+                        .setBackgroundColor(MyApplication.getInstance().getApplicationContext().getResources().getColor(R.color.android_base));
 
                 viewList.add(driverView);
                 viewList.add(quoteContentTv);

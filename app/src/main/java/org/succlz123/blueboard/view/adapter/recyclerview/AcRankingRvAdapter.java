@@ -96,9 +96,9 @@ public class AcRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((RankingVH) holder).tvTitleHot
                     .setText(entity.getTitle());
             ((RankingVH) holder).tvClickHot
-                    .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+                    .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
             ((RankingVH) holder).tvReplyHot
-                    .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+                    .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
             ((RankingVH) holder).cvVerticalWithClickInfo.setOnClickListener(new View.OnClickListener() {
 
                 @Override

@@ -184,7 +184,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
             if (position == 0) {
                 tvTitle.setText(AcString.TITLE_HOT);
             } else {
-                Context context = MyApplication.getsInstance().getApplicationContext();
+                Context context = MyApplication.getInstance().getApplicationContext();
                 SharedPreferences settings
                         = context.getSharedPreferences(context.getString(R.string.app_name), Activity.MODE_PRIVATE);
                 String title = settings.getString(AcString.TITLE, AcString.TITLE_TIME_ORDER);
@@ -200,9 +200,9 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((MostPopularVH) holder).tvTitleHot
                         .setText(entity.getTitle());
                 ((MostPopularVH) holder).tvClickHot
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
                 ((MostPopularVH) holder).tvReplyHot
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
                 ((MostPopularVH) holder).cvVerticalWithClickInfo.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -220,11 +220,11 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((LastPostVH) holder).tvTitleOther
                         .setText(entity.getTitle());
                 ((LastPostVH) holder).tvUpOther
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.up) + " " + entity.getUser().getUsername());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.up) + " " + entity.getUser().getUsername());
                 ((LastPostVH) holder).tvClickOther
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
                 ((LastPostVH) holder).tvReplyOther
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
 
                 if (mOnClickListener != null) {
                     ((LastPostVH) holder).cvHorizontal.setOnClickListener(new View.OnClickListener() {

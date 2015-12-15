@@ -17,7 +17,7 @@ public class BiliUrl {
 
 
 	public static String get(int module) {
-		String androidId = GlobalUtils.getAndroidId(MyApplication.getsInstance().getApplicationContext());
+		String androidId = GlobalUtils.getAndroidId(MyApplication.getInstance().getApplicationContext());
 		String ts = String.valueOf(System.currentTimeMillis());
 
 		StringBuilder sb = new StringBuilder();

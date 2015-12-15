@@ -6,10 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <FrameLayout
-        android:id="@+id/fragment_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <include layout="@layout/drawerlayout_main"/>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

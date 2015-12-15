@@ -117,7 +117,7 @@ public class DownloadService extends Service {
 //        mMyDownloadListener = new MyDownloadListener();
 //        downloadRequest.setUrl(url);
 //
-//        mDownloadManager.startFragment(downloadRequest, mMyDownloadListener);
+//        mDownloadManager.newInstance(downloadRequest, mMyDownloadListener);
 //    }
 
     public void toggleDownload(String name) {
@@ -135,7 +135,7 @@ public class DownloadService extends Service {
 //    private class MyDownloadListener implements NBDownloadListener {
 //        @Override
 //        public void onStart(NBDownloadRequest nbDownloadRequest) {
-//            LogUtils.e("startFragment");
+//            LogUtils.e("newInstance");
 //        }
 //
 //        @Override

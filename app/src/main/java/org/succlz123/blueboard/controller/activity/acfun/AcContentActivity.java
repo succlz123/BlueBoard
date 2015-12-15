@@ -18,13 +18,15 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.otto.Subscribe;
 
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.config.BusProvider;
-import org.succlz123.blueboard.view.adapter.fragment.AcContentFmAdapter;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
 import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
+import org.succlz123.blueboard.model.config.BusProvider;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.fragment.AcContentFmAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -89,10 +91,11 @@ public class AcContentActivity extends BaseActivity {
                 AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity
                         = fullContentEntity.getVideos().get(0);
 
-                VideoPlayActivity.startActivity(AcContentActivity.this,
+                VideoPlayActivity.newInstance(AcContentActivity.this,
                         videosEntity.getVideoId(),
                         videosEntity.getSourceId(),
-                        videosEntity.getType());
+                        videosEntity.getType(),
+                        videosEntity.getName());
             }
         });
 //        mCollapsingToolbarLayout.setTitle("AC" + fullContentEntity.getContentId());
@@ -152,6 +155,9 @@ public class AcContentActivity extends BaseActivity {
                 break;
             case 2:
                 setOnDlCheckBoxShow(true, true);
+                ArrayList xx = new ArrayList();
+                xx.get(3);
+
                 break;
         }
         return super.onOptionsItemSelected(item);

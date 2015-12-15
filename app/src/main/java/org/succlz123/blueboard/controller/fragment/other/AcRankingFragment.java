@@ -158,7 +158,7 @@ public class AcRankingFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()
                         && AcRankingFragment.this.getUserVisibleHint()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);

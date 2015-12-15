@@ -3,7 +3,6 @@ package org.succlz123.blueboard.controller.fragment.tab;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,7 +12,9 @@ import android.view.ViewGroup;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcRecommendRvAdapter;
+import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
+import org.succlz123.blueboard.controller.activity.acfun.AcPartitionActivity;
+import org.succlz123.blueboard.controller.base.BaseFragment;
 import org.succlz123.blueboard.model.api.acfun.AcApi;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
@@ -21,9 +22,7 @@ import org.succlz123.blueboard.model.bean.acfun.AcReHot;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
-import org.succlz123.blueboard.controller.activity.acfun.AcPartitionActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcRecommendRvAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -64,9 +63,7 @@ public class AcRecommendFragment extends BaseFragment {
                 return 1;
             }
         });
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new AcRecommendRvAdapter.MyDecoration());
         mAdapter = new AcRecommendRvAdapter();
         //解决viewpager里滑动导致swipeReFreshLayout的出现
@@ -185,7 +182,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -218,7 +215,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -251,7 +248,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -284,7 +281,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                     }
+                    }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
@@ -316,7 +313,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                     }
+                    }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
@@ -348,7 +345,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                     }
+                    }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
@@ -380,7 +377,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                     }
+                    }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
@@ -413,7 +410,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                     }
+                    }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
@@ -446,7 +443,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                     }
+                    }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);

@@ -32,7 +32,7 @@
 // */
 //public class DownLoadFragment extends BaseFragment {
 //
-//	public static DownLoadFragment startFragment(String videoId, String danmakuId, String sourceId, String sourceType) {
+//	public static DownLoadFragment newInstance(String videoId, String danmakuId, String sourceId, String sourceType) {
 //		DownLoadFragment fragment = new DownLoadFragment();
 //		Bundle bundle = new Bundle();
 //		bundle.putString(AcString.VIDEO_ID, videoId);
@@ -76,7 +76,7 @@
 //							task.setFilePath(filePathName);
 //
 //							downloadManager.add(task, listener); //Add the task
-//							downloadManager.startFragment(task, listener); //Start the task
+//							downloadManager.newInstance(task, listener); //Start the task
 //							downloadManager.stop(task, listener); //Stop the task if you exit your APP.
 //						}
 //
@@ -108,7 +108,7 @@
 //
 //							} else {
 //								if (getActivity() != null && getActivity().isDestroyed()) {
-//									GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "不支持的视频源");
+//									GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "不支持的视频源");
 //								}
 //							}
 //						}
@@ -116,7 +116,7 @@
 //						@Override
 //						public void failure(RetrofitError error) {
 ////							if (getActivity() != null && getActivity().isDestroyed()) {
-////								GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络异常");
+////								GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "网络异常");
 ////							}
 //						}
 //					});

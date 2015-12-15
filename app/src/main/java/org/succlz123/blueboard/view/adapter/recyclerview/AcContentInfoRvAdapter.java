@@ -61,7 +61,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public interface OnVideoPlayClickListener {
-        void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType);
+        void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType, String sourceTitle);
     }
 
     public interface OnDownLoadClickListener {
@@ -174,15 +174,15 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 ((VideoInfoVH) holder).tvDescription
                         .setText(Html.fromHtml(contentEntity.getDescription()));
                 ((VideoInfoVH) holder).tvClick
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + contentEntity.getViews());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + contentEntity.getViews());
                 ((VideoInfoVH) holder).tvStows
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.stows) + " " + contentEntity.getStows());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.stows) + " " + contentEntity.getStows());
                 ((VideoInfoVH) holder).simpleDraweeView
                         .setImageURI(Uri.parse(contentEntity.getUser().getUserImg()));
                 ((VideoInfoVH) holder).tvName
                         .setText(contentEntity.getUser().getUsername());
                 ((VideoInfoVH) holder).tvUid
-                        .setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.uid) + " " + contentEntity.getUser().getUserId());
+                        .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.uid) + " " + contentEntity.getUser().getUserId());
 
                 if (mOnVideoPlayClickListener != null) {
                     ((VideoInfoVH) holder).frameLayout.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +191,7 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             mOnVideoPlayClickListener.onClick(v,
                                     position,
                                     String.valueOf(contentEntity.getUser().getUserId()),
-                                    null, null, null);
+                                    null, null, null, null);
                         }
                     });
                 }
@@ -213,7 +213,8 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                     null,
                                     videosEntity.getVideoId(),
                                     videosEntity.getSourceId(),
-                                    videosEntity.getType());
+                                    videosEntity.getType(),
+                                    videosEntity.getName());
                         }
                     });
                     ((VideoItemVH) holder).cbVideo.setVisibility(View.GONE);

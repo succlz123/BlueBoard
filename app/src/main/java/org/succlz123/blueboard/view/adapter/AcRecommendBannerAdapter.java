@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -16,9 +15,9 @@ import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcRecommendRvAdapter;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcRecommendRvAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.List;
  * Created by succlz123 on 2015/7/24.
  */
 public class AcRecommendBannerAdapter extends PagerAdapter {
-    private Context mContext = org.succlz123.blueboard.MyApplication.getsInstance().getApplicationContext();
+    private Context mContext = org.succlz123.blueboard.MyApplication.getInstance().getApplicationContext();
     private Resources mResources = mContext.getResources();
 
     private List<View> mViewItems = new ArrayList<>();
@@ -37,7 +36,7 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
     private int mVpNum;
 
 
-    public AcRecommendBannerAdapter( AcReBanner acReBanner, ViewPager viewPager, LinearLayout dots, final SwipeRefreshLayout swipeRefreshLayout, final AcRecommendRvAdapter.OnClickListener onClickListener) {
+    public AcRecommendBannerAdapter(AcReBanner acReBanner, ViewPager viewPager, LinearLayout dots, final AcRecommendRvAdapter.OnClickListener onClickListener) {
         super();
         final List<AcReBanner.DataEntity.ListEntity> bannerInfo = acReBanner.getData().getList();
         mVpTotalNum = bannerInfo.size();

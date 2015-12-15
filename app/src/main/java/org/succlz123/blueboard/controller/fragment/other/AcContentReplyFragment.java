@@ -77,7 +77,7 @@ public class AcContentReplyFragment extends BaseFragment {
 //                if (position == 0) {
 //                    GlobalUtils.showToastShort(getActivity(), "哇哈哈哈 " + userId);
 //                } else {
-//                    VideoPlayActivity.startActivity(getActivity(),
+//                    VideoPlayActivity.newInstance(getActivity(),
 //                            videoId,
 //                            danmakuId,
 //                            sourceId,
@@ -126,7 +126,7 @@ public class AcContentReplyFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()) {
                     if (acContentReply.getData().getPage().getList().size() == 0) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "并没有评论");
+                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "并没有评论");
                     } else {
                         mAdapter.setContentReply(sortListReply(acContentReply));
                     }
@@ -143,7 +143,7 @@ public class AcContentReplyFragment extends BaseFragment {
                 if (getActivity() != null
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "网络连接异常");
+                    GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

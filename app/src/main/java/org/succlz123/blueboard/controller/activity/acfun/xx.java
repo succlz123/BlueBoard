@@ -198,7 +198,7 @@
 //        startVideoInfo = (TextView) findViewById(R.id.video_start_info);
 //        biliAnim = (ImageView) findViewById(R.id.bili_anim);
 //        anim = (AnimationDrawable) biliAnim.getBackground();
-//        anim.startFragment();
+//        anim.newInstance();
 //        DanmakuGlobalConfig.DEFAULT.setDanmakuStyle(DanmakuGlobalConfig.DANMAKU_STYLE_STROKEN, 3).setDuplicateMergingEnabled(false);
 ////        if (mDanmakuView != null) {
 ////            //mParser = createParser(this.getResources().openRawResource(R.raw.comments));
@@ -215,7 +215,7 @@
 ////                public void prepared() {
 ////                  isload = true;
 ////                  startPlayer();
-////                    //mDanmakuView.startFragment();
+////                    //mDanmakuView.newInstance();
 ////                }
 ////            });
 ////            mDanmakuView.prepare(mParser);
@@ -584,11 +584,11 @@
 //        if (isInitialized() && mScreenReceiver.screenOn
 //                && !vPlayer.isBuffering()&&isload) {
 //             if (!vPlayer.isPlaying()) {
-//                vPlayer.startFragment();
+//                vPlayer.newInstance();
 //                if(mDanmakuView.isPaused())
 //                    mDanmakuView.resume();
 //                else
-//                    mDanmakuView.startFragment();
+//                    mDanmakuView.newInstance();
 //            }
 //        }
 //    }
@@ -790,11 +790,11 @@
 //                    loadVPlayerPrefs();
 //                    setVideoLoadingLayoutVisibility(View.GONE);
 //                    setVideoLayout();
-//                    vPlayer.startFragment();
+//                    vPlayer.newInstance();
 //                    if(mDanmakuView.isPaused())
 //                        mDanmakuView.resume();
 //                    else
-//                        mDanmakuView.startFragment();
+//                        mDanmakuView.newInstance();
 //                    attachMediaController();
 //                    break;
 //                case OPEN_FAILED:
@@ -920,11 +920,11 @@
 //        public void onPlaybackComplete() {
 //            mEnd = true;
 //            if (mLoopCount == 0 || mLoopCount-- > 1) {
-//                vPlayer.startFragment();
+//                vPlayer.newInstance();
 //                if(mDanmakuView.isPaused())
 //                    mDanmakuView.resume();
 //                else
-//                    mDanmakuView.startFragment();
+//                    mDanmakuView.newInstance();
 //                vPlayer.seekTo(0);
 //            } else {
 //                resultFinish(RESULT_OK);
@@ -1039,13 +1039,13 @@
 //    }
 //
 //    @Override
-//    public void startFragment() {
+//    public void newInstance() {
 //        if (isInitialized())
-//            vPlayer.startFragment();
+//            vPlayer.newInstance();
 //        if(mDanmakuView.isPaused())
 //            mDanmakuView.resume();
 //        else
-//            mDanmakuView.startFragment();
+//            mDanmakuView.newInstance();
 //    }
 //
 //    @Override
@@ -1174,11 +1174,11 @@
 //            }
 //            vPlayer.releaseSurface();
 //            if (vPlayer.needResume()){
-//                vPlayer.startFragment();
+//                vPlayer.newInstance();
 //                if(mDanmakuView.isPaused())
 //                    mDanmakuView.resume();
 //                else
-//                    mDanmakuView.startFragment();
+//                    mDanmakuView.newInstance();
 //            }
 //
 //        }

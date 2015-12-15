@@ -200,7 +200,7 @@ public class AcPartitionFragment extends BaseFragment {
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()
                             && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新太快或者网络连接异常");
+                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新太快或者网络连接异常");
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
@@ -251,7 +251,7 @@ public class AcPartitionFragment extends BaseFragment {
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()
                             && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新太快或者网络连接异常");
+                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新太快或者网络连接异常");
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);

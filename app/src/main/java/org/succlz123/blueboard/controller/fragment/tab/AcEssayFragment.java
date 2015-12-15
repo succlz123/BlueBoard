@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcEssayRvAdapter;
+import org.succlz123.blueboard.controller.base.BaseFragment;
 import org.succlz123.blueboard.model.api.acfun.AcApi;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcEssay;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcEssayRvAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -161,7 +161,7 @@ public class AcEssayFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()
                         && AcEssayFragment.this.getUserVisibleHint()) {
-                    GlobalUtils.showToastShort(MyApplication.getsInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);

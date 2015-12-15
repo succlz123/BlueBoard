@@ -97,9 +97,9 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 				((CardViewHolder) holder).tvTime
 						.setText(GlobalUtils.getDateToStringWithYDHM(entity.getReleaseDate()));
 				((CardViewHolder) holder).tvClick
-						.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
+						.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
 				((CardViewHolder) holder).tvReply
-						.setText(MyApplication.getsInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
+						.setText(MyApplication.getInstance().getApplicationContext().getString(R.string.reply) + " " + entity.getComments());
 				if(mOnClickListener!=null){
 					((CardViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
 						@Override

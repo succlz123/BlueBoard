@@ -72,12 +72,12 @@ public class DownLoadActivity extends BaseActivity {
             return;
         }
 
-        OkDownloadManager okDownloadManager = OkDownloadManager.getInstance(MyApplication.getsInstance().getApplicationContext());
+        OkDownloadManager okDownloadManager = OkDownloadManager.getInstance(MyApplication.getInstance().getApplicationContext());
 
         for (AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
             String sourceId = videosEntity.getSourceId();
             String sourceType = videosEntity.getSourceType();
-            String filePath = MyApplication.getsInstance().getApplicationContext().getExternalFilesDir("video").getAbsolutePath() + File.separator + sourceId + ".mp4";
+            String filePath = MyApplication.getInstance().getApplicationContext().getExternalFilesDir("video").getAbsolutePath() + File.separator + sourceId + ".mp4";
 
             String title = videosEntity.getVideoTitle();
             String description = videosEntity.getName();

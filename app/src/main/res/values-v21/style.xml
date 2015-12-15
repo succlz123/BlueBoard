@@ -17,5 +17,10 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <!--底部导航栏透明 -->
+    <style name="TranslucentNavigationTheme" parent="AppTheme">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 
 </resources>

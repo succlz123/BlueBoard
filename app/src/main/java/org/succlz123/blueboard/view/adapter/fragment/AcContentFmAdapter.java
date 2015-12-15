@@ -23,7 +23,7 @@ public class AcContentFmAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return AcContentInfoFragment.startFragment(mContentId);
+                return AcContentInfoFragment.newInstance(mContentId);
             case 1:
                 return AcContentReplyFragment.startFragment(mContentId);
         }
