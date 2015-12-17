@@ -22,31 +22,28 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".controller.activity.main.MainActivity"
-            android:theme="@style/TranslucentStatusTheme">
+            android:name=".controller.activity.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".controller.activity.acfun.AcPartitionActivity">
+            android:name=".controller.activity.acfun.AcPartitionActivity"
+            android:theme="@style/tabTheme">
         </activity>
 
         <activity
-            android:name=".controller.activity.acfun.AcContentActivity"
-            android:theme="@style/TranslucentStatusTheme">
+            android:name=".controller.activity.acfun.AcContentActivity">
         </activity>
 
         <activity
             android:name=".controller.activity.video.VideoPlayActivity"
             android:configChanges="orientation|keyboardHidden"
-
             android:screenOrientation="landscape">
 
-        <!--android:process=":OkExoPlayer"-->
+            <!--android:process=":OkExoPlayer"-->
         </activity>
 
         <activity

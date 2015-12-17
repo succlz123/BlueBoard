@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="AppTheme" parent="BaseTheme"/>
+
+    <style name="tabTheme" parent="AppTheme"/>
+
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Toolbar颜色 也是多任务切换的标题颜色-->
         <item name="colorPrimary">@color/pink_base</item>
         <!--状态栏颜色-->
-        <item name="colorPrimaryDark">@color/pink_base</item>
+        <item name="colorPrimaryDark">@color/pink_base_dark</item>
         <!--下划线 提示等一些组件的 着色-->
         <item name="colorAccent">@color/pink_base_dark</item>
 
-        <!--android底色-->
-        <!--<item name="android:windowBackground">@color/window_background</item>-->
+        <!--<item name="colorPrimary">#673AB7</item>-->
+        <!--<item name="colorPrimaryDark">#512DA8</item>-->
 
+        <!--android底色-->
+        <item name="android:windowBackground">@color/window_background</item>
         <!--ActionMode出现时 覆盖ActionBar-->
         <item name="windowActionModeOverlay">true</item>
-    </style>
-
-    <style name="AppTheme" parent="BaseTheme">
-
     </style>
 
     <!--<style name="Animation" parent="@android:style/Animation">-->
@@ -27,21 +29,7 @@
     <!--<item name="android:windowExitAnimation">@android:anim/slide_in_left</item>-->
     <!--</style>-->
 
-    <!--侧滑透明-->
-    <style name="TranslucentTheme" parent="AppTheme">
-        <!--theme透明-->
-        <item name="android:windowIsTranslucent">true</item>
-        <!--背景透明-->
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <!--状态栏透明 DrawerLayout-->
-    <style name="TranslucentStatusTheme" parent="AppTheme">
-        <!--状态栏透明-->
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-    <!--状态栏透明 DrawerLayout-->
+    <!--底部导航栏透明 -->
     <style name="TranslucentNavigationTheme" parent="AppTheme">
         <item name="android:windowTranslucentNavigation">true</item>
     </style>

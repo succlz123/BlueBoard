@@ -47,7 +47,6 @@ public class GlobalUtils {
      */
     private synchronized static void globalToast(Context context, String tip, int duration) {
         if (toast != null) {
-            toast.cancel();
             toast.setText(tip);
             toast.setDuration(duration);
         } else {

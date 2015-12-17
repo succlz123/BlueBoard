@@ -79,4 +79,44 @@ public class SysUtils {
 
         return (currentVolume * 100) / maxVolume;
     }
+
+    /**
+     * 滑动改变进度
+     *
+     * @param distanceX
+     * @param distanceY
+     * @param setupDp
+     * @param changeSetup
+     * @param position
+     * @param duration
+     * @return
+     */
+    public static long onProgressSlide(float distanceX, float distanceY, int setupDp, int changeSetup, long position, long duration) {
+        // distanceX=lastScrollPositionX-currentScrollPositionX
+        // 向左滑,正数
+        // 向右滑,负数
+        if (Math.abs(distanceX) > Math.abs(distanceY)) {
+            // 横向移动大于纵向移动
+            if (distanceX >= setupDp) {
+                // 防止为负
+                if (position > changeSetup) {
+                    position -= changeSetup;
+                } else {
+                    position = 0;
+                }
+            } else if (distanceX <= -setupDp) {
+                // 防止超过总时长
+                if (position < duration - changeSetup) {
+                    position += changeSetup;
+                } else {
+                    position = duration - changeSetup;
+                }
+            }
+            if (position < 0) {
+                position = 0;
+            }
+        }
+        return position;
+    }
+
 }

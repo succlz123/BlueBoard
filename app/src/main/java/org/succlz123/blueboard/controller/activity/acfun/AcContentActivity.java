@@ -26,8 +26,6 @@ import org.succlz123.blueboard.model.config.BusProvider;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.view.adapter.fragment.AcContentFmAdapter;
 
-import java.util.ArrayList;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -98,7 +96,6 @@ public class AcContentActivity extends BaseActivity {
                         videosEntity.getName());
             }
         });
-//        mCollapsingToolbarLayout.setTitle("AC" + fullContentEntity.getContentId());
     }
 
     private void setOnDlCheckBoxShow(boolean isDlCheckBoxShow, boolean isDlCheckBoxSelectAll) {
@@ -155,9 +152,6 @@ public class AcContentActivity extends BaseActivity {
                 break;
             case 2:
                 setOnDlCheckBoxShow(true, true);
-                ArrayList xx = new ArrayList();
-                xx.get(3);
-
                 break;
         }
         return super.onOptionsItemSelected(item);

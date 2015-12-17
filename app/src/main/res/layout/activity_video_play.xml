@@ -19,8 +19,9 @@
     <LinearLayout
         android:id="@+id/video_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:layout_gravity="top"
+        android:clickable="true"
         android:background="@color/video_background"
         android:orientation="horizontal"
         android:visibility="visible">
@@ -68,10 +69,11 @@
     <LinearLayout
         android:id="@+id/video_controller_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="@color/video_background"
         android:gravity="center"
+        android:clickable="true"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -81,7 +83,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:background="@android:drawable/ic_media_play"/>
+            android:background="@drawable/video_play"/>
 
         <SeekBar
             android:id="@+id/sb_rate"

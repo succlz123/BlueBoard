@@ -191,10 +191,10 @@ public class DownLoadActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
 //        this.unregisterReceiver(mBroadcastReceiver);
-        if (mIsBindService) {
-            this.unbindService(mMyConnection);
-            mIsBindService = false;
-        }
+//        if (mIsBindService) {
+//            this.unbindService(mMyConnection);
+//            mIsBindService = false;
+//        }
         super.onDestroy();
     }
 }
