@@ -1,5 +1,8 @@
 package org.succlz123.blueboard.model.utils.common;
 
+import org.succlz123.blueboard.MyApplication;
+import org.succlz123.blueboard.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -20,9 +23,6 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,10 +40,6 @@ public class GlobalUtils {
 
     /**
      * 全局Toast
-     *
-     * @param context
-     * @param tip
-     * @param duration
      */
     private synchronized static void globalToast(Context context, String tip, int duration) {
         if (toast != null) {
@@ -57,42 +53,36 @@ public class GlobalUtils {
 
     /**
      * 显示Toast 时间为short
-     *
-     * @param context
-     * @param tip
      */
-    public static void showToastShort(Context context, String tip) {
+    public static void showToastShort(String tip) {
         if (TextUtils.isEmpty(tip)) {
             tip = "未知错误";
         }
-        if (context == null) {
-            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT);
-        } else {
-            globalToast(context.getApplicationContext(), tip, Toast.LENGTH_SHORT);
-        }
+//        if (context == null) {
+//            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT);
+//        } else {
+//            globalToast(context.getApplicationContext(), tip, Toast.LENGTH_SHORT);
+//        }
+        globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT);
     }
 
     /**
      * 显示Toast 时间为long
-     *
-     * @param context
-     * @param tip
      */
-    public static void showToastLong(Context context, String tip) {
+    public static void showToastLong(String tip) {
         if (TextUtils.isEmpty(tip)) {
             tip = "未知错误";
         }
-        if (context == null) {
-            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_LONG);
-        } else {
-            globalToast(context.getApplicationContext(), tip, Toast.LENGTH_LONG);
-        }
+//        if (context == null) {
+//            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_LONG);
+//        } else {
+//            globalToast(context.getApplicationContext(), tip, Toast.LENGTH_LONG);
+//        }
+        globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_LONG);
     }
 
     /**
      * 是否有SDCard
-     *
-     * @return
      */
     public static boolean hasSDCard() {
         String status = Environment.getExternalStorageState();
@@ -102,9 +92,6 @@ public class GlobalUtils {
 
     /**
      * 通过activity得到屏幕信息
-     *
-     * @param context
-     * @return
      */
     public static DisplayMetrics getScreenDisplayMetrics(Activity context) {
         DisplayMetrics metric = new DisplayMetrics();
@@ -115,9 +102,6 @@ public class GlobalUtils {
 
     /**
      * 通过WINDOW_SERVICE获取display对象
-     *
-     * @param context
-     * @return
      */
     public static String getScreenWidthxHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -132,9 +116,6 @@ public class GlobalUtils {
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     *
-     * @param context
-     * @param dpValue
      */
     public static int dip2px(Context context, float dpValue) {
         float scale = context.getResources().getDisplayMetrics().density;
@@ -144,9 +125,6 @@ public class GlobalUtils {
 
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
-     *
-     * @param context
-     * @param pxValue
      */
     public static int px2dip(Context context, float pxValue) {
         float scale = context.getResources().getDisplayMetrics().density;
@@ -156,9 +134,6 @@ public class GlobalUtils {
 
     /**
      * 获取版本号和版本次数
-     *
-     * @param context
-     * @return
      */
     public static String getVersionCode(Context context, int type) {
         try {
@@ -198,9 +173,6 @@ public class GlobalUtils {
 
     /**
      * 获取设备信息
-     *
-     * @param context
-     * @return
      */
     public static String getDeviceInfo(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -226,9 +198,6 @@ public class GlobalUtils {
 
     /**
      * 获取设备android id
-     *
-     * @param context
-     * @return
      */
     public static String getAndroidId(Context context) {
         String androidId
@@ -280,8 +249,6 @@ public class GlobalUtils {
 
     /**
      * 获取layoutInflater
-     *
-     * @return
      */
     public static LayoutInflater getLayoutInflater(Context context) {
         LayoutInflater inflater
@@ -292,9 +259,6 @@ public class GlobalUtils {
 
     /**
      * 字符串拼接 by StringBuilder
-     *
-     * @param strings
-     * @return
      */
     public static String getStringByStringBuilder(String... strings) {
         StringBuilder builder = new StringBuilder();
@@ -306,9 +270,6 @@ public class GlobalUtils {
 
     /**
      * 字符串拼接 by StringBuffer
-     *
-     * @param strings
-     * @return
      */
     public static String getStringByStringBuffer(String... strings) {
         StringBuffer builder = new StringBuffer();
@@ -320,9 +281,6 @@ public class GlobalUtils {
 
     /**
      * 高效拼接url
-     *
-     * @param params
-     * @return
      */
     public static String getUrl(HashMap<String, String> params) {
         String url = null;
@@ -349,9 +307,6 @@ public class GlobalUtils {
 
     /**
      * 判断是否有网络连接
-     *
-     * @param context
-     * @return
      */
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
@@ -367,9 +322,6 @@ public class GlobalUtils {
 
     /**
      * 检查网络
-     *
-     * @param context
-     * @return
      */
     public static boolean checkNetState(Context context) {
         boolean netstate = false;
@@ -391,9 +343,6 @@ public class GlobalUtils {
 
     /**
      * 判断WIFI网络是否可用
-     *
-     * @param context
-     * @return
      */
     public static boolean isWifiConnected(Context context) {
         if (context != null) {
@@ -410,9 +359,6 @@ public class GlobalUtils {
 
     /**
      * 判断移动网络是否可用
-     *
-     * @param context
-     * @return
      */
     public static boolean isMobileConnected(Context context) {
         if (context != null) {
@@ -429,9 +375,6 @@ public class GlobalUtils {
 
     /**
      * 获取当前网络连接的类型信息
-     *
-     * @param context
-     * @return
      */
     public static int getConnectedType(Context context) {
         if (context != null) {
@@ -455,9 +398,6 @@ public class GlobalUtils {
 
     /**
      * Base64 编码
-     *
-     * @param string
-     * @return
      */
     public static String encodeByBase64(String string) {
         byte[] encode = Base64.encode(string.getBytes(), Base64.DEFAULT);
@@ -468,9 +408,6 @@ public class GlobalUtils {
 
     /**
      * Base64 解码
-     *
-     * @param string
-     * @return
      */
     public static String decodeByBase64(String string) {
         byte[] decode = Base64.decode(string, Base64.DEFAULT);
@@ -481,10 +418,6 @@ public class GlobalUtils {
 
     /**
      * inputStream 转成 string
-     *
-     * @param in
-     * @return
-     * @throws IOException
      */
     public static String inputStream2String(InputStream in) throws IOException {
         byte[] buf = new byte[1024];
@@ -522,10 +455,7 @@ public class GlobalUtils {
     }
 
     public static boolean isActivityLive(Activity activity) {
-        if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
-            return true;
-        }
-        return false;
+        return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 
 }

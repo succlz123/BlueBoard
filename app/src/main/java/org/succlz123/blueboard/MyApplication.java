@@ -1,13 +1,14 @@
 package org.succlz123.blueboard;
 
-import android.app.Application;
-import android.content.Context;
-
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.succlz123.blueboard.model.config.FrescoConfig;
+
+import android.app.Application;
+import android.content.Context;
+import android.os.Handler;
 
 /**
  * Created by succlz123 on 2015/7/6.
@@ -28,6 +29,8 @@ public class MyApplication extends Application {
         return application.refWatcher;
     }
 
+    private Handler mHandler = new Handler();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,9 +45,11 @@ public class MyApplication extends Application {
         Fresco.initialize(sInstance, FrescoConfig.getImagePipelineConfig(sInstance));
 
 
-
-
     }
 
 
+
+    public void postOnUiThread(Runnable runnable) {
+        mHandler.post(runnable);
+    }
 }

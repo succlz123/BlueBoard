@@ -439,11 +439,8 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     //根据position判断是否显示分区标题
     public boolean getTitleType(int position) {
-        if (position == 1 | position == 6 | position == 9 | position == 12
-                | position == 15 | position == 18 | position == 21 | position == 24) {
-            return true;
-        }
-        return false;
+        return position == 1 | position == 6 | position == 9 | position == 12
+                | position == 15 | position == 18 | position == 21 | position == 24;
     }
 
     public void setCardViewInfo(AcReOther.DataEntity.PageEntity.ListEntity entity,

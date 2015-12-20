@@ -1,10 +1,11 @@
 package org.succlz123.blueboard.controller.base;
 
-import android.support.v4.app.Fragment;
-
 import com.squareup.leakcanary.RefWatcher;
 
 import org.succlz123.blueboard.MyApplication;
+
+import android.support.v4.app.Fragment;
+import android.view.View;
 
 import butterknife.ButterKnife;
 
@@ -13,16 +14,16 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseFragment extends Fragment {
     public String TAG = getClass().getSimpleName();
-    protected boolean isVisible;
+    protected boolean mIsVisible;
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getUserVisibleHint()) {
-            isVisible = true;
+            mIsVisible = true;
             onVisible();
         } else {
-            isVisible = false;
+            mIsVisible = false;
             onInvisible();
         }
     }
@@ -44,5 +45,10 @@ public abstract class BaseFragment extends Fragment {
         RefWatcher refWatcher = MyApplication.getRefWatcher(getActivity());
         refWatcher.watch(this);
     }
+
+    protected <T extends View> T f(View view, int resId) {
+        return (T) view.findViewById(resId);
+    }
+
 }
 

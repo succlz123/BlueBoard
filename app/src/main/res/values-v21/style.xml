@@ -18,7 +18,7 @@
     <!--<item name="android:windowTranslucentStatus">true</item>-->
     <!--</style>-->
 
-    <style name="tabTheme" parent="AppTheme">
+    <style name="dyeTheme" parent="AppTheme">
         <!--<item name="android:windowTranslucentStatus">false</item>-->
         <item name="android:statusBarColor">@color/pink_base_dark</item>
     </style>

@@ -249,17 +249,11 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     //根据position判断是否显示间隔标题
     public boolean getTitleType(int position) {
-        if (position == 0 | position == 5) {
-            return true;
-        }
-        return false;
+        return position == 0 | position == 5;
     }
 
     public boolean getHotType(int position) {
-        if (position == 1 | position == 2 | position == 3 | position == 4) {
-            return true;
-        }
-        return false;
+        return position == 1 | position == 2 | position == 3 | position == 4;
     }
 
     //处理cardView中间的margin

@@ -106,7 +106,7 @@ public class MyLinearLayoutManager extends LinearLayoutManager {
 
         final int stateItemCount = state.getItemCount();
         final int adapterItemCount = getItemCount();
-        // adapter always contains actual data while state might contain old data (f.e. data before the animation is
+        // adapter always contains actual data while state might contain old data ($.e. data before the animation is
         // done). As we want to measure the view with actual data we must use data from the adapter and not from  the
         // state
         for (int i = 0; i < adapterItemCount; i++) {

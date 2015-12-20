@@ -45,11 +45,11 @@ public abstract class AppFragmentPagerAdapter extends PagerAdapter {
         String name = getFragmentTag(position);
         Fragment fragment = mFragmentManager.findFragmentByTag(name);
         if (fragment != null) {
-            if (DEBUG) Log.v(TAG, "Attaching item #" + itemId + ": f=" + fragment);
+            if (DEBUG) Log.v(TAG, "Attaching item #" + itemId + ": find=" + fragment);
             mCurTransaction.attach(fragment);
         } else {
             fragment = getItem(position);
-            if (DEBUG) Log.v(TAG, "Adding item #" + itemId + ": f=" + fragment);
+            if (DEBUG) Log.v(TAG, "Adding item #" + itemId + ": find=" + fragment);
             mCurTransaction.add(container.getId(), fragment,
                     getFragmentTag(position));
         }

@@ -1,5 +1,14 @@
 package org.succlz123.blueboard.controller.fragment.tab;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.model.api.acfun.AcApi;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcEssay;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcEssayRvAdapter;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,16 +19,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.base.BaseFragment;
-import org.succlz123.blueboard.model.api.acfun.AcApi;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.bean.acfun.AcEssay;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcEssayRvAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +68,7 @@ public class AcEssayFragment extends BaseFragment {
         mAdapter.setOnClickListener(new AcEssayRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position, String contentId) {
-                GlobalUtils.showToastShort(getActivity(), "TODO");
+                GlobalUtils.showToastShort("TODO");
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -109,7 +108,7 @@ public class AcEssayFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible) {
+        if (!mIsPrepared || !mIsVisible) {
             return;
         } else {
             if (mAdapter.getmAcEssay() == null) {
@@ -127,8 +126,7 @@ public class AcEssayFragment extends BaseFragment {
 
     private void getHttpResult(final String pagerNoNum) {
         //文章
-        Call<AcEssay> call = AcApi.getAcPartition()
-                .onResult(AcApi.buildAcPartitionUrl(
+        Call<AcEssay> call = AcApi.getAcPartition().onEssayResult(AcApi.buildAcPartitionUrl(
                         mPartitionType,
                         AcString.POPULARITY,
                         AcString.ONE_WEEK,
@@ -161,7 +159,7 @@ public class AcEssayFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()
                         && AcEssayFragment.this.getUserVisibleHint()) {
-                    GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    GlobalUtils.showToastShort("刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);

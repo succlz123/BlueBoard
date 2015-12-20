@@ -1,5 +1,19 @@
 package org.succlz123.blueboard.controller.fragment.other;
 
+import com.squareup.otto.Subscribe;
+
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
+import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
+import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.model.api.acfun.AcApi;
+import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
+import org.succlz123.blueboard.model.config.BusProvider;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.service.DownloadService;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcContentInfoRvAdapter;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,24 +23,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.otto.Subscribe;
-
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.config.BusProvider;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcContentInfoRvAdapter;
-import org.succlz123.blueboard.model.api.acfun.AcApi;
-import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
-import org.succlz123.blueboard.controller.activity.acfun.DownLoadActivity;
-import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,11 +46,8 @@ public class AcContentInfoFragment extends BaseFragment {
         return fragment;
     }
 
-    @Bind(R.id.ac_fragment_content_reply_recycler_view)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String CONTENT_ID = "contentId";
     private boolean mIsPrepared;
@@ -63,23 +59,24 @@ public class AcContentInfoFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_content_info, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_content_reply_recycler_view);
+        mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+
         BusProvider.getInstance().register(this);
         mContentId = getArguments().getString(CONTENT_ID);
 
         if (mContentId == null) {
-            GlobalUtils.showToastShort(getActivity(), "数据连接错误,重重试");
+            GlobalUtils.showToastShort("网络异常,请重试");
             return null;
         }
 
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(manager);
         mAdapter = new AcContentInfoRvAdapter();
         mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnVideoPlayClickListener() {
             @Override
             public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType, String sourceTitle) {
                 if (position == 0) {
-                    GlobalUtils.showToastShort(getActivity(), "TODO " + userId);
+                    GlobalUtils.showToastShort("TODO " + userId);
                 } else {
                     VideoPlayActivity.newInstance(getActivity(), videoId, sourceId, sourceType, sourceTitle);
                 }
@@ -88,48 +85,56 @@ public class AcContentInfoFragment extends BaseFragment {
         mAdapter.setOnDownLoadClickListener(new AcContentInfoRvAdapter.OnDownLoadClickListener() {
             @Override
             public void onClick(View view, int position, ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
-                DownLoadActivity.startActivity(getActivity(), downLoadList);
+                if (downLoadList == null || downLoadList.size() <= 0) {
+                    return;
+                }
+                DownloadService.startService(getActivity(), downLoadList);
             }
         });
 
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+
         ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
+
         mIsPrepared = true;
         lazyLoad();
 
         return view;
     }
 
-    @Subscribe
-    public void onIsDlCheckBoxShow(AcContentActivity.DlCheckBox DlCheckBox) {
-        mAdapter.setIsShowDlCheckBox(DlCheckBox.isDlCheckBoxShow(), DlCheckBox.isDlCheckBoxSelectAll());
-    }
+    @Override
+    protected void lazyLoad() {
+        if (!mIsPrepared || !mIsVisible || mContentId == null) {
+            return;
+        }
+        if (mAdapter.getAcContentInfo() != null) {
+            return;
+        }
 
-    @Subscribe
-    public boolean getIsDlCheckBoxShow(AcContentActivity.DlCheckBox DlCheckBox) {
-        return mAdapter.isShowDlCheckBox();
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                sendHttpRequest();
+            }
+        });
     }
 
     @Override
-    protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible || mContentId == null) {
-            return;
-        } else {
-            if (mAdapter.getAcContentInfo() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        sendHttpRequest();
-                    }
-                });
-            }
+    public void onDestroy() {
+        super.onDestroy();
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
         }
+        BusProvider.getInstance().unregister(this);
     }
 
     private void sendHttpRequest() {
         //视频信息
-        Observable<AcContentInfo> observable = AcApi.getAcContentInfo().onResult(AcApi.buildAcContentInfoUrl(mContentId));
+        HashMap<String, String> urlMap = AcApi.buildAcContentInfoUrl(mContentId);
+        Observable<AcContentInfo> observable = AcApi.getAcContentInfo().onResult(urlMap);
         mSubscription = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AcContentInfo, Boolean>() {
@@ -141,12 +146,9 @@ public class AcContentInfoFragment extends BaseFragment {
                 .filter(new Func1<AcContentInfo, Boolean>() {
                     @Override
                     public Boolean call(AcContentInfo acContentInfo) {
-                        boolean isSuccess = !(!acContentInfo.isSuccess()
-                                || acContentInfo.getStatus() != 200
-                                || acContentInfo.getStatus() == 404
-                                || acContentInfo.getStatus() == 403);
+                        boolean isSuccess = acContentInfo.isSuccess() && acContentInfo.getStatus() == 200;
                         if (!isSuccess) {
-                            GlobalUtils.showToastShort(getActivity(), acContentInfo.getMsg());
+                            GlobalUtils.showToastShort(acContentInfo.getMsg());
                         }
                         return isSuccess;
                     }
@@ -156,23 +158,26 @@ public class AcContentInfoFragment extends BaseFragment {
                     public void call(AcContentInfo acContentInfo) {
                         mAdapter.setContentInfo(acContentInfo);
                         BusProvider.getInstance().post(acContentInfo.getData().getFullContent());
-                        ViewUtils.setSwipeRefreshOk(mSwipeRefreshLayout);
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(false);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        GlobalUtils.showToastShort(getActivity(), "网络连接异常");
-                        ViewUtils.setSwipeRefreshFailed(mSwipeRefreshLayout);
+                        GlobalUtils.showToastShort("网络连接异常,请重试");
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        BusProvider.getInstance().unregister(this);
+    @Subscribe
+    public void onIsDlCheckBoxShow(AcContentActivity.DlCheckBox DlCheckBox) {
+        mAdapter.setIsShowDlCheckBox(DlCheckBox.isDlCheckBoxShow(), DlCheckBox.isDlCheckBoxSelectAll());
+    }
+
+    @Subscribe
+    public boolean getIsDlCheckBoxShow(AcContentActivity.DlCheckBox DlCheckBox) {
+        return mAdapter.isShowDlCheckBox();
     }
 }

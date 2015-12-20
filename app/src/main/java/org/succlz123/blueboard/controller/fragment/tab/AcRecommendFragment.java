@@ -1,16 +1,5 @@
 package org.succlz123.blueboard.controller.fragment.tab;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
 import org.succlz123.blueboard.controller.activity.acfun.AcPartitionActivity;
@@ -23,6 +12,16 @@ import org.succlz123.blueboard.model.bean.acfun.AcReOther;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.view.adapter.recyclerview.AcRecommendRvAdapter;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -107,7 +106,7 @@ public class AcRecommendFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible) {
+        if (!mIsPrepared || !mIsVisible) {
             return;
         } else {
             if (mAdapter.getAcReBanner() == null) {
@@ -182,7 +181,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -215,7 +214,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -248,7 +247,7 @@ public class AcRecommendFragment extends BaseFragment {
                     if (getActivity() != null
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
                     }
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);

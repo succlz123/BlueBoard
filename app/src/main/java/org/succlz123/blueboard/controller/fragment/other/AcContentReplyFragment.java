@@ -1,5 +1,14 @@
 package org.succlz123.blueboard.controller.fragment.other;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.model.api.acfun.AcApi;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcContentReply;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcContentReplyRvAdapter;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,16 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcContentReplyRvAdapter;
-import org.succlz123.blueboard.model.api.acfun.AcApi;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.bean.acfun.AcContentReply;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.controller.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class AcContentReplyFragment extends BaseFragment {
         mContentId = getArguments().getString(CONTENT_ID);
 
         if (mContentId == null) {
-            GlobalUtils.showToastShort(getActivity(), "数据连接错误,重重试");
+            GlobalUtils.showToastShort(  "数据连接错误,重重试");
             return null;
         }
 
@@ -96,7 +95,7 @@ public class AcContentReplyFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible || mContentId == null) {
+        if (!mIsPrepared || !mIsVisible || mContentId == null) {
             return;
         } else {
             if (mAdapter.getmAcContentReply() == null) {
@@ -126,7 +125,7 @@ public class AcContentReplyFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()) {
                     if (acContentReply.getData().getPage().getList().size() == 0) {
-                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "并没有评论");
+                        GlobalUtils.showToastShort(  "并没有评论");
                     } else {
                         mAdapter.setContentReply(sortListReply(acContentReply));
                     }
@@ -143,7 +142,7 @@ public class AcContentReplyFragment extends BaseFragment {
                 if (getActivity() != null
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()) {
-                    GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "网络连接异常");
+                    GlobalUtils.showToastShort( "网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

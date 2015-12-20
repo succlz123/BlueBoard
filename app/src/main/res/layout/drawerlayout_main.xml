@@ -24,6 +24,7 @@
             android:layout_height="37dp"
             android:background="@color/pink_base"
             app:tabIndicatorColor="@color/white"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="@color/translucence_white">
 

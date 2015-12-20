@@ -1,82 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/download_downloading_cv"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:clickable="true"
-    android:foreground="?selectableItemBackground"
-    card_view:cardCornerRadius="@dimen/shape">
-
-    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/download_downloading_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground"
+        card_view:cardCornerRadius="@dimen/shape">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/download_tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:minHeight="25dp"
-                android:singleLine="true"
-                android:text=" "
-                android:textSize="14sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/download_tv_file_size"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text=" "
-                android:textSize="12sp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/tv_download_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:minHeight="25dp"
+                    android:singleLine="true"
+                    android:text=" "
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            <TextView
+                    android:id="@+id/tv_download_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:minHeight="25dp"
+                    android:singleLine="true"
+                    android:text=" "
+                    android:textSize="14sp"/>
+
+            <TextView
+                    android:id="@+id/tv_download_file_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text=" "
+                    android:textSize="12sp"/>
 
             <ProgressBar
-                android:id="@+id/download_progress_bar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginBottom="8dp"
-                android:minHeight="20dp"/>
+                    android:id="@+id/pb_download"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="8dp"
+                    android:minHeight="20dp"/>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/download_btn_delete"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/cancel"
-            android:backgroundTint="@color/android_base"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="14sp"/>
+                android:id="@+id/btn_download_cancel"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/cancel"
+                android:backgroundTint="@color/android_base"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="14sp"/>
 
         <Button
-            android:id="@+id/download_btn_toggle"
-            android:layout_width="40dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="8dp"
-            android:background="@color/pink_base"
-            android:gravity="center"
-            android:text="开始"
-            android:textColor="@color/white"
-            android:textSize="12sp"/>
+                android:id="@+id/btn_download_toggle"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="8dp"
+                android:background="@color/pink_base"
+                android:gravity="center"
+                android:text="开始"
+                android:textColor="@color/white"
+                android:textSize="12sp"/>
 
     </LinearLayout>
 

@@ -28,8 +28,8 @@ public class AcApi {
     /**
      * @return 都有而且不用改变的url参数
      */
-    public static HashMap buildBaseMap() {
-        HashMap map = new HashMap();
+    public static HashMap<String, String> buildBaseMap() {
+        HashMap<String, String> map = new HashMap<String, String>();
         map.put(AcString.APP_VERSION, AcString.APP_NUM);
         map.put(AcString.SYS_NAME, AcString.SYS_NAME_ANDROID);
         map.put(AcString.SYS_VERSION, AcString.SYS_VERSION_ANDROID);
@@ -46,8 +46,8 @@ public class AcApi {
      *
      * @return 首页横幅
      */
-    public static HashMap buildAcReBannerUrl() {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcReBannerUrl() {
+        HashMap<String, String> map = buildBaseMap();
         return map;
     }
 
@@ -59,7 +59,7 @@ public class AcApi {
      *
      * @return 热门焦点
      */
-    public static HashMap buildAcReHotUrl(String pageNo) {
+    public static HashMap<String, String> buildAcReHotUrl(String pageNo) {
         HashMap<String, String> map = buildBaseMap();
         map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_20);
         map.put(AcString.PAGE_NO, pageNo);
@@ -80,7 +80,7 @@ public class AcApi {
      * @param range     返回数据是多少时间内统计的 一周 一月 三月 总共
      * @return 返回不同的分区信息
      */
-    public static HashMap buildAcReOtherUrl(String channelId, String orderBy, String range) {
+    public static HashMap<String, String> buildAcReOtherUrl(String channelId, String orderBy, String range) {
         HashMap<String, String> map = buildBaseMap();
         map.put(AcString.CHANNEL_IDS, channelId);
         map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_10);
@@ -117,8 +117,8 @@ public class AcApi {
      *
      * @return 分区内不同板块数据
      */
-    public static HashMap buildAcPartitionUrl(String channelIds, String orderBy, String range, String pageSize, String pagerNo) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcPartitionUrl(String channelIds, String orderBy, String range, String pageSize, String pagerNo) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.CHANNEL_IDS, channelIds);
         map.put(AcString.PAGE_SIZE, pageSize);
         map.put(AcString.PAGE_NO, pagerNo);
@@ -149,8 +149,8 @@ public class AcApi {
      *
      * @return 视频具体信息
      */
-    public static HashMap buildAcContentInfoUrl(String contentId) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcContentInfoUrl(String contentId) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.VERSION, AcString.VERSION_NUM_2);
         map.put(AcString.CONTENT_ID, contentId);
 
@@ -174,8 +174,8 @@ public class AcApi {
      *
      * @return 视频的评论信息
      */
-    public static HashMap buildAcContentReplyUrl(String contentId, String pageSize, String pageNo) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcContentReplyUrl(String contentId, String pageSize, String pageNo) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.VERSION, AcString.VERSION_NUM_4);
         map.put(AcString.CONTENT_ID, contentId);
         map.put(AcString.PAGE_SIZE, pageSize);
@@ -205,8 +205,8 @@ public class AcApi {
      *
      * @return 乐视视频的播放地址
      */
-    public static HashMap buildAcContentVideoUrl(String sourceId) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcContentVideoUrl(String sourceId) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.UU, AcString.UU_STRING);
         map.put(AcString.CF, AcString.CF_TYPE);
         map.put(AcString.FORMAT, AcString.FORMAT_TYPE);
@@ -234,8 +234,8 @@ public class AcApi {
      *
      * @return 其他视频的播放地址 html5(优酷 土豆 渣浪 企鹅)
      */
-    public static HashMap buildAcContentHtml5VideoUrl(String videoId) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcContentHtml5VideoUrl(String videoId) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.VID, videoId);
 
         return map;
@@ -262,8 +262,8 @@ public class AcApi {
      *
      * @return 弹幕信息地址
      */
-    public static HashMap buildAcContentDanMuUrl() {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcContentDanMuUrl() {
+        HashMap<String, String> map = buildBaseMap();
 
         return map;
     }
@@ -281,8 +281,8 @@ public class AcApi {
      *
      * @return 每周新番时间表
      */
-    public static HashMap buildAcBangumiUrl(String types) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcBangumiUrl(String types) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.BANGUMI_TYPES, types);
         return map;
     }
@@ -305,8 +305,8 @@ public class AcApi {
      *
      * @return 每周新番时间表
      */
-    public static HashMap buildAcRankingUrl(String channelIds, String pageNo) {
-        HashMap map = buildBaseMap();
+    public static HashMap<String, String> buildAcRankingUrl(String channelIds, String pageNo) {
+        HashMap<String, String> map = buildBaseMap();
         map.put(AcString.CHANNEL_IDS, channelIds);
         map.put(AcString.PAGE_SIZE, AcString.PAGE_SIZE_NUM_20);
         map.put(AcString.PAGE_NO, pageNo);

@@ -1,5 +1,14 @@
 package org.succlz123.blueboard.controller.fragment.tab;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.model.api.acfun.AcApi;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.recyclerview.AcBangumiRvAdapter;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,18 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcBangumiRvAdapter;
-import org.succlz123.blueboard.model.api.acfun.AcApi;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.controller.base.BaseFragment;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -34,17 +31,16 @@ public class AcBangumiFragment extends BaseFragment {
     private boolean mIsPrepared;
     private AcBangumiRvAdapter mAdapter;
 
-    @Bind(R.id.ac_fragment_bangumi_recycler_view)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_main_bangumi, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_bangumi_recycler_view);
+        mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
 
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setHasFixedSize(true);
@@ -54,7 +50,7 @@ public class AcBangumiFragment extends BaseFragment {
         mAdapter.setOnClickListener(new AcBangumiRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position, String contentId) {
-                GlobalUtils.showToastShort(getActivity(), "TODO");
+                GlobalUtils.showToastShort(  "TODO");
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -76,7 +72,7 @@ public class AcBangumiFragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
-        if (!mIsPrepared || !isVisible) {
+        if (!mIsPrepared || !mIsVisible) {
             return;
         } else {
             if (mAdapter.getmAcBangumi() == null) {
@@ -119,7 +115,7 @@ public class AcBangumiFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()
                         && AcBangumiFragment.this.getUserVisibleHint()) {
-                    GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "刷新过快或者网络连接异常");
+                    GlobalUtils.showToastShort(  "刷新过快或者网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);

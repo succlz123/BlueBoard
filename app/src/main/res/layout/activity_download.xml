@@ -7,13 +7,13 @@
     <include layout="@layout/toolbar"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/download_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/rv_bottom"
-        android:paddingLeft="@dimen/rv_margin"
-        android:paddingRight="@dimen/rv_margin"
-        android:scrollbars="none"/>
+            android:id="@+id/download_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/rv_bottom"
+            android:paddingLeft="@dimen/rv_margin"
+            android:paddingRight="@dimen/rv_margin"
+            android:scrollbars="none"/>
 
 </LinearLayout>

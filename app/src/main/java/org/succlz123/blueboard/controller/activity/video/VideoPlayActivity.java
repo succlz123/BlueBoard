@@ -1,5 +1,20 @@
 package org.succlz123.blueboard.controller.activity.video;
 
+import com.squareup.okhttp.ResponseBody;
+
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.api.acfun.NewAcApi;
+import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.SysUtils;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.model.utils.danmaku.DanmakuHelper;
+import org.succlz123.okplayer.OkPlayer;
+import org.succlz123.okplayer.listener.OkPlayerListener;
+import org.succlz123.okplayer.view.OkVideoView;
+
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -19,30 +34,12 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.squareup.okhttp.ResponseBody;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.base.BaseActivity;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.api.acfun.NewAcApi;
-import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.model.utils.common.SysUtils;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.model.utils.danmaku.DanmakuHelper;
-import org.succlz123.okplayer.OkPlayer;
-import org.succlz123.okplayer.listener.OkPlayerListener;
-import org.succlz123.okplayer.view.OkVideoView;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import master.flame.danmaku.controller.DrawHandler;
@@ -77,56 +74,28 @@ public class VideoPlayActivity extends BaseActivity {
         activity.startActivity(intent);
     }
 
-    @Bind(R.id.fl_loading)
-    FrameLayout mFlLoading;
+    private FrameLayout mFlLoading;
+    private FrameLayout mFlDownloadRate;
+    private TextView mTvDownloadRate;
 
-    @Bind(R.id.fl_download_rate)
-    FrameLayout mFlDownloadRate;
+    private LinearLayout mLlBrightness;
+    private LinearLayout mLlVolume;
+    private TextView mTvBrightness;
+    private TextView mTvVolume;
 
-    @Bind(R.id.tv_download_rate)
-    TextView mTvDownloadRate;
+    private ImageView mIvHD;
+    private ImageView mIvDanmaku;
 
-    @Bind(R.id.ll_brightness)
-    LinearLayout mLlBrightness;
+    private TextView mTvTitle;
+    private LinearLayout mTitleBar;
 
-    @Bind(R.id.ll_volume)
-    LinearLayout mLlVolume;
+    private ImageView mIvPlay;
+    private TextView mTvRate;
+    private SeekBar mPbRate;
+    private LinearLayout mControllerBar;
 
-    @Bind(R.id.tv_brightness)
-    TextView mTvBrightness;
-
-    @Bind(R.id.tv_volume)
-    TextView mTvVolume;
-
-    @Bind(R.id.video_hd)
-    ImageView mIvHD;
-
-    @Bind(R.id.video_danmaku)
-    ImageView mIvDanmaku;
-
-    @Bind(R.id.tv_title)
-    TextView mTvTitle;
-
-    @Bind(R.id.video_title_bar)
-    LinearLayout mTitleBar;
-
-    @Bind(R.id.iv_play)
-    ImageView mIvPlay;
-
-    @Bind(R.id.tv_rate)
-    TextView mTvRate;
-
-    @Bind(R.id.sb_rate)
-    SeekBar mPbRate;
-
-    @Bind(R.id.video_controller_bar)
-    LinearLayout mControllerBar;
-
-    @Bind(R.id.sv_danmaku)
-    DanmakuSurfaceView mDanmakuView;
-
-    @Bind(R.id.ok_video_view)
-    OkVideoView mOkVideoView;
+    private DanmakuSurfaceView mDanmakuView;
+    private OkVideoView mOkVideoView;
 
     private AudioManager mAudioManager;
 
@@ -162,26 +131,49 @@ public class VideoPlayActivity extends BaseActivity {
         ViewUtils.toggleHideyBar(decorView);
 
         setContentView(R.layout.activity_video_play);
-        ButterKnife.bind(this);
 
         initDate();
+        initView();
         initDanmaku();
+
         if (mSourceTitle != null) {
             mTvTitle.setText(mSourceTitle);
         }
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mGestureDetector = new GestureDetector(this, new CustomTouchListener());
 
-        if (TextUtils.isEmpty(mSourceType)) {
-            GlobalUtils.showToastShort(this, "读取视频源出错");
-            return;
-        }
-
         if (TextUtils.equals(mSourceType, "zhuzhan")) {
             videoFormZhuZhan();
         } else {
-            GlobalUtils.showToastShort(this, "非主站");
+            GlobalUtils.showToastShort("读取视频源出错,非主站");
         }
+    }
+
+    private void initDate() {
+        mVideoId = getIntent().getStringExtra(AcString.VIDEO_ID);
+        mSourceId = getIntent().getStringExtra(AcString.SOURCE_ID);
+        mSourceType = getIntent().getStringExtra(AcString.SOURCE_TYPE);
+        mSourceTitle = getIntent().getStringExtra(AcString.SOURCE_TITLE);
+    }
+
+    private void initView() {
+        mFlLoading = f(R.id.fl_loading);
+        mFlDownloadRate = f(R.id.fl_download_rate);
+        mTvDownloadRate = f(R.id.tv_download_rate);
+        mLlBrightness = f(R.id.ll_brightness);
+        mLlVolume = f(R.id.ll_volume);
+        mTvBrightness = f(R.id.tv_brightness);
+        mTvVolume = f(R.id.tv_volume);
+        mIvHD = f(R.id.video_hd);
+        mIvDanmaku = f(R.id.video_danmaku);
+        mTvTitle = f(R.id.tv_title);
+        mTitleBar = f(R.id.video_title_bar);
+        mIvPlay = f(R.id.iv_play);
+        mTvRate = f(R.id.tv_rate);
+        mPbRate = f(R.id.sb_rate);
+        mControllerBar = f(R.id.video_controller_bar);
+        mDanmakuView = f(R.id.sv_danmaku);
+        mOkVideoView = f(R.id.ok_video_view);
     }
 
     private void initDanmaku() {
@@ -333,13 +325,6 @@ public class VideoPlayActivity extends BaseActivity {
         }
     }
 
-    private void initDate() {
-        mVideoId = getIntent().getStringExtra(AcString.VIDEO_ID);
-        mSourceId = getIntent().getStringExtra(AcString.SOURCE_ID);
-        mSourceType = getIntent().getStringExtra(AcString.SOURCE_TYPE);
-        mSourceTitle = getIntent().getStringExtra(AcString.SOURCE_TITLE);
-    }
-
     @Override
     public void onNewIntent(Intent intent) {
         mOkVideoView.onNewIntent();
@@ -428,7 +413,7 @@ public class VideoPlayActivity extends BaseActivity {
                         mHandler.postDelayed(this, 1000);
                         mCheckCount++;
                     } else {
-                        GlobalUtils.showToastShort(MyApplication.getInstance().getApplicationContext(), "弹幕解析失败,请重试");
+                        GlobalUtils.showToastShort("弹幕解析失败,请重试");
                     }
                 }
             });
@@ -471,17 +456,17 @@ public class VideoPlayActivity extends BaseActivity {
 
     @OnClick(R.id.video_hd)
     void onVideoHD(View v) {
-        GlobalUtils.showToastShort(this, "啊啊啊");
+        GlobalUtils.showToastShort("啊啊啊");
     }
 
     @OnClick(R.id.video_danmaku)
     void onVideoDanmaku(View v) {
         if (mDanmakuView.isShown()) {
             mDanmakuView.hide();
-            GlobalUtils.showToastShort(this, "关闭弹幕");
+            GlobalUtils.showToastShort("关闭弹幕");
         } else {
             mDanmakuView.show();
-            GlobalUtils.showToastShort(this, "打开弹幕");
+            GlobalUtils.showToastShort("打开弹幕");
         }
     }
 
@@ -617,12 +602,10 @@ public class VideoPlayActivity extends BaseActivity {
             return super.onSingleTapConfirmed(e);
         }
 
-//        @Override
-//        public boolean onContextClick(MotionEvent e) {
-//            return super.onContextClick(e);
-//        }
+        @Override
+        public boolean onContextClick(MotionEvent e) {
+            return super.onContextClick(e);
+        }
     }
-
-
 }
 

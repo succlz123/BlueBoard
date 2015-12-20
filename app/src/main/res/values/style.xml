@@ -3,7 +3,7 @@
 
     <style name="AppTheme" parent="BaseTheme"/>
 
-    <style name="tabTheme" parent="AppTheme"/>
+    <style name="dyeTheme" parent="AppTheme"/>
 
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Toolbar颜色 也是多任务切换的标题颜色-->

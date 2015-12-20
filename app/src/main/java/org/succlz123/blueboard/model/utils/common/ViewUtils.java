@@ -1,5 +1,7 @@
 package org.succlz123.blueboard.model.utils.common;
 
+import org.succlz123.blueboard.R;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,8 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
-import org.succlz123.blueboard.R;
 
 /**
  * Created by succlz123 on 2015/7/7.
@@ -97,7 +97,7 @@ public class ViewUtils {
      *
      * @param swipeRefreshLayout
      */
-    public static void setSwipeRefreshOk(SwipeRefreshLayout swipeRefreshLayout) {
+    public static void setRefreshSuccess(SwipeRefreshLayout swipeRefreshLayout) {
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
             swipeRefreshLayout.setEnabled(false);
@@ -109,7 +109,7 @@ public class ViewUtils {
      *
      * @param swipeRefreshLayout
      */
-    public static void setSwipeRefreshFailed(SwipeRefreshLayout swipeRefreshLayout) {
+    public static void setRefreshFailed(SwipeRefreshLayout swipeRefreshLayout) {
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }

@@ -1,9 +1,17 @@
 package org.succlz123.blueboard.view.adapter.recyclerview;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.service.DownloadService;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.okdownload.OkDownloadEnqueueListener;
+import org.succlz123.okdownload.OkDownloadError;
+
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,130 +19,71 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 15/9/1.
  */
 public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private OnClickListener mOnClickListener;
-
-    private String mName;
-    private int mProgress;
-    private long mCacheSize;
-    private long mTotalSize;
-    private long mAverageSpeed;
-    private long mRealTimeSpeed;
 
     private HashMap<String, Integer> downloadMap = new HashMap<>();
-    private boolean mIsNotify;
 
-//    private ArrayList<NBDownloadRequest> mNBDownloadRequests = new ArrayList<>();
+    private WeakReference<Activity> mActivity;
+    private OkDownloadEnqueueListener mListener;
+    private ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> mDownLoadList = new ArrayList<>();
+    private DownloadService mDownloadService;
+    private DecimalFormat df = new DecimalFormat("0.00");
 
-//    public ArrayList<NBDownloadRequest> getNBDownloadRequests() {
-//        return mNBDownloadRequests;
-//    }
+    private long time = System.currentTimeMillis();
 
-//    public void setNBDownloadRequests(List<NBDownloadRequest> downloadRequestList) {
-//        this.mNBDownloadRequests = new ArrayList<>(downloadRequestList);
-//        notifyDataSetChanged();
-//    }
-
-//    public void deleteRequests(int position) {
-//        if (mNBDownloadRequests.size() != 0) {
-//            mNBDownloadRequests.remove(position);
-//            notifyDataSetChanged();
-//        }
-//    }
-
-    public OnClickListener getOnClickListener() {
-        return mOnClickListener;
+    public DownLoadRvAdapter(Activity activity) {
+        super();
+        this.mActivity = new WeakReference<Activity>(activity);
     }
 
-    long time = System.currentTimeMillis();
+    public OkDownloadEnqueueListener getListener() {
+        return mListener;
+    }
 
-    public void setProgress(String name, int progress, long cacheSize, long totalSize, long averageSpeed, long realTimeSpeed) {
-        mName = name;
-        this.mProgress = progress;
-        this.mCacheSize = cacheSize;
-        this.mTotalSize = totalSize;
-        this.mAverageSpeed = averageSpeed;
-        this.mRealTimeSpeed = realTimeSpeed;
+    public void setListener(OkDownloadEnqueueListener listener) {
+        mListener = listener;
+    }
 
-        if (downloadMap.size() != 0 && downloadMap.get(name) != null) {
-            notifyItemChanged(downloadMap.get(name));
-        } else if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - time) >= 1) {
-            time = System.currentTimeMillis();
-            notifyDataSetChanged();
+    public DownloadService getDownloadService() {
+        return mDownloadService;
+    }
+
+    public void setDownloadService(DownloadService downloadService) {
+        mDownloadService = downloadService;
+        ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity>
+                downLoadList = mDownloadService.getDownLoadList();
+
+        if (downLoadList == null) {
+            return;
         }
+        mDownLoadList = downLoadList;
+        notifyDataSetChanged();
     }
 
-    public void setFinish(String name) {
-
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public int getProgress() {
-        return mProgress;
-    }
-
-    public long getCacheSize() {
-        return mCacheSize;
-    }
-
-    public long getTotalSize() {
-        return mTotalSize;
-    }
-
-    public long getAverageSpeed() {
-        return mAverageSpeed;
-    }
-
-    public long getRealTimeSpeed() {
-        return mRealTimeSpeed;
-    }
-
-    public interface OnClickListener {
-
-        void onToggle(View view, int position, String name);
-
-        void onDelete(View view, int position);
-    }
-
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.mOnClickListener = onClickListener;
-    }
-
-    public class DownloadVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.download_tv_title)
-        TextView tvTitle;
-
-        @Bind(R.id.download_tv_file_size)
-        TextView tvFileSize;
-
-        @Bind(R.id.download_progress_bar)
-        ProgressBar progressBar;
-
-        @Bind(R.id.download_btn_toggle)
-        Button btnToggle;
-
-        @Bind(R.id.download_btn_delete)
-        Button btnDelete;
+    public class DownloadVH extends BaseRvViewHolder {
+        private TextView tvTitle;
+        private TextView tvName;
+        private TextView tvFileSize;
+        private ProgressBar pbDownload;
+        private Button btnToggle;
+        private Button btnCancel;
 
         public DownloadVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitle = f(itemView, R.id.tv_download_title);
+            tvName = f(itemView, R.id.tv_download_info);
+            tvFileSize = f(itemView, R.id.tv_download_file_size);
+            pbDownload = f(itemView, R.id.pb_download);
+            btnToggle = f(itemView, R.id.btn_download_toggle);
+            btnCancel = f(itemView, R.id.btn_download_cancel);
         }
     }
 
@@ -148,72 +97,81 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DownloadVH) {
-
-//                 String sourceId = downloadRequest.getName();
-            String filePath = "c";
-
-            ((DownloadVH) holder).tvTitle.setText("");
-            ((DownloadVH) holder).progressBar.setMax(100);
-            DecimalFormat df = new DecimalFormat("0.00");
-
-            if (filePath != null) {
-                float cacheSize = (float) 11 / 1024 / 1024;
-                float totalSize = (float) 11 / 1024 / 1024;
-
-                if (totalSize != 0) {
-                    ((DownloadVH) holder).tvFileSize.setText(df.format(cacheSize) + "M" + "/" + df.format(totalSize) + "M");
-                    ((DownloadVH) holder).progressBar.setProgress((int) (cacheSize / totalSize * 100));
-                }
-
-                if (cacheSize == totalSize) {
-                    ((DownloadVH) holder).tvFileSize.setText("");
-                    ((DownloadVH) holder).btnToggle.setText("完成");
-                    ((DownloadVH) holder).progressBar.setProgress(100);
-                } else if (cacheSize < totalSize) {
-                    ((DownloadVH) holder).btnToggle.setText("继续");
-                }
+            if (mDownLoadList.size() <= 0) {
+                return;
             }
 
-            if (mName != null && TextUtils.equals(mName, "")) {
+            String title = mDownLoadList.get(position).getVideoTitle();
+            String name = mDownLoadList.get(position).getName();
 
-                downloadMap.put(mName, position);
+            ((DownloadVH) holder).tvTitle.setText(title);
+            ((DownloadVH) holder).tvName.setText(name);
+            ((DownloadVH) holder).pbDownload.setMax(100);
 
-                float cacheSize = (float) mCacheSize / 1024 / 1024;
-                float totalSize = (float) mTotalSize / 1024 / 1024;
+            mListener = new OkDownloadEnqueueListener() {
+                @Override
+                public void onStart(int id) {
 
-                ((DownloadVH) holder).tvFileSize.setText(df.format(cacheSize) + "M" + "/" + df.format(totalSize) + "M");
-                ((DownloadVH) holder).progressBar.setProgress(mProgress);
-
-                ((DownloadVH) holder).btnToggle.setText("下载");
-            }
-
-            ((DownloadVH) holder).btnToggle.setOnClickListener(new View.OnClickListener() {
+                }
 
                 @Override
-                public void onClick(View v) {
-                }
-            });
+                public void onProgress(int progress, long cacheSize, long totalSize) {
+                    if (!GlobalUtils.isActivityLive(mActivity.get())) {
+                        return;
+                    }
 
-            ((DownloadVH) holder).btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                    ((DownloadVH) holder).pbDownload.setProgress(progress);
+
+                    if (cacheSize != 0 && totalSize != 0) {
+                        final float convertCacheSize = ((float) cacheSize) / 1024 / 1024;
+                        final float convertTotalSize = ((float) totalSize) / 1024 / 1024;
+
+                        ((DownloadVH) holder).tvFileSize.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((DownloadVH) holder).tvFileSize.setText(df.format(convertCacheSize) + "m" + "/" + df.format(convertTotalSize) + "m");
+                            }
+                        });
+                    }
                 }
-            });
+
+                @Override
+                public void onRestart() {
+
+                }
+
+                @Override
+                public void onPause() {
+
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+
+                @Override
+                public void onError(OkDownloadError error) {
+
+                }
+            };
+
+            mDownloadService.setListener(mListener, position);
         }
     }
 
     @Override
     public int getItemCount() {
-//        int itemCount = mNBDownloadRequests.size();
-//        if (itemCount > 0) {
-//            return itemCount;
-//        }
-        return 0;
+        return mDownLoadList.size();
     }
 
-    //处理cardView中间的margin
     public static class MyDecoration extends RecyclerView.ItemDecoration {
 
         @Override

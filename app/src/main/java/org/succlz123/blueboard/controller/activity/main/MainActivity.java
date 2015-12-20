@@ -1,5 +1,11 @@
 package org.succlz123.blueboard.controller.activity.main;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.activity.acfun.DownLoadActivity;
+import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.fragment.AcMainFmAdapter;
+
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -9,44 +15,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.base.BaseActivity;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.fragment.AcMainFmAdapter;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 
 public class MainActivity extends BaseActivity {
-
-    @Bind(R.id.drawer_layout)
-    public DrawerLayout mDrawerLayout;
-
-    @Bind(R.id.nav_view)
-    NavigationView mNavigationView;
-
-    @Bind(R.id.fragment_main_tab_layout)
-    TabLayout mTabLayout;
-
-    @Bind(R.id.fragment_main_viewpager)
-    ViewPager mViewPager;
-
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
+        mToolbar = f(R.id.toolbar);
+        mViewPager = f(R.id.fragment_main_viewpager);
+        mTabLayout = f(R.id.fragment_main_tab_layout);
+        mNavigationView = f(R.id.nav_view);
+        mDrawerLayout = f(R.id.drawer_layout);
 
         ViewUtils.setToolbar(this, mToolbar, true);
         ViewUtils.setDrawer(this, mDrawerLayout, mToolbar);
-
         setUpDrawerContent(mNavigationView);
 
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         AcMainFmAdapter adapter = new AcMainFmAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(adapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -54,17 +45,27 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setUpDrawerContent(NavigationView navigationView) {
+        navigationView.setCheckedItem(R.id.nav_home);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_home:
+                                menuItem.setChecked(true);
+                                break;
+                            case R.id.nav_download:
+                                DownLoadActivity.newInstance(MainActivity.this);
+                                break;
+
+                            default:
+                                break;
+                        }
                         mDrawerLayout.closeDrawers();
                         return true;
                     }
                 });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
