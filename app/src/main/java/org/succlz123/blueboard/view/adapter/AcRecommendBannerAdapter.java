@@ -1,14 +1,5 @@
 package org.succlz123.blueboard.view.adapter;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -17,7 +8,16 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcRecommendRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.tab.AcRecommendRvAdapter;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;

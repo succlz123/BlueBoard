@@ -1,5 +1,10 @@
 package org.succlz123.blueboard.controller.fragment.tab;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.activity.acfun.AcPartitionActivity;
+import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.view.adapter.recyclerview.tab.AcNavigationRvAdapter;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,22 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcNavigationRvAdapter;
-import org.succlz123.blueboard.controller.activity.acfun.AcPartitionActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 
 /**
  * Created by succlz123 on 2015/5/2.
  */
 public class AcNavigationFragment extends BaseFragment {
 
-    @Bind(R.id.ac_fragment_navigation_recycler_view)
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private boolean mIsPrepared;
     private AcNavigationRvAdapter mAdapter;
@@ -32,7 +28,8 @@ public class AcNavigationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_main_navigation, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_navigation_recycler_view);
 
         mIsPrepared = true;
 

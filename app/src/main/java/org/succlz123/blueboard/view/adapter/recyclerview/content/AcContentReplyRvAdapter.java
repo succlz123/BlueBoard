@@ -1,4 +1,12 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.content;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.succlz123.blueboard.MyApplication;
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.bean.acfun.AcContentReply;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.net.Uri;
 import android.support.v7.widget.CardView;
@@ -10,19 +18,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.bean.acfun.AcContentReply;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 15/8/4.
@@ -48,28 +47,22 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
         notifyDataSetChanged();
     }
 
-    public class TitleInfoViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_content_reply_name_tv)
-        TextView tvName;
-
-        @Bind(R.id.ac_rv_content_reply_time_tv)
-        TextView tvTime;
-
-        @Bind(R.id.ac_rv_content_reply_reply_tv)
-        TextView tvReply;
-
-        @Bind(R.id.ac_rv_content_reply_user_img)
-        SimpleDraweeView userImg;
-
-        @Bind(R.id.quote_reply_linear_layout)
-        LinearLayout linearLayout;
-
-        @Bind(R.id.cv_content_reply)
-        CardView cardView;
+    public class TitleInfoViewHolder extends BaseRvViewHolder {
+        private TextView tvName;
+        private TextView tvTime;
+        private TextView tvReply;
+        private SimpleDraweeView userImg;
+        private LinearLayout linearLayout;
+        private CardView cardView;
 
         public TitleInfoViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvName = f(itemView, R.id.ac_rv_content_reply_name_tv);
+            tvTime = f(itemView, R.id.ac_rv_content_reply_time_tv);
+            tvReply = f(itemView, R.id.ac_rv_content_reply_reply_tv);
+            userImg = f(itemView, R.id.ac_rv_content_reply_user_img);
+            linearLayout = f(itemView, R.id.quote_reply_linear_layout);
+            cardView = f(itemView, R.id.cv_content_reply);
         }
     }
 
@@ -85,7 +78,7 @@ public class AcContentReplyRvAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (mAcContentReply != null) {
             AcContentReply.DataEntity.Entity entity = mAcContentReply.get(position);
-            if(entity.getAvatar()!=null){
+            if (entity.getAvatar() != null) {
                 ((TitleInfoViewHolder) holder).userImg
                         .setImageURI(Uri.parse(entity.getAvatar()));
             }

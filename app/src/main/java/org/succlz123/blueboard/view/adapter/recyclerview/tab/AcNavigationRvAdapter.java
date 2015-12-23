@@ -1,4 +1,10 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.tab;
+
+import org.succlz123.blueboard.MyApplication;
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -9,14 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 15/8/12.
@@ -35,30 +33,25 @@ public class AcNavigationRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mOnClickListener = onClickListener;
     }
 
-    public class TitleViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_tv_title)
-        TextView tvTitle;
+    public class TitleViewHolder extends BaseRvViewHolder {
+        private TextView tvTitle;
 
         public TitleViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitle = f(itemView, R.id.ac_rv_tv_title);
         }
     }
 
-    public class ButtonViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.ac_rv_navigation_img)
-        ImageView imgButton;
-
-        @Bind(R.id.ac_rv_navigation_tv)
-        TextView tvButton;
-
-        @Bind(R.id.ac_rv_navigation_cv)
-        CardView cvButon;
+    public class ButtonViewHolder extends BaseRvViewHolder {
+        private ImageView imgButton;
+        private TextView tvButton;
+        private CardView cvButon;
 
         public ButtonViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            imgButton = f(itemView, R.id.ac_rv_navigation_img);
+            tvButton = f(itemView, R.id.ac_rv_navigation_tv);
+            cvButon = f(itemView, R.id.ac_rv_navigation_cv);
         }
     }
 

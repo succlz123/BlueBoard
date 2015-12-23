@@ -1,4 +1,11 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.other;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.bean.acfun.AcReHot;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -10,17 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.bean.acfun.AcReHot;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 15/8/18.
@@ -55,22 +53,18 @@ public class AcHotRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.mOnClickListener = onClickListener;
     }
 
-    public class HotVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_card_view_tv_1)
-        TextView tvTitleHot;
-
-        @Bind(R.id.ac_card_view_tv_2)
-        TextView tvSubTitleHot;
-
-        @Bind(R.id.ac_card_view_img)
-        SimpleDraweeView imgCoverHot;
-
-        @Bind(R.id.ac_fragment_re_card_view)
-        CardView cardViewHot;
+    public class HotVH extends BaseRvViewHolder {
+        private TextView tvTitleHot;
+        private TextView tvSubTitleHot;
+        private SimpleDraweeView imgCoverHot;
+        private CardView cardViewHot;
 
         public HotVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitleHot = f(itemView, R.id.ac_card_view_tv_1);
+            tvSubTitleHot = f(itemView, R.id.ac_card_view_tv_2);
+            imgCoverHot = f(itemView, R.id.ac_card_view_img);
+            cardViewHot = f(itemView, R.id.ac_fragment_re_card_view);
         }
     }
 

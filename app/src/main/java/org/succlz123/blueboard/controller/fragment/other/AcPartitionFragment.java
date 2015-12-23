@@ -8,7 +8,7 @@ import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcPartitionRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.other.AcPartitionRvAdapter;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -23,8 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -53,17 +51,17 @@ public class AcPartitionFragment extends BaseFragment {
     private GridLayoutManager mManager;
     private int mPagerNoNum = 1;
 
-    @Bind(R.id.ac_fragment_partition_recycler_view)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_partition, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_partition_recycler_view);
+        mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+
         mPartitionType = getArguments().getString(AcString.CHANNEL_IDS);
 
         mManager = new GridLayoutManager(getActivity(), 2);
@@ -199,7 +197,7 @@ public class AcPartitionFragment extends BaseFragment {
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()
                             && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort(  "刷新太快或者网络连接异常");
+                        GlobalUtils.showToastShort("刷新太快或者网络连接异常");
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
@@ -234,7 +232,7 @@ public class AcPartitionFragment extends BaseFragment {
                                 }
                                 mPagerNoNum++;
                             } else {
-                                GlobalUtils.showToastShort( "没有更多了 (´･ω･｀)");
+                                GlobalUtils.showToastShort("没有更多了 (´･ω･｀)");
                             }
                         }
                         if (mSwipeRefreshLayout != null) {
@@ -250,7 +248,7 @@ public class AcPartitionFragment extends BaseFragment {
                             && !getActivity().isDestroyed()
                             && !getActivity().isFinishing()
                             && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort( "刷新太快或者网络连接异常");
+                        GlobalUtils.showToastShort("刷新太快或者网络连接异常");
                         if (mSwipeRefreshLayout != null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);

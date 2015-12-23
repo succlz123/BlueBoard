@@ -1,4 +1,14 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.other;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.succlz123.blueboard.MyApplication;
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcReHot;
+import org.succlz123.blueboard.model.bean.acfun.AcReOther;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,20 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.bean.acfun.AcReHot;
-import org.succlz123.blueboard.model.bean.acfun.AcReOther;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 2015/8/9.
@@ -87,60 +85,48 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.mOnClickListener = onClickListener;
     }
 
-    public class TitleVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_tv_title)
-        TextView tvTitle;
+    public class TitleVH extends BaseRvViewHolder {
+        private TextView tvTitle;
 
         public TitleVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitle = f(itemView, R.id.ac_rv_tv_title);
         }
     }
 
-    public class MostPopularVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.cv_vertical_with_click_info_tv_title)
-        TextView tvTitleHot;
-
-        @Bind(R.id.cv_vertical_with_click_info_tv_click)
-        TextView tvClickHot;
-
-        @Bind(R.id.cv_vertical_with_click_info_tv_reply)
-        TextView tvReplyHot;
-
-        @Bind(R.id.cv_vertical_with_click_info_img)
-        SimpleDraweeView imgCoverHot;
-
-        @Bind(R.id.cv_vertical_with_click_info)
-        CardView cvVerticalWithClickInfo;
+    public class MostPopularVH extends BaseRvViewHolder {
+        private TextView tvTitleHot;
+        private TextView tvClickHot;
+        private TextView tvReplyHot;
+        private SimpleDraweeView imgCoverHot;
+        private CardView cvVerticalWithClickInfo;
 
         public MostPopularVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitleHot = f(itemView, R.id.cv_vertical_with_click_info_tv_title);
+            tvClickHot = f(itemView, R.id.cv_vertical_with_click_info_tv_click);
+            tvReplyHot = f(itemView, R.id.cv_vertical_with_click_info_tv_reply);
+            imgCoverHot = f(itemView, R.id.cv_vertical_with_click_info_img);
+            cvVerticalWithClickInfo = f(itemView, R.id.cv_vertical_with_click_info);
         }
     }
 
-    public class LastPostVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.cv_horizontal_tv_title)
-        TextView tvTitleOther;
-
-        @Bind(R.id.cv_horizontal_tv_up)
-        TextView tvUpOther;
-
-        @Bind(R.id.cv_horizontal_tv_click)
-        TextView tvClickOther;
-
-        @Bind(R.id.cv_horizontal_tv_reply)
-        TextView tvReplyOther;
-
-        @Bind(R.id.cv_horizontal_img_cover)
-        SimpleDraweeView imgCoverOther;
-
-        @Bind(R.id.cv_horizontal)
-        CardView cvHorizontal;
+    public class LastPostVH extends BaseRvViewHolder {
+        private TextView tvTitleOther;
+        private TextView tvUpOther;
+        private TextView tvClickOther;
+        private TextView tvReplyOther;
+        private SimpleDraweeView imgCoverOther;
+        private CardView cvHorizontal;
 
         public LastPostVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitleOther = f(itemView, R.id.cv_horizontal_tv_title);
+            tvUpOther = f(itemView, R.id.cv_horizontal_tv_up);
+            tvClickOther = f(itemView, R.id.cv_horizontal_tv_click);
+            tvReplyOther = f(itemView, R.id.cv_horizontal_tv_reply);
+            imgCoverOther = f(itemView, R.id.cv_horizontal_img_cover);
+            cvHorizontal = f(itemView, R.id.cv_horizontal);
         }
     }
 

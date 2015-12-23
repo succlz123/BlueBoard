@@ -12,13 +12,15 @@ import org.succlz123.blueboard.model.config.BusProvider;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.service.DownloadService;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcContentInfoRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.content.AcContentInfoRvAdapter;
+import org.succlz123.okdownload.OkDownloadRequest;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +90,29 @@ public class AcContentInfoFragment extends BaseFragment {
                 if (downLoadList == null || downLoadList.size() <= 0) {
                     return;
                 }
-                DownloadService.startService(getActivity(), downLoadList);
+
+                ArrayList<OkDownloadRequest> requestList = new ArrayList<>();
+                if (requestList.size() > 5) {
+                    GlobalUtils.showToastShort("抱歉,最多只能同时下5个视频");
+                    return;
+                }
+
+                for (AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
+                    if (TextUtils.equals(videosEntity.getSourceType(), "zhuzhan")) {
+
+                        OkDownloadRequest request = new OkDownloadRequest.Builder()
+                                .title(videosEntity.getVideoTitle())
+                                .description(videosEntity.getName())
+                                .sign(videosEntity.getDanmakuId())
+                                .build();
+
+                        requestList.add(request);
+                    } else {
+                        GlobalUtils.showToastShort("非主站");
+                    }
+                }
+
+                DownloadService.startService(getActivity(), requestList);
             }
         });
 

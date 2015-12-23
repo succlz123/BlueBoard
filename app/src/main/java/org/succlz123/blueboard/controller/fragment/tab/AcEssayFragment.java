@@ -7,7 +7,7 @@ import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcEssay;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcEssayRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.tab.AcEssayRvAdapter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,8 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -47,17 +45,17 @@ public class AcEssayFragment extends BaseFragment {
     private LinearLayoutManager mManager;
     private int mPagerNoNum = 1;
 
-    @Bind(R.id.ac_fragment_essay_recycler_view)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_main_essay, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_essay_recycler_view);
+        mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+
         mPartitionType = getArguments().getString(AcString.CHANNEL_IDS);
 
         mManager = new LinearLayoutManager(getActivity());
@@ -127,10 +125,10 @@ public class AcEssayFragment extends BaseFragment {
     private void getHttpResult(final String pagerNoNum) {
         //文章
         Call<AcEssay> call = AcApi.getAcPartition().onEssayResult(AcApi.buildAcPartitionUrl(
-                        mPartitionType,
-                        AcString.POPULARITY,
-                        AcString.ONE_WEEK,
-                        AcString.PAGE_SIZE_NUM_20, pagerNoNum));
+                mPartitionType,
+                AcString.POPULARITY,
+                AcString.ONE_WEEK,
+                AcString.PAGE_SIZE_NUM_20, pagerNoNum));
         call.enqueue(new Callback<AcEssay>() {
             @Override
             public void onResponse(Response<AcEssay> response, Retrofit retrofit) {

@@ -1,5 +1,17 @@
 package org.succlz123.blueboard.controller.activity.acfun;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.otto.Subscribe;
+
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
+import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
+import org.succlz123.blueboard.model.config.BusProvider;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.fragment.AcContentFmAdapter;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,21 +26,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.squareup.otto.Subscribe;
-
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
-import org.succlz123.blueboard.controller.base.BaseActivity;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
-import org.succlz123.blueboard.model.config.BusProvider;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.fragment.AcContentFmAdapter;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by succlz123 on 15/8/1.
  */
@@ -40,21 +37,11 @@ public class AcContentActivity extends BaseActivity {
         activity.startActivity(intent);
     }
 
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @Bind(R.id.collapsing_toolbar_content)
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
-
-    @Bind(R.id.img_content_title)
-    SimpleDraweeView mTitleImg;
-
-    @Bind(R.id.tab_layout_content)
-    TabLayout mTabLayout;
-
-    @Bind(R.id.viewpager_content_info)
-    ViewPager mViewPager;
-
+    private Toolbar mToolbar;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private SimpleDraweeView mTitleImg;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
     private String mContentId;
     private AcContentFmAdapter mAdapter;
 
@@ -62,7 +49,13 @@ public class AcContentActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_activity_content);
-        ButterKnife.bind(this);
+
+        mToolbar = f(R.id.toolbar);
+        mCollapsingToolbarLayout = f(R.id.collapsing_toolbar_content);
+        mTitleImg = f(R.id.img_content_title);
+        mTabLayout = f(R.id.tab_layout_content);
+        mViewPager = f(R.id.viewpager_content_info);
+
         BusProvider.getInstance().register(this);
 
         mContentId = getIntent().getStringExtra(AcString.CONTENT_ID);

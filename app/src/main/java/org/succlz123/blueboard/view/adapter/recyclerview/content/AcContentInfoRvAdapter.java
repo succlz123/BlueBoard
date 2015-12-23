@@ -1,4 +1,11 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.content;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.succlz123.blueboard.MyApplication;
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.net.Uri;
 import android.support.v7.widget.CardView;
@@ -11,19 +18,11 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 15/8/4.
@@ -86,51 +85,48 @@ public class AcContentInfoRvAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         notifyDataSetChanged();
     }
 
-    public class VideoInfoVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_content_info_title)
-        TextView tvTitle;
-        @Bind(R.id.ac_rv_content_info_description)
-        TextView tvDescription;
-        @Bind(R.id.ac_rv_content_info_click)
-        TextView tvClick;
-        @Bind(R.id.ac_rv_content_info_stows)
-        TextView tvStows;
-        @Bind(R.id.ac_rv_content_info_up_img)
-        SimpleDraweeView simpleDraweeView;
-        @Bind(R.id.ac_rv_content_info_up_name)
-        TextView tvName;
-        @Bind(R.id.ac_rv_content_info_up_level)
-        TextView tvUid;
-        @Bind(R.id.cv_content_title_info_frame_layout)
-        FrameLayout frameLayout;
+    public class VideoInfoVH extends BaseRvViewHolder {
+        private TextView tvTitle;
+        private TextView tvDescription;
+        private TextView tvClick;
+        private TextView tvStows;
+        private SimpleDraweeView simpleDraweeView;
+        private TextView tvName;
+        private TextView tvUid;
+        private FrameLayout frameLayout;
 
         public VideoInfoVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitle = f(itemView, R.id.ac_rv_content_info_title);
+            tvDescription = f(itemView, R.id.ac_rv_content_info_description);
+            tvClick = f(itemView, R.id.ac_rv_content_info_click);
+            tvStows = f(itemView, R.id.ac_rv_content_info_stows);
+            simpleDraweeView = f(itemView, R.id.ac_rv_content_info_up_img);
+            tvName = f(itemView, R.id.ac_rv_content_info_up_name);
+            tvUid = f(itemView, R.id.ac_rv_content_info_up_level);
+            frameLayout = f(itemView, R.id.cv_content_title_info_frame_layout);
         }
     }
 
-    public class VideoItemVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_content_info_video_tv)
-        TextView tvVideo;
-        @Bind(R.id.ac_rv_content_info_video_cb)
-        CheckBox cbVideo;
-        @Bind(R.id.cv_content_video_item)
-        CardView cardView;
+    public class VideoItemVH extends BaseRvViewHolder {
+        private TextView tvVideo;
+        private CheckBox cbVideo;
+        private CardView cardView;
 
         public VideoItemVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvVideo = f(itemView, R.id.ac_rv_content_info_video_tv);
+            cbVideo = f(itemView, R.id.ac_rv_content_info_video_cb);
+            cardView = f(itemView, R.id.cv_content_video_item);
         }
     }
 
-    public class DownLoadItemVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_content_download_cv)
-        CardView cardView;
+    public class DownLoadItemVH extends BaseRvViewHolder {
+        private CardView cardView;
 
         public DownLoadItemVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            cardView = f(itemView, R.id.ac_rv_content_download_cv);
         }
     }
 

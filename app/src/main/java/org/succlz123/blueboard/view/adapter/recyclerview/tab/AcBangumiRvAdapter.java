@@ -1,4 +1,11 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.tab;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -9,15 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by succlz123 on 15/8/12.
@@ -43,22 +41,18 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    public class CardViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_rv_bangumi_img)
-        SimpleDraweeView imgBangumi;
-
-        @Bind(R.id.ac_rv_bangumi_title_tv)
-        TextView tvTitle;
-
-        @Bind(R.id.ac_rv_bangumi_num_tv)
-        TextView tvNum;
-
-        @Bind(R.id.cv_bangumi)
-        CardView cvBangumi;
+    public class CardViewHolder extends BaseRvViewHolder {
+        private SimpleDraweeView imgBangumi;
+        private TextView tvTitle;
+        private TextView tvNum;
+        private CardView cvBangumi;
 
         public CardViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            imgBangumi = f(itemView, R.id.ac_rv_bangumi_img);
+            tvTitle = f(itemView, R.id.ac_rv_bangumi_title_tv);
+            tvNum = f(itemView, R.id.ac_rv_bangumi_num_tv);
+            cvBangumi = f(itemView, R.id.cv_bangumi);
         }
     }
 

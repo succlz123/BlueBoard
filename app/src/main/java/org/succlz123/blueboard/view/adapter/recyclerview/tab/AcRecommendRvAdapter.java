@@ -1,4 +1,17 @@
-package org.succlz123.blueboard.view.adapter.recyclerview;
+package org.succlz123.blueboard.view.adapter.recyclerview.tab;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.succlz123.blueboard.MyApplication;
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
+import org.succlz123.blueboard.model.bean.acfun.AcReHot;
+import org.succlz123.blueboard.model.bean.acfun.AcReOther;
+import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.view.adapter.AcRecommendBannerAdapter;
+import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.blueboard.view.callback.GetAcRecommendHttpResult;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -14,21 +27,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
-import org.succlz123.blueboard.model.bean.acfun.AcReHot;
-import org.succlz123.blueboard.model.bean.acfun.AcReOther;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.AcRecommendBannerAdapter;
-import org.succlz123.blueboard.view.callback.GetAcRecommendHttpResult;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 
 /**
@@ -159,76 +157,62 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     //首页横幅
-    public class ViewPagerVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_viewpager_banner)
-        ViewPager vpBanner;
-
-        @Bind(R.id.ac_viewpager_dots)
-        LinearLayout llDots;
-
-        @Bind(R.id.ac_recommend_banner)
-        CardView cardView;
+    public class ViewPagerVH extends BaseRvViewHolder {
+        private ViewPager vpBanner;
+        private LinearLayout llDots;
+        private CardView cardView;
 
         public ViewPagerVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            vpBanner = f(itemView, R.id.ac_viewpager_banner);
+            llDots = f(itemView, R.id.ac_viewpager_dots);
+            cardView = f(itemView, R.id.ac_recommend_banner);
         }
     }
 
     //分区标题
-    public class NavigationTitleVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_fragment_re_partition_title_tv)
-        TextView tvPartitionTitle;
-
-        @Bind(R.id.ac_fragment_re_partition_title_btn)
-        Button btnPartitionMore;
+    public class NavigationTitleVH extends BaseRvViewHolder {
+        private TextView tvPartitionTitle;
+        private Button btnPartitionMore;
 
         public NavigationTitleVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvPartitionTitle = f(itemView, R.id.ac_fragment_re_partition_title_tv);
+            btnPartitionMore = f(itemView, R.id.ac_fragment_re_partition_title_btn);
         }
     }
 
     //视图卡片 1
-    public class HotVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.ac_card_view_tv_1)
-        TextView tvTitleHot;
-
-        @Bind(R.id.ac_card_view_tv_2)
-        TextView tvSubTitleHot;
-
-        @Bind(R.id.ac_card_view_img)
-        SimpleDraweeView imgCoverHot;
-
-        @Bind(R.id.ac_fragment_re_card_view)
-        CardView cardViewHot;
+    public class HotVH extends BaseRvViewHolder {
+        private TextView tvTitleHot;
+        private TextView tvSubTitleHot;
+        private SimpleDraweeView imgCoverHot;
+        private CardView cardViewHot;
 
         public HotVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitleHot = f(itemView, R.id.ac_card_view_tv_1);
+            tvSubTitleHot = f(itemView, R.id.ac_card_view_tv_2);
+            imgCoverHot = f(itemView, R.id.ac_card_view_img);
+            cardViewHot = f(itemView, R.id.ac_fragment_re_card_view);
         }
     }
 
     //视图卡片 2
-    public class OtherVH extends RecyclerView.ViewHolder {
-        @Bind(R.id.cv_vertical_with_click_info_tv_title)
-        TextView tvTitleOther;
-
-        @Bind(R.id.cv_vertical_with_click_info_tv_click)
-        TextView tvSubTitleOtherLeft;
-
-        @Bind(R.id.cv_vertical_with_click_info_tv_reply)
-        TextView tvSubTitleOtherRight;
-
-        @Bind(R.id.cv_vertical_with_click_info_img)
-        SimpleDraweeView imgCoverOther;
-
-        @Bind(R.id.cv_vertical_with_click_info)
-        CardView cardViewOther;
+    public class OtherVH extends BaseRvViewHolder {
+        private TextView tvTitleOther;
+        private TextView tvSubTitleOtherLeft;
+        private TextView tvSubTitleOtherRight;
+        private SimpleDraweeView imgCoverOther;
+        private CardView cardViewOther;
 
         public OtherVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitleOther = f(itemView, R.id.cv_vertical_with_click_info_tv_title);
+            tvSubTitleOtherLeft = f(itemView, R.id.cv_vertical_with_click_info_tv_click);
+            tvSubTitleOtherRight = f(itemView, R.id.cv_vertical_with_click_info_tv_reply);
+            imgCoverOther = f(itemView, R.id.cv_vertical_with_click_info_img);
+            cardViewOther = f(itemView, R.id.cv_vertical_with_click_info);
         }
     }
 

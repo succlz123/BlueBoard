@@ -1,5 +1,12 @@
 package org.succlz123.blueboard.controller.activity.acfun;
 
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.controller.fragment.other.AcPartitionFragment;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+import org.succlz123.blueboard.model.utils.common.ViewUtils;
+import org.succlz123.blueboard.view.adapter.fragment.AcPartitionFmAdapter;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,16 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.view.adapter.fragment.AcPartitionFmAdapter;
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.controller.base.BaseActivity;
-import org.succlz123.blueboard.controller.fragment.other.AcPartitionFragment;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by succlz123 on 2015/7/27.
  */
@@ -35,22 +32,20 @@ public class AcPartitionActivity extends BaseActivity {
         activity.startActivity(intent);
     }
 
-    @Bind(R.id.fragment_partition_tab_layout)
-    TabLayout mTabLayout;
-
-    @Bind(R.id.fragment_partition_viewpager)
-    ViewPager mViewPager;
-
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private Toolbar mToolbar;
     private String mPartitionType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_activity_partition);
-        ButterKnife.bind(this);
+
+        mTabLayout = f(R.id.fragment_partition_tab_layout);
+        mViewPager = f(R.id.fragment_partition_viewpager);
+        mToolbar = f(R.id.toolbar);
+
         //根据partitionType来判断什么分区
         mPartitionType = getIntent().getStringExtra(AcString.CHANNEL_IDS);
 

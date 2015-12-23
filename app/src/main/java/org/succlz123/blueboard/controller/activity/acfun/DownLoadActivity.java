@@ -1,10 +1,11 @@
 package org.succlz123.blueboard.controller.activity.acfun;
 
+import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.base.BaseActivity;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.service.DownloadService;
-import org.succlz123.blueboard.view.adapter.recyclerview.DownLoadRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.download.DownLoadRvAdapter;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,7 +24,6 @@ public class DownLoadActivity extends BaseActivity {
 
     public static void newInstance(Context activity) {
         Intent intent = new Intent(activity, DownLoadActivity.class);
-//        intent.putParcelableArrayListExtra(AcString.DOWNLOAD_LIST, downLoadList);
         activity.startActivity(intent);
     }
 
@@ -52,25 +52,22 @@ public class DownLoadActivity extends BaseActivity {
 
         mMyConnection = new MyConnection(mAdapter);
         DownloadService.bindService(DownLoadActivity.this, mMyConnection, Context.BIND_AUTO_CREATE);
+
+        mAdapter.setDownLoadList(MyApplication.getInstance().quaryAllDonwload());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DownloadService service = mAdapter.getDownloadService();
-        if (service.getListenerHashMap() != null) {
-            service.setListenerHashMap(null);
-        }
     }
 
     @Override
     protected void onDestroy() {
         if (mMyConnection.isBindService()) {
-
-
             this.unbindService(mMyConnection);
             mMyConnection.setIsBindService(false);
         }
+        mAdapter.cleanListener();
         super.onDestroy();
     }
 

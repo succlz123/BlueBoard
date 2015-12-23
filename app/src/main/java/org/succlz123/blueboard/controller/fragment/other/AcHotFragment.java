@@ -8,7 +8,7 @@ import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReHot;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcHotRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.other.AcHotRvAdapter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,8 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -46,17 +44,16 @@ public class AcHotFragment extends BaseFragment {
     private GridLayoutManager mManager;
     private int mPagerNoNum = 1;
 
-    @Bind(R.id.ac_fragment_partition_recycler_view)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_partition, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_partition_recycler_view);
+        mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
 
         mManager = new GridLayoutManager(getActivity(), 2);
         mRecyclerView.setLayoutManager(mManager);

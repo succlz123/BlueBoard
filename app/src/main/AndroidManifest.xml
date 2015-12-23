@@ -51,7 +51,9 @@
                 android:theme="@style/dyeTheme">
         </activity>
 
-        <service android:name=".service.DownloadService"/>
+        <service android:name=".service.DownloadService"
+                 android:enabled="true"
+                 android:permission="org.succlz123.blueboard.DownloadService"/>
 
     </application>
 

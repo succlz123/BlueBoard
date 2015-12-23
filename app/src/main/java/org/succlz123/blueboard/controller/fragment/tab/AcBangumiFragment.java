@@ -7,7 +7,7 @@ import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcBangumiRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.tab.AcBangumiRvAdapter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

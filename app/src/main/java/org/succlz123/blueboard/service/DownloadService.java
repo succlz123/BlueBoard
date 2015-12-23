@@ -2,7 +2,6 @@ package org.succlz123.blueboard.service;
 
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.api.acfun.NewAcApi;
-import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.okdownload.OkDownloadEnqueueListener;
@@ -17,7 +16,7 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ import rx.schedulers.Schedulers;
 public class DownloadService extends Service {
     private static final String TAG = "DownloadService";
 
-    public static void startService(Context context, ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
+    public static void startService(Context context, ArrayList<OkDownloadRequest> downLoadList) {
         Intent intent = new Intent(context, DownloadService.class);
         intent.putParcelableArrayListExtra(AcString.DOWNLOAD_LIST, downLoadList);
         context.startService(intent);
@@ -44,34 +43,51 @@ public class DownloadService extends Service {
 
     public static void bindService(Context context, ServiceConnection serviceConnection, int flags) {
         Intent intent = new Intent(context, DownloadService.class);
-//        context.startService(intent);
         context.bindService(intent, serviceConnection, flags);
     }
 
+    public static void stopService(Context context) {
+        Intent intent = new Intent(context, DownloadService.class);
+        context.stopService(intent);
+    }
+
     private OkDownloadManager mOkDownloadManager;
-    private long previousTime;
-    private ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> mDownLoadList = new ArrayList<>();
-    private HashMap<Integer, OkDownloadEnqueueListener> mListenerHashMap = new HashMap<>();
-    private int mPosition;
+    private HashMap<String, OkDownloadRequest> mDownloadRequests = new HashMap<>();
+    private HashMap<String, OkDownloadEnqueueListener> mListeners = new HashMap<>();
 
-    public HashMap<Integer, OkDownloadEnqueueListener> getListenerHashMap() {
-        return mListenerHashMap;
+    public HashMap<String, OkDownloadEnqueueListener> getListeners() {
+        return mListeners;
     }
 
-    public void setListenerHashMap(HashMap<Integer, OkDownloadEnqueueListener> listenerHashMap) {
-        this.mListenerHashMap = listenerHashMap;
+    public void clearListenerMap() {
+        this.mListeners.clear();
     }
 
-    public void setListener(OkDownloadEnqueueListener listener, int position) {
-        mListenerHashMap.put(position, listener);
+    public void addListener(String sign, OkDownloadEnqueueListener listener) {
+        mListeners.put(sign, listener);
     }
 
-    public ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> getDownLoadList() {
-        return mDownLoadList;
+    public HashMap<String, OkDownloadRequest> getDownloadRequests() {
+        return mDownloadRequests;
     }
 
-    public void setDownLoadList(ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
-        mDownLoadList = downLoadList;
+//    public void addDownloadRequest(String sign) {
+//        mDownloadRequests.put(sign, "zhuzhan");
+//    }
+
+    public void toggleDownload(String sign, OkDownloadRequest request) {
+        if (mDownloadRequests.get(sign) == null) {
+            downloadFromZhuZhan(request);
+            return;
+        }
+        download(sign, mDownloadRequests.get(sign));
+    }
+
+    public void cancelDownload(String sign, OkDownloadEnqueueListener listener) {
+        if (mDownloadRequests.get(sign) != null) {
+            mDownloadRequests.remove(sign);
+        }
+        mOkDownloadManager.onCancel(sign, listener);
     }
 
     @Override
@@ -92,36 +108,34 @@ public class DownloadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity>
-                downLoadList = intent.getParcelableArrayListExtra(AcString.DOWNLOAD_LIST);
-
-        if (downLoadList != null) {
-            mDownLoadList.addAll(downLoadList);
+        if (intent == null) {
+            return Service.START_NOT_STICKY;
         }
 
-        initDownload();
+        ArrayList<OkDownloadRequest> downLoadList = intent.getParcelableArrayListExtra(AcString.DOWNLOAD_LIST);
 
-        return super.onStartCommand(intent, flags, startId);
+        initDownload(downLoadList);
+
+        return Service.START_NOT_STICKY;
     }
 
-    private void initDownload() {
-        for (int i = 0; i < mDownLoadList.size(); i++) {
-            AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity = mDownLoadList.get(i);
-            if (TextUtils.equals(videosEntity.getSourceType(), "zhuzhan")) {
-                downloadFromZhuZhan(i, videosEntity);
-            } else {
-                GlobalUtils.showToastShort("非主站");
-            }
+    private void initDownload(ArrayList<OkDownloadRequest> downLoadList) {
+        for (OkDownloadRequest request : downLoadList) {
+            downloadFromZhuZhan(request);
         }
     }
 
-    private void downloadFromZhuZhan(final int position, final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity) {
-        final String videoId = videosEntity.getCommentId();
+    private void downloadFromZhuZhan(final OkDownloadRequest request) {
+        final String videoId = request.getSign();
         final String filePath = this.getExternalFilesDir("video").getAbsolutePath() + File.separator + videoId + ".mp4";
 
-        final int notificationId = Integer.valueOf(videoId);
-        final String title = videosEntity.getVideoTitle();
-        final String description = videosEntity.getName();
+//        final int notificationId = Integer.valueOf(videoId);
+
+        //查询是否已在下载队列
+        if (mDownloadRequests.get(videoId) != null) {
+            GlobalUtils.showToastLong("下载任务已经在队列中");
+            return;
+        }
 
         Observable<NewAcVideo> videoObservable = NewAcApi.getNewAcVideo().onResult(videoId);
         videoObservable.subscribeOn(Schedulers.io())
@@ -133,25 +147,20 @@ public class DownloadService extends Service {
                         Collections.reverse(list);
                         String url = list.get(0).getUrl().get(0);
 
-                        OkDownloadRequest request = new OkDownloadRequest.Builder()
-                                .url(url)
-                                .filePath(filePath)
-                                .build();
+                        request.setUrl(url);
+                        request.setFilePath(filePath);
 
-                        download(position, request, videosEntity);
+                        mDownloadRequests.put(videoId, request);
+                        download(videoId, request);
                     }
                 });
     }
 
-    public void download(final int position, OkDownloadRequest request, final AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity) {
-        if (mListenerHashMap == null) {
-            return;
-        }
-        final OkDownloadEnqueueListener listener = mListenerHashMap.get(position);
-
+    public void download(final String sign, OkDownloadRequest request) {
         mOkDownloadManager.enqueue(request, new OkDownloadEnqueueListener() {
             @Override
             public void onStart(int id) {
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
                     listener.onStart(id);
                 }
@@ -159,6 +168,9 @@ public class DownloadService extends Service {
 
             @Override
             public void onProgress(int progress, long cacheSize, long totalSize) {
+//                Log.w(TAG, "onProgress: " + sign + "/" + progress);
+
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
                     listener.onProgress(progress, cacheSize, totalSize);
                 }
@@ -166,6 +178,9 @@ public class DownloadService extends Service {
 
             @Override
             public void onRestart() {
+                Log.w(TAG, "onRestart: " + sign);
+
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
                     listener.onRestart();
                 }
@@ -173,28 +188,39 @@ public class DownloadService extends Service {
 
             @Override
             public void onPause() {
+                Log.w(TAG, "onPause: " + sign);
+
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
                     listener.onPause();
                 }
             }
 
             @Override
-            public void onCancel() {
+            public void onCancel(String sign) {
+                Log.w(TAG, "onCancel: " + sign);
+
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
-                    listener.onCancel();
+                    listener.onCancel(sign);
                 }
+                mDownloadRequests.remove(sign);
             }
 
             @Override
-            public void onFinish() {
+            public void onFinish(int id) {
+                Log.w(TAG, "onFinish: " + id);
+
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
-                    listener.onCancel();
+                    listener.onFinish(id);
                 }
-                mDownLoadList.remove(videosEntity);
+                mDownloadRequests.remove(sign);
             }
 
             @Override
             public void onError(OkDownloadError error) {
+                OkDownloadEnqueueListener listener = mListeners.get(sign);
                 if (listener != null) {
                     listener.onError(error);
                 }
@@ -216,6 +242,18 @@ public class DownloadService extends Service {
 
     @Override
     public void onDestroy() {
+//        mOkDownloadManager.onPauseAll();
         super.onDestroy();
     }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+    }
+
 }

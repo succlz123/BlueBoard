@@ -7,7 +7,7 @@ import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcContentReply;
 import org.succlz123.blueboard.model.utils.common.GlobalUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
-import org.succlz123.blueboard.view.adapter.recyclerview.AcContentReplyRvAdapter;
+import org.succlz123.blueboard.view.adapter.recyclerview.content.AcContentReplyRvAdapter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -42,11 +40,8 @@ public class AcContentReplyFragment extends BaseFragment {
         return fragment;
     }
 
-    @Bind(R.id.ac_fragment_content_reply_recycler_view)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipe_fresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String CONTENT_ID = "contentId";
     private boolean mIsPrepared;
@@ -57,12 +52,14 @@ public class AcContentReplyFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ac_fragment_content_reply, container, false);
-        ButterKnife.bind(this, view);
+
+        mRecyclerView = f(view, R.id.ac_fragment_content_reply_recycler_view);
+        mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
 
         mContentId = getArguments().getString(CONTENT_ID);
 
         if (mContentId == null) {
-            GlobalUtils.showToastShort(  "数据连接错误,重重试");
+            GlobalUtils.showToastShort("数据连接错误,重重试");
             return null;
         }
 
@@ -125,7 +122,7 @@ public class AcContentReplyFragment extends BaseFragment {
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()) {
                     if (acContentReply.getData().getPage().getList().size() == 0) {
-                        GlobalUtils.showToastShort(  "并没有评论");
+                        GlobalUtils.showToastShort("并没有评论");
                     } else {
                         mAdapter.setContentReply(sortListReply(acContentReply));
                     }
@@ -142,7 +139,7 @@ public class AcContentReplyFragment extends BaseFragment {
                 if (getActivity() != null
                         && !getActivity().isDestroyed()
                         && !getActivity().isFinishing()) {
-                    GlobalUtils.showToastShort( "网络连接异常");
+                    GlobalUtils.showToastShort("网络连接异常");
                     if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

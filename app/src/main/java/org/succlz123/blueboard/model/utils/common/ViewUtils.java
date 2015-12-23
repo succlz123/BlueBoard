@@ -3,12 +3,14 @@ package org.succlz123.blueboard.model.utils.common;
 import org.succlz123.blueboard.R;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,9 +22,6 @@ public class ViewUtils {
 
     /**
      * 显示Toolbar 默认标题
-     *
-     * @param context
-     * @param toolbar
      */
     public static void setToolbar(AppCompatActivity context, Toolbar toolbar, Boolean WithHomeButton) {
         context.setSupportActionBar(toolbar);
@@ -37,9 +36,6 @@ public class ViewUtils {
 
     /**
      * 显示Toolbar 添加自定义标题
-     *
-     * @param context
-     * @param toolbar
      */
     public static void setToolbar(AppCompatActivity context, Toolbar toolbar, Boolean WithHomeButton, String title) {
         if (title != null) {
@@ -83,8 +79,6 @@ public class ViewUtils {
 
     /**
      * 下拉刷新组件颜色设置
-     *
-     * @param swipeRefreshLayout
      */
     public static void setSwipeRefreshLayoutColor(SwipeRefreshLayout swipeRefreshLayout) {
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light,
@@ -94,8 +88,6 @@ public class ViewUtils {
 
     /**
      * 下拉刷新成功
-     *
-     * @param swipeRefreshLayout
      */
     public static void setRefreshSuccess(SwipeRefreshLayout swipeRefreshLayout) {
         if (swipeRefreshLayout != null) {
@@ -106,8 +98,6 @@ public class ViewUtils {
 
     /**
      * 下拉刷新失败
-     *
-     * @param swipeRefreshLayout
      */
     public static void setRefreshFailed(SwipeRefreshLayout swipeRefreshLayout) {
         if (swipeRefreshLayout != null) {
@@ -161,4 +151,12 @@ public class ViewUtils {
         decorView.setSystemUiVisibility(newUiOptions);
     }
 
+    public static AlertDialog showAlertDialog(Activity activity, String title, String message, DialogInterface.OnClickListener listener) {
+        return new AlertDialog.Builder(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("确定", listener)
+                .setNegativeButton("取消", null)
+                .show();
+    }
 }

@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/download_downloading_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,28 +31,28 @@
                     android:gravity="center_vertical"
                     android:minHeight="25dp"
                     android:singleLine="true"
-                    android:text=" "
+                    tools:text="123"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
             <TextView
-                    android:id="@+id/tv_download_info"
+                    android:id="@+id/tv_download_description"
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:gravity="center_vertical"
                     android:minHeight="25dp"
                     android:singleLine="true"
-                    android:text=" "
+                    tools:text="123"
                     android:textSize="14sp"/>
 
             <TextView
                     android:id="@+id/tv_download_file_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|bottom|right"
                     android:singleLine="true"
-                    android:text=" "
-                    android:textSize="12sp"/>
+                    tools:text="123"
+                    android:textSize="14sp"/>
 
             <ProgressBar
                     android:id="@+id/pb_download"
@@ -63,30 +64,42 @@
 
         </LinearLayout>
 
-        <Button
-                android:id="@+id/btn_download_cancel"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/cancel"
-                android:backgroundTint="@color/android_base"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="14sp"/>
+        <LinearLayout
+                android:layout_width="60dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_height="match_parent">
 
-        <Button
-                android:id="@+id/btn_download_toggle"
-                android:layout_width="40dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp"
-                android:background="@color/pink_base"
-                android:gravity="center"
-                android:text="开始"
-                android:textColor="@color/white"
-                android:textSize="12sp"/>
+            <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/md_red_400"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="删除"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+            <Button
+                    android:id="@+id/btn_download"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/download_enable"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
