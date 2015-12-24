@@ -1,11 +1,8 @@
 package org.succlz123.blueboard;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.succlz123.blueboard.model.config.FrescoConfig;
 import org.succlz123.blueboard.service.DownloadService;
@@ -56,9 +53,9 @@ public class MyApplication extends Application {
 
         Fresco.initialize(sInstance, FrescoConfig.getImagePipelineConfig(sInstance));
 
-        Stetho.initializeWithDefaults(this);
-        OkHttpClient client = new OkHttpClient();
-        client.networkInterceptors().add(new StethoInterceptor());
+//        Stetho.initializeWithDefaults(this);
+//        OkHttpClient client = new OkHttpClient();
+//        client.networkInterceptors().add(new StethoInterceptor());
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

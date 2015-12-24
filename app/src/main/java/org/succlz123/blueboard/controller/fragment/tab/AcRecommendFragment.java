@@ -23,21 +23,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import java.util.HashMap;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by succlz123 on 2015/7/19.
  */
 public class AcRecommendFragment extends BaseFragment {
+
+    public static AcRecommendFragment newInstance() {
+        AcRecommendFragment fragment = new AcRecommendFragment();
+        return fragment;
+    }
+
     private boolean mIsPrepared;
     private AcRecommendRvAdapter mAdapter;
     private AcApi.onAcRecommend acRecommend;
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 
     @Nullable
     @Override
@@ -46,6 +58,7 @@ public class AcRecommendFragment extends BaseFragment {
 
         mRecyclerView = f(view, R.id.ac_fragment_recommend_recycler_view);
         mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -62,6 +75,8 @@ public class AcRecommendFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new AcRecommendRvAdapter.MyDecoration());
         mAdapter = new AcRecommendRvAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
         //解决viewpager里滑动导致swipeReFreshLayout的出现
         mAdapter.setSwipeRefreshLayout(mSwipeRefreshLayout);
         mAdapter.setOnClickListener(new AcRecommendRvAdapter.OnClickListener() {
@@ -76,9 +91,7 @@ public class AcRecommendFragment extends BaseFragment {
                 }
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
 
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,50 +118,54 @@ public class AcRecommendFragment extends BaseFragment {
     protected void lazyLoad() {
         if (!mIsPrepared || !mIsVisible) {
             return;
-        } else {
-            if (mAdapter.getAcReBanner() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getHttpResult(AcString.BANNER);
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                });
-            }
-            if (mAdapter.getAcReHot() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getHttpResult(AcString.HOT);
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                });
-            }
-            if (mAdapter.getAcReAnimation() == null) {
-                getHttpResult(AcString.ANIMATION);
-            }
-            if (mAdapter.getAcReFun() == null) {
-                getHttpResult(AcString.FUN);
-            }
-            if (mAdapter.getAcReMusic() == null) {
-                getHttpResult(AcString.MUSIC);
-            }
-            if (mAdapter.getAcReGame() == null) {
-                getHttpResult(AcString.GAME);
-            }
-            if (mAdapter.getAcReScience() == null) {
-                getHttpResult(AcString.SCIENCE);
-            }
-            if (mAdapter.getAcReSport() == null) {
-                getHttpResult(AcString.SPORT);
-            }
-            if (mAdapter.getAcReTv() == null) {
-                getHttpResult(AcString.TV);
-            }
         }
+        if (mAdapter.getAcReBanner() == null) {
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    getHttpResult(AcString.BANNER);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            });
+        }
+        if (mAdapter.getAcReHot() == null) {
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    getHttpResult(AcString.HOT);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            });
+        }
+        if (mAdapter.getAcReAnimation() == null) {
+            getHttpResult(AcString.ANIMATION);
+        }
+        if (mAdapter.getAcReFun() == null) {
+            getHttpResult(AcString.FUN);
+        }
+        if (mAdapter.getAcReMusic() == null) {
+            getHttpResult(AcString.MUSIC);
+        }
+        if (mAdapter.getAcReGame() == null) {
+            getHttpResult(AcString.GAME);
+        }
+        if (mAdapter.getAcReScience() == null) {
+            getHttpResult(AcString.SCIENCE);
+        }
+        if (mAdapter.getAcReSport() == null) {
+            getHttpResult(AcString.SPORT);
+        }
+        if (mAdapter.getAcReTv() == null) {
+            getHttpResult(AcString.TV);
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        mCompositeSubscription.unsubscribe();
+        super.onDestroy();
     }
 
     private void getHttpResult(String httpGetType) {
@@ -156,296 +173,317 @@ public class AcRecommendFragment extends BaseFragment {
 
         if (TextUtils.equals(httpGetType, AcString.BANNER)) {
             //首页横幅
-            Call<AcReBanner> call = acRecommend.onAcReBannerResult(AcApi.buildAcReBannerUrl());
-            call.enqueue(new Callback<AcReBanner>() {
-                @Override
-                public void onResponse(Response<AcReBanner> response, Retrofit retrofit) {
-                    AcReBanner acReBanner = response.body();
-                    if (acReBanner != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onReBannerResult(acReBanner);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterBanner = AcApi.buildAcReBannerUrl();
+
+            Observable<AcReBanner> observableBanner = acRecommend.onAcReBannerResult(httpParameterBanner);
+
+            Subscription subscriptionBanner = observableBanner.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReBanner, Boolean>() {
+                        @Override
+                        public Boolean call(AcReBanner acReBanner) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReBanner>() {
+                        @Override
+                        public void call(AcReBanner acReBanner) {
+                            mAdapter.onReBannerResult(acReBanner);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionBanner);
         } else if (TextUtils.equals(httpGetType, AcString.HOT)) {
             //首页热门焦点
-            Call<AcReHot> call = acRecommend.onAcReHotResult(AcApi.buildAcReHotUrl
-                    (AcString.PAGE_NO_NUM_1));
-            call.enqueue(new Callback<AcReHot>() {
-                @Override
-                public void onResponse(Response<AcReHot> response, Retrofit retrofit) {
-                    AcReHot acReHot = response.body();
-                    if (acReHot != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReHotResult(acReHot);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterHot = AcApi.buildAcReHotUrl(AcString.PAGE_NO_NUM_1);
+
+            Observable<AcReHot> observableHot = acRecommend.onAcReHotResult(httpParameterHot);
+
+            Subscription subscriptionHot = observableHot.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReHot, Boolean>() {
+                        @Override
+                        public Boolean call(AcReHot acReHot) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReHot>() {
+                        @Override
+                        public void call(AcReHot acReHot) {
+                            mAdapter.onAcReHotResult(acReHot);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionHot);
         } else if (TextUtils.equals(httpGetType, AcString.ANIMATION)) {
             //动画区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.ANIMATION, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReOther = response.body();
-                    if (acReOther != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReAnimationResult(acReOther);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterAnimation = AcApi.buildAcReOtherUrl(AcString.ANIMATION,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableAnimation = acRecommend.onAcReOtherResult(httpParameterAnimation);
+
+            Subscription subscriptionAnimation = observableAnimation.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReAnimationResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionAnimation);
         } else if (TextUtils.equals(httpGetType, AcString.FUN)) {
             //娱乐区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.FUN, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReFun = response.body();
-                    if (acReFun != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReFunResult(acReFun);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterFun = AcApi.buildAcReOtherUrl(AcString.FUN,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableFun = acRecommend.onAcReOtherResult(httpParameterFun);
+
+            Subscription subscriptionFun = observableFun.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReFunResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionFun);
         } else if (TextUtils.equals(httpGetType, AcString.MUSIC)) {
             //音乐区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.MUSIC, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReMusic = response.body();
-                    if (acReMusic != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReMusicResult(acReMusic);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterMusic = AcApi.buildAcReOtherUrl(AcString.MUSIC,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableMusic = acRecommend.onAcReOtherResult(httpParameterMusic);
+
+            Subscription subscriptionMusic = observableMusic.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReMusicResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionMusic);
         } else if (TextUtils.equals(httpGetType, AcString.GAME)) {
             //游戏区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.GAME, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReGame = response.body();
-                    if (acReGame != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReGameResult(acReGame);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterGame = AcApi.buildAcReOtherUrl(AcString.GAME,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableGame = acRecommend.onAcReOtherResult(httpParameterGame);
+
+            Subscription subscriptionGame = observableGame.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReGameResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionGame);
         } else if (TextUtils.equals(httpGetType, AcString.SCIENCE)) {
             //科学区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.SCIENCE, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReScience = response.body();
-                    if (acReScience != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReScienceResult(acReScience);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterScience = AcApi.buildAcReOtherUrl(AcString.SCIENCE,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableScience = acRecommend.onAcReOtherResult(httpParameterScience);
+
+            Subscription subscriptionScience = observableScience.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReScienceResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
-
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionScience);
         } else if (TextUtils.equals(httpGetType, AcString.SPORT)) {
             //体育区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.SPORT, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReSport = response.body();
-                    if (acReSport != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReSportResult(acReSport);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterSport = AcApi.buildAcReOtherUrl(AcString.SPORT,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableSport = acRecommend.onAcReOtherResult(httpParameterSport);
+
+            Subscription subscriptionSport = observableSport.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReSportResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
-
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionSport);
         } else if (TextUtils.equals(httpGetType, AcString.TV)) {
             //影视区
-            Call<AcReOther> call = acRecommend.onAcReOtherResult(AcApi.buildAcReOtherUrl
-                    (AcString.TV, AcString.LAST_POST, AcString.ONE_WEEK));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReTv = response.body();
-                    if (acReTv != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                        mAdapter.onAcReTvResult(acReTv);
-                        if (mSwipeRefreshLayout != null) {
+            HashMap<String, String> httpParameterTv = AcApi.buildAcReOtherUrl(AcString.TV,
+                    AcString.LAST_POST, AcString.ONE_WEEK);
+
+            Observable<AcReOther> observableTv = acRecommend.onAcReOtherResult(httpParameterTv);
+
+            Subscription subscriptionTv = observableTv.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcRecommendFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    })
+                    .subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.onAcReTvResult(acReOther);
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()) {
-                    }
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            });
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+            mCompositeSubscription.add(subscriptionTv);
         }
     }
 }

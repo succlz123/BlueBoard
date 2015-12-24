@@ -20,12 +20,13 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by succlz123 on 15/8/3.
@@ -47,6 +48,7 @@ public class AcContentReplyFragment extends BaseFragment {
     private boolean mIsPrepared;
     private String mContentId;
     private AcContentReplyRvAdapter mAdapter;
+    private Subscription mSubscription;
 
     @Nullable
     @Override
@@ -55,35 +57,19 @@ public class AcContentReplyFragment extends BaseFragment {
 
         mRecyclerView = f(view, R.id.ac_fragment_content_reply_recycler_view);
         mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         mContentId = getArguments().getString(CONTENT_ID);
 
         if (mContentId == null) {
-            GlobalUtils.showToastShort("数据连接错误,重重试");
+            GlobalUtils.showToastShort("网络异常,请重试");
             return null;
         }
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new AcContentReplyRvAdapter();
-
-//        mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnClickListener() {
-//            @Override
-//            public void onToggle(View view, int position, String userId, String videoId, String danmakuId, String sourceId, String sourceType) {
-//                if (position == 0) {
-//                    GlobalUtils.showToastShort(getActivity(), "哇哈哈哈 " + userId);
-//                } else {
-//                    VideoPlayActivity.newInstance(getActivity(),
-//                            videoId,
-//                            danmakuId,
-//                            sourceId,
-//                            sourceType);
-//                }
-//            }
-//        });
-
         mRecyclerView.setAdapter(mAdapter);
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         mIsPrepared = true;
 
@@ -94,70 +80,89 @@ public class AcContentReplyFragment extends BaseFragment {
     protected void lazyLoad() {
         if (!mIsPrepared || !mIsVisible || mContentId == null) {
             return;
-        } else {
-            if (mAdapter.getmAcContentReply() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        getHttpResult();
-                    }
-                });
-            }
         }
-    }
-
-    private void getHttpResult() {
-        //评论
-        Call<AcContentReply> call = AcApi.getAcContentReply()
-                .onResult(AcApi.buildAcContentReplyUrl(mContentId, AcString.PAGE_SIZE_NUM_50, AcString.PAGE_NO_NUM_1));
-
-        call.enqueue(new Callback<AcContentReply>() {
-
+        if (mAdapter.getmAcContentReply() != null) {
+            return;
+        }
+        mSwipeRefreshLayout.post(new Runnable() {
             @Override
-            public void onResponse(Response<AcContentReply> response, Retrofit retrofit) {
-                AcContentReply acContentReply = response.body();
-                if (acContentReply != null
-                        && getActivity() != null
-                        && !getActivity().isDestroyed()
-                        && !getActivity().isFinishing()) {
-                    if (acContentReply.getData().getPage().getList().size() == 0) {
-                        GlobalUtils.showToastShort("并没有评论");
-                    } else {
-                        mAdapter.setContentReply(sortListReply(acContentReply));
-                    }
-
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                if (getActivity() != null
-                        && !getActivity().isDestroyed()
-                        && !getActivity().isFinishing()) {
-                    GlobalUtils.showToastShort("网络连接异常");
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                getHttpResult();
             }
         });
     }
 
+    @Override
+    public void onDestroy() {
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+        super.onDestroy();
+    }
+
+    private void getHttpResult() {
+        //评论
+        HashMap<String, String> httpParameter =
+                AcApi.buildAcContentReplyUrl(mContentId, AcString.PAGE_SIZE_NUM_50, AcString.PAGE_NO_NUM_1);
+
+        Observable<AcContentReply> observable = AcApi.getAcContentReply().onResult(httpParameter);
+
+        mSubscription = observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<AcContentReply, Boolean>() {
+                    @Override
+                    public Boolean call(AcContentReply acContentReply) {
+                        Boolean isFragmentLive = AcContentReplyFragment.this.getUserVisibleHint()
+                                && GlobalUtils.isActivityLive(getActivity());
+                        return isFragmentLive;
+                    }
+                })
+                .filter(new Func1<AcContentReply, Boolean>() {
+                    @Override
+                    public Boolean call(AcContentReply acContentReply) {
+                        boolean isReply = acContentReply.getData().getPage().getList().size() > 0;
+                        if (!isReply) {
+                            GlobalUtils.showToastShort("并没有评论");
+                        }
+                        return isReply;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<AcContentReply, ArrayList<AcContentReply.DataEntity.Entity>>() {
+                    @Override
+                    public ArrayList<AcContentReply.DataEntity.Entity> call(AcContentReply acContentReply) {
+                        return sortListReply(acContentReply);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ArrayList<AcContentReply.DataEntity.Entity>>() {
+                    @Override
+                    public void call(ArrayList<AcContentReply.DataEntity.Entity> acContentReplyList) {
+                        mAdapter.setContentReply(acContentReplyList);
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(false);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        GlobalUtils.showToastShort("网络连接异常,请重试");
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+    }
+
     private ArrayList<AcContentReply.DataEntity.Entity> sortListReply(AcContentReply acContentReply) {
-        ArrayList<AcContentReply.DataEntity.Entity> replys = new ArrayList<>();
-        List<Integer> replyIds = acContentReply.getData().getPage().getList();
+        ArrayList<AcContentReply.DataEntity.Entity> replyList = new ArrayList<>();
+        ArrayList<Integer> replyIdList = acContentReply.getData().getPage().getList();
         HashMap<String, AcContentReply.DataEntity.Entity> replyIdMap = acContentReply.getData().getPage().getMap();
 
-        for (Integer id : replyIds) {
-            replys.add(replyIdMap.get("c" + String.valueOf(id)));
+        for (Integer id : replyIdList) {
+            replyList.add(replyIdMap.get("c" + String.valueOf(id)));
         }
 
-        for (AcContentReply.DataEntity.Entity reply : replys) {
+        for (AcContentReply.DataEntity.Entity reply : replyList) {
             AcContentReply.DataEntity.Entity currentReply = reply;
             int quoteId = currentReply.getQuoteId();
             while (quoteId != 0 && currentReply.getQuoteReply() == null) {
@@ -167,7 +172,7 @@ public class AcContentReplyFragment extends BaseFragment {
                 quoteId = currentReply.getQuoteId();
             }
         }
-        return replys;
+        return replyList;
     }
 }
 

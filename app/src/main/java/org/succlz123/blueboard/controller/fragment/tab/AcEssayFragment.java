@@ -20,10 +20,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import java.util.HashMap;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by succlz123 on 2015/5/2.
@@ -47,6 +51,7 @@ public class AcEssayFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Subscription mSubscription;
 
     @Nullable
     @Override
@@ -55,6 +60,7 @@ public class AcEssayFragment extends BaseFragment {
 
         mRecyclerView = f(view, R.id.ac_fragment_essay_recycler_view);
         mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         mPartitionType = getArguments().getString(AcString.CHANNEL_IDS);
 
@@ -63,6 +69,7 @@ public class AcEssayFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(mManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new AcEssayRvAdapter();
+
         mAdapter.setOnClickListener(new AcEssayRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position, String contentId) {
@@ -89,7 +96,6 @@ public class AcEssayFragment extends BaseFragment {
             }
         });
 
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -108,63 +114,69 @@ public class AcEssayFragment extends BaseFragment {
     protected void lazyLoad() {
         if (!mIsPrepared || !mIsVisible) {
             return;
-        } else {
-            if (mAdapter.getmAcEssay() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getHttpResult(AcString.PAGE_NO_NUM_1);
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                });
-            }
         }
+        if (mAdapter.getmAcEssay() != null) {
+            return;
+        }
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getHttpResult(AcString.PAGE_NO_NUM_1);
+                mSwipeRefreshLayout.setRefreshing(true);
+                mSwipeRefreshLayout.setEnabled(false);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     private void getHttpResult(final String pagerNoNum) {
         //文章
-        Call<AcEssay> call = AcApi.getAcPartition().onEssayResult(AcApi.buildAcPartitionUrl(
-                mPartitionType,
+        HashMap<String, String> httpParameter = AcApi.buildAcPartitionUrl(mPartitionType,
                 AcString.POPULARITY,
                 AcString.ONE_WEEK,
-                AcString.PAGE_SIZE_NUM_20, pagerNoNum));
-        call.enqueue(new Callback<AcEssay>() {
-            @Override
-            public void onResponse(Response<AcEssay> response, Retrofit retrofit) {
-                AcEssay acEssay = response.body();
-                if (acEssay != null &&
-                        getActivity() != null
-                        && !getActivity().isDestroyed()
-                        && !getActivity().isFinishing()
-                        && AcEssayFragment.this.getUserVisibleHint()) {
-                    if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
-                        mAdapter.addData(acEssay);
-                    } else {
-                        mAdapter.setEssayInfo(acEssay);
-                    }
-                    mPagerNoNum++;
-                    if (mSwipeRefreshLayout != null) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mSwipeRefreshLayout.setEnabled(true);
-                    }
-                }
-            }
+                AcString.PAGE_SIZE_NUM_20, pagerNoNum);
 
-            @Override
-            public void onFailure(Throwable t) {
-                if (getActivity() != null
-                        && !getActivity().isDestroyed()
-                        && !getActivity().isFinishing()
-                        && AcEssayFragment.this.getUserVisibleHint()) {
-                    GlobalUtils.showToastShort("刷新过快或者网络连接异常");
-                    if (mSwipeRefreshLayout != null) {
+        Observable<AcEssay> observable = AcApi.getAcPartition().onEssayResult(httpParameter);
+
+        mSubscription = observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<AcEssay, Boolean>() {
+                    @Override
+                    public Boolean call(AcEssay acEssay) {
+                        Boolean isFragmentLive = AcEssayFragment.this.getUserVisibleHint()
+                                && GlobalUtils.isActivityLive(getActivity());
+                        return isFragmentLive;
+                    }
+                })
+                .subscribe(new Action1<AcEssay>() {
+                    @Override
+                    public void call(AcEssay acEssay) {
+                        if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
+                            mAdapter.addData(acEssay);
+                        } else {
+                            mAdapter.setEssayInfo(acEssay);
+                        }
+                        mPagerNoNum++;
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
                     }
-                }
-            }
-        });
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mSwipeRefreshLayout.setEnabled(true);
+                    }
+                });
     }
 }
 

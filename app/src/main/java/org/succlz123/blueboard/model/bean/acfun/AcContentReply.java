@@ -1,7 +1,7 @@
 package org.succlz123.blueboard.model.bean.acfun;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by succlz123 on 15/8/11.
@@ -87,7 +87,7 @@ public class AcContentReply {
             private int pageNo;
             private HashMap<String, Entity> map;
             private int pageSize;
-            private List<Integer> list;
+            private ArrayList<Integer> list;
 
             public void setTotalCount(int totalCount) {
                 this.totalCount = totalCount;
@@ -105,7 +105,7 @@ public class AcContentReply {
                 this.pageSize = pageSize;
             }
 
-            public void setList(List<Integer> list) {
+            public void setList(ArrayList<Integer> list) {
                 this.list = list;
             }
 
@@ -125,7 +125,7 @@ public class AcContentReply {
                 return pageSize;
             }
 
-            public List<Integer> getList() {
+            public ArrayList<Integer> getList() {
                 return list;
             }
 

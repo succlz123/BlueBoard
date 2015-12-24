@@ -23,10 +23,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import java.util.HashMap;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by succlz123 on 2015/7/27.
@@ -53,6 +58,7 @@ public class AcPartitionFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 
     @Nullable
     @Override
@@ -61,6 +67,7 @@ public class AcPartitionFragment extends BaseFragment {
 
         mRecyclerView = f(view, R.id.ac_fragment_partition_recycler_view);
         mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         mPartitionType = getArguments().getString(AcString.CHANNEL_IDS);
 
@@ -107,7 +114,6 @@ public class AcPartitionFragment extends BaseFragment {
             }
         });
 
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -123,35 +129,37 @@ public class AcPartitionFragment extends BaseFragment {
         return view;
     }
 
-    /**
-     * 延迟加载 默认只在fragment显示时才去发起http请求 使viewPager只加载一页
-     */
     @Override
     protected void lazyLoad() {
         if (!mIsPrepared || !mIsVisible) {
             return;
-        } else {
-            if (mAdapter.getAcMostPopular() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getHttpResult(TYPE_MOST_POPULAR, null);
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                });
-            }
-            if (mAdapter.getAcLastPost() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                });
-            }
         }
+        if (mAdapter.getAcMostPopular() == null) {
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    getHttpResult(TYPE_MOST_POPULAR, null);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            });
+        }
+        if (mAdapter.getAcLastPost() == null) {
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    getHttpResult(TYPE_LAST_POST, AcString.PAGE_NO_NUM_1);
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        mCompositeSubscription.unsubscribe();
+        super.onDestroy();
     }
 
     public void setHttpOrder() {
@@ -165,97 +173,100 @@ public class AcPartitionFragment extends BaseFragment {
                 = settings.getString(AcString.ORDER_BY, AcString.TIME_ORDER);
         //人气最旺
         if (type == TYPE_MOST_POPULAR) {
-            Call<AcReOther> call = AcApi.getAcPartition().onResult(AcApi.buildAcPartitionUrl
-                    (mPartitionType,
-                            AcString.POPULARITY,
-                            AcString.ONE_WEEK,
-                            AcString.PAGE_SIZE_NUM_10,
-                            AcString.PAGE_NO_NUM_1));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReOther = response.body();
-                    if (acReOther != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()
-                            && AcPartitionFragment.this.getUserVisibleHint()) {
-                        if (acReOther.getData() != null
-                                && acReOther.getData().getPage().getList().size() != 0) {
-                            mAdapter.setAcMostPopular(acReOther);
-                        }
-                        if (mSwipeRefreshLayout != null) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            mSwipeRefreshLayout.setEnabled(true);
-                        }
-                    }
-                }
+            HashMap<String, String> httpParameterPop = AcApi.buildAcPartitionUrl(mPartitionType,
+                    AcString.POPULARITY,
+                    AcString.ONE_WEEK,
+                    AcString.PAGE_SIZE_NUM_10,
+                    AcString.PAGE_NO_NUM_1);
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()
-                            && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort("刷新太快或者网络连接异常");
-                        if (mSwipeRefreshLayout != null) {
+            Observable<AcReOther> observablePop = AcApi.getAcPartition().onResult(httpParameterPop);
+
+            Subscription subscriptionPop = observablePop.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            Boolean isFragmentLive = AcPartitionFragment.this.getUserVisibleHint()
+                                    && GlobalUtils.isActivityLive(getActivity());
+                            return isFragmentLive;
+                        }
+                    }).filter(new Func1<AcReOther, Boolean>() {
+                        @Override
+                        public Boolean call(AcReOther acReOther) {
+                            boolean isSuccess = acReOther.getData() != null;
+                            if (isSuccess) {
+                                isSuccess = (acReOther.getData().getPage().getList().size()) > 0;
+                            }
+                            return isSuccess;
+                        }
+                    }).subscribe(new Action1<AcReOther>() {
+                        @Override
+                        public void call(AcReOther acReOther) {
+                            mAdapter.setAcMostPopular(acReOther);
                             mSwipeRefreshLayout.setRefreshing(false);
                             mSwipeRefreshLayout.setEnabled(true);
                         }
-                    }
-                }
-            });
-        }
-        //最新发布
-        if (type == TYPE_LAST_POST) {
-            Call<AcReOther> call = AcApi.getAcPartition().onResult(AcApi.buildAcPartitionUrl
-                    (mPartitionType,
-                            order,
-                            AcString.ONE_WEEK,
-                            AcString.PAGE_SIZE_NUM_10,
-                            pagerNoNum));
-            call.enqueue(new Callback<AcReOther>() {
-                @Override
-                public void onResponse(Response<AcReOther> response, Retrofit retrofit) {
-                    AcReOther acReOther = response.body();
-                    if (acReOther != null
-                            && getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()
-                            && AcPartitionFragment.this.getUserVisibleHint()) {
-                        if (acReOther.getData() != null) {
-                            if (acReOther.getData().getPage().getList().size() != 0) {
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    });
+
+            mCompositeSubscription.add(subscriptionPop);
+            //最新发布
+            if (type == TYPE_LAST_POST) {
+                HashMap<String, String> httpParameterPost = AcApi.buildAcPartitionUrl(mPartitionType,
+                        order,
+                        AcString.ONE_WEEK,
+                        AcString.PAGE_SIZE_NUM_10,
+                        pagerNoNum);
+
+                Observable<AcReOther> observablePost = AcApi.getAcPartition().onResult(httpParameterPost);
+
+                Subscription subscriptionPost = observablePost.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .filter(new Func1<AcReOther, Boolean>() {
+                            @Override
+                            public Boolean call(AcReOther acReOther) {
+                                Boolean isFragmentLive = AcPartitionFragment.this.getUserVisibleHint()
+                                        && GlobalUtils.isActivityLive(getActivity());
+                                return isFragmentLive;
+                            }
+                        }).filter(new Func1<AcReOther, Boolean>() {
+                            @Override
+                            public Boolean call(AcReOther acReOther) {
+                                boolean isSuccess = acReOther.getData() != null;
+                                if (isSuccess) {
+                                    isSuccess = (acReOther.getData().getPage().getList().size()) > 0;
+                                } else {
+                                    GlobalUtils.showToastShort("没有更多了 (´･ω･｀)");
+                                }
+                                return isSuccess;
+                            }
+                        }).subscribe(new Action1<AcReOther>() {
+                            @Override
+                            public void call(AcReOther acReOther) {
                                 if (!TextUtils.equals(pagerNoNum, AcString.PAGE_NO_NUM_1)) {
                                     mAdapter.addDate(acReOther);
                                 } else {
                                     mAdapter.setAcLastPost(acReOther);
                                 }
                                 mPagerNoNum++;
-                            } else {
-                                GlobalUtils.showToastShort("没有更多了 (´･ω･｀)");
-                            }
-                        }
-                        if (mSwipeRefreshLayout != null) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            mSwipeRefreshLayout.setEnabled(true);
-                        }
-                    }
-                }
 
-                @Override
-                public void onFailure(Throwable t) {
-                    if (getActivity() != null
-                            && !getActivity().isDestroyed()
-                            && !getActivity().isFinishing()
-                            && AcPartitionFragment.this.getUserVisibleHint()) {
-                        GlobalUtils.showToastShort("刷新太快或者网络连接异常");
-                        if (mSwipeRefreshLayout != null) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            mSwipeRefreshLayout.setEnabled(true);
-                        }
-                    }
-                }
-            });
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                mSwipeRefreshLayout.setEnabled(true);
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                mSwipeRefreshLayout.setEnabled(true);
+                            }
+                        });
+                mCompositeSubscription.add(subscriptionPost);
+            }
         }
     }
 }

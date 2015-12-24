@@ -64,6 +64,7 @@ public class AcContentInfoFragment extends BaseFragment {
 
         mRecyclerView = f(view, R.id.ac_fragment_content_reply_recycler_view);
         mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         BusProvider.getInstance().register(this);
         mContentId = getArguments().getString(CONTENT_ID);
@@ -73,7 +74,11 @@ public class AcContentInfoFragment extends BaseFragment {
             return null;
         }
 
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
         mAdapter = new AcContentInfoRvAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
         mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnVideoPlayClickListener() {
             @Override
             public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType, String sourceTitle) {
@@ -116,12 +121,6 @@ public class AcContentInfoFragment extends BaseFragment {
             }
         });
 
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
-
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
-
         mIsPrepared = true;
         lazyLoad();
 
@@ -136,7 +135,6 @@ public class AcContentInfoFragment extends BaseFragment {
         if (mAdapter.getAcContentInfo() != null) {
             return;
         }
-
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -148,23 +146,27 @@ public class AcContentInfoFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (!mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
         BusProvider.getInstance().unregister(this);
+        super.onDestroy();
     }
 
     private void sendHttpRequest() {
         //视频信息
-        HashMap<String, String> urlMap = AcApi.buildAcContentInfoUrl(mContentId);
-        Observable<AcContentInfo> observable = AcApi.getAcContentInfo().onResult(urlMap);
+        HashMap<String, String> httpParameter = AcApi.buildAcContentInfoUrl(mContentId);
+
+        Observable<AcContentInfo> observable = AcApi.getAcContentInfo().onResult(httpParameter);
+
         mSubscription = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AcContentInfo, Boolean>() {
                     @Override
                     public Boolean call(AcContentInfo acContentInfo) {
-                        return GlobalUtils.isActivityLive(getActivity());
+                        Boolean isFragmentLive = AcContentInfoFragment.this.getUserVisibleHint()
+                                && GlobalUtils.isActivityLive(getActivity());
+                        return isFragmentLive;
                     }
                 })
                 .filter(new Func1<AcContentInfo, Boolean>() {

@@ -1,14 +1,14 @@
 package org.succlz123.blueboard.view.adapter.fragment;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-
-import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.controller.fragment.tab.AcEssayFragment;
 import org.succlz123.blueboard.controller.fragment.other.AcHotFragment;
 import org.succlz123.blueboard.controller.fragment.other.AcPartitionFragment;
 import org.succlz123.blueboard.controller.fragment.other.AcRankingFragment;
+import org.succlz123.blueboard.controller.fragment.tab.AcEssayFragment;
+import org.succlz123.blueboard.model.api.acfun.AcString;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
  * Created by succlz123 on 15/8/10.
@@ -152,7 +152,7 @@ public class AcPartitionFmAdapter extends FragmentStatePagerAdapter {
     }
 
     public Fragment getHotFragment(int position) {
-        Fragment fragment = AcHotFragment.newInstance(AcString.TITLE_HOT);
+        Fragment fragment = AcHotFragment.newInstance();
 
         return fragment;
     }

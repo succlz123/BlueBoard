@@ -92,7 +92,7 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View downloadView = inflater.inflate(R.layout.hahh, parent, false);
+        View downloadView = inflater.inflate(R.layout.download, parent, false);
 
         return new DlVH(downloadView);
     }

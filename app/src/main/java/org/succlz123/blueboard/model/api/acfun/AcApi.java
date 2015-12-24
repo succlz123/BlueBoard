@@ -1,6 +1,5 @@
 package org.succlz123.blueboard.model.api.acfun;
 
-import org.succlz123.blueboard.model.config.RetrofitManager;
 import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
 import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
 import org.succlz123.blueboard.model.bean.acfun.AcContentReply;
@@ -10,11 +9,11 @@ import org.succlz123.blueboard.model.bean.acfun.AcGetH5ByVid;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
 import org.succlz123.blueboard.model.bean.acfun.AcReHot;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
+import org.succlz123.blueboard.model.config.RetrofitManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.QueryMap;
@@ -93,13 +92,13 @@ public class AcApi {
     public interface onAcRecommend {
 
         @GET(AcString.RECOMMEND_LIST)
-        Call<AcReBanner> onAcReBannerResult(@QueryMap() Map<String, String> options);
+        Observable<AcReBanner> onAcReBannerResult(@QueryMap() Map<String, String> options);
 
         @GET(AcString.RECOMMEND_PAGE)
-        Call<AcReHot> onAcReHotResult(@QueryMap() Map<String, String> options);
+        Observable<AcReHot> onAcReHotResult(@QueryMap() Map<String, String> options);
 
         @GET(AcString.CONTENT_CHANNEL)
-        Call<AcReOther> onAcReOtherResult(@QueryMap() Map<String, String> options);
+        Observable<AcReOther> onAcReOtherResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcRecommend getAcRecommend() {
@@ -131,10 +130,10 @@ public class AcApi {
     public interface onAcPartition {
 
         @GET(AcString.CONTENT_CHANNEL)
-        Call<AcReOther> onResult(@QueryMap() Map<String, String> options);
+        Observable<AcReOther> onResult(@QueryMap() Map<String, String> options);
 
         @GET(AcString.CONTENT_CHANNEL)
-        Call<AcEssay> onEssayResult(@QueryMap() Map<String, String> options);
+        Observable<AcEssay> onEssayResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcPartition getAcPartition() {
@@ -186,7 +185,7 @@ public class AcApi {
 
     public interface onAcContentReply {
         @GET(AcString.CONTENT_REPLY)
-        Call<AcContentReply> onResult(@QueryMap() Map<String, String> options);
+        Observable<AcContentReply> onResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcContentReply getAcContentReply() {
@@ -219,7 +218,7 @@ public class AcApi {
 
     public interface onAcContentLeTvVideo {
         @GET(AcString.LETV_URL_GPC)
-        Call<AcContentVideo> onContentResult(@QueryMap() Map<String, String> options);
+        Observable<AcContentVideo> onContentResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcContentLeTvVideo getAcContentLeTvVideo() {
@@ -243,7 +242,7 @@ public class AcApi {
 
     public interface onAcContentHtml5Video {
         @GET(AcString.VIDEO_GET_H5_BY_VID)
-        Call<AcGetH5ByVid> onContentResult(@QueryMap() Map<String, String> options);
+        Observable<AcGetH5ByVid> onContentResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcContentHtml5Video getAcContentHtml5Video() {
@@ -252,7 +251,7 @@ public class AcApi {
 
     public interface onVideoDownloadUrl {
         @GET("/{url}")
-        Call onResult(@Path(value = "url", encoded = false) String url);
+        Observable onResult(@Path(value = "url", encoded = false) String url);
     }
 
     /**
@@ -270,7 +269,7 @@ public class AcApi {
 
     public interface onAcContentDanMu {
         @GET("{sourceId}")
-        Call onContentResult(@QueryMap() Map<String, String> options, @Path("sourceId") String sourceId);
+        Observable onContentResult(@QueryMap() Map<String, String> options, @Path("sourceId") String sourceId);
     }
 
     /**
@@ -289,7 +288,7 @@ public class AcApi {
 
     public interface onAcBangumi {
         @GET(AcString.BANGUMI_WEEK)
-        Call<AcBangumi> onResult(@QueryMap() Map<String, String> options);
+        Observable<AcBangumi> onResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcBangumi getAcBangumi() {
@@ -315,7 +314,7 @@ public class AcApi {
 
     public interface onAcRanking {
         @GET(AcString.CONTENT_RANK)
-        Call<AcReOther> onRankingResult(@QueryMap() Map<String, String> options);
+        Observable<AcReOther> onRankingResult(@QueryMap() Map<String, String> options);
     }
 
     public static onAcRanking getAcRanking() {
@@ -325,6 +324,6 @@ public class AcApi {
     public interface onDownLoad {
         @GET(AcString.CONTENT_RANK)
         @Streaming
-        Call<AcReOther> getData(@QueryMap() Map<String, String> options);
+        Observable<AcReOther> getData(@QueryMap() Map<String, String> options);
     }
 }

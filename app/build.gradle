@@ -50,8 +50,8 @@ dependencies {
 
     compile 'com.tencent.bugly:crashreport:1.2.8'
 
-    compile 'com.facebook.stetho:stetho:1.2.0'
-    compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
+//    compile 'com.facebook.stetho:stetho:1.2.0'
+//    compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
 
     compile 'com.facebook.fresco:fresco:0.8.1'
     compile 'com.facebook.fresco:imagepipeline-okhttp:0.8.1'

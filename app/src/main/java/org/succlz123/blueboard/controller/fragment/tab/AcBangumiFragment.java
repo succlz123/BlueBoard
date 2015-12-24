@@ -18,21 +18,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import java.util.HashMap;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
  * Created by succlz123 on 2015/5/2.
  */
 public class AcBangumiFragment extends BaseFragment {
+
+    public static AcBangumiFragment newInstance() {
+        AcBangumiFragment fragment = new AcBangumiFragment();
+        return fragment;
+    }
+
     private boolean mIsPrepared;
     private AcBangumiRvAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Subscription mSubscription;
 
     @Nullable
     @Override
@@ -41,21 +52,22 @@ public class AcBangumiFragment extends BaseFragment {
 
         mRecyclerView = f(view, R.id.ac_fragment_bangumi_recycler_view);
         mSwipeRefreshLayout = f(view, R.id.swipe_fresh_layout);
+        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
 
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new AcBangumiRvAdapter.MyDecoration());
         mAdapter = new AcBangumiRvAdapter();
+
         mAdapter.setOnClickListener(new AcBangumiRvAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position, String contentId) {
-                GlobalUtils.showToastShort(  "TODO");
+                GlobalUtils.showToastShort("TODO");
             }
         });
         mRecyclerView.setAdapter(mAdapter);
 
-        ViewUtils.setSwipeRefreshLayoutColor(mSwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -74,54 +86,60 @@ public class AcBangumiFragment extends BaseFragment {
     protected void lazyLoad() {
         if (!mIsPrepared || !mIsVisible) {
             return;
-        } else {
-            if (mAdapter.getmAcBangumi() == null) {
-                mSwipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getHttpResult();
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                });
-            }
         }
+        if (mAdapter.getmAcBangumi() != null) {
+            return;
+        }
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getHttpResult();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mSwipeRefreshLayout.setEnabled(false);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+        super.onDestroy();
     }
 
     private void getHttpResult() {
         //新番专题
-        Call<AcBangumi> call = AcApi.getAcBangumi().onResult(AcApi.buildAcBangumiUrl(AcString.BANGUMI_TYPES_ANIMATION));
+        HashMap<String, String> httpParameter = AcApi.buildAcBangumiUrl(AcString.BANGUMI_TYPES_ANIMATION);
 
-        call.enqueue(new Callback<AcBangumi>() {
-            @Override
-            public void onResponse(Response<AcBangumi> response, Retrofit retrofit) {
-                AcBangumi acBangumi = response.body();
-                if (acBangumi != null
-                        && getActivity() != null
-                        && !getActivity().isDestroyed()
-                        && !getActivity().isFinishing()
-                        && AcBangumiFragment.this.getUserVisibleHint()) {
-                    mAdapter.setBangumiInfo(acBangumi);
-                    if (mSwipeRefreshLayout != null) {
+        Observable<AcBangumi> observable = AcApi.getAcBangumi().onResult(httpParameter);
+
+        mSubscription = observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<AcBangumi, Boolean>() {
+                    @Override
+                    public Boolean call(AcBangumi acBangumi) {
+                        Boolean isFragmentLive = AcBangumiFragment.this.getUserVisibleHint()
+                                && GlobalUtils.isActivityLive(getActivity());
+                        return isFragmentLive;
+                    }
+                })
+                .subscribe(new Action1<AcBangumi>() {
+                    @Override
+                    public void call(AcBangumi acBangumi) {
+                        mAdapter.setBangumiInfo(acBangumi);
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
                     }
-                }
-            }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
 
-            @Override
-            public void onFailure(Throwable t) {
-                if (getActivity() != null
-                        && !getActivity().isDestroyed()
-                        && !getActivity().isFinishing()
-                        && AcBangumiFragment.this.getUserVisibleHint()) {
-                    GlobalUtils.showToastShort(  "刷新过快或者网络连接异常");
-                    if (mSwipeRefreshLayout != null) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
                     }
-                }
-            }
-        });
+                });
     }
 }

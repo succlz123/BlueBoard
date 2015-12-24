@@ -19,9 +19,12 @@ import android.view.ViewGroup;
  */
 public class AcNavigationFragment extends BaseFragment {
 
-    private RecyclerView mRecyclerView;
+    public static AcNavigationFragment newInstance() {
+        AcNavigationFragment fragment = new AcNavigationFragment();
+        return fragment;
+    }
 
-    private boolean mIsPrepared;
+    private RecyclerView mRecyclerView;
     private AcNavigationRvAdapter mAdapter;
 
     @Nullable
@@ -30,8 +33,6 @@ public class AcNavigationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_fragment_main_navigation, container, false);
 
         mRecyclerView = f(view, R.id.ac_fragment_navigation_recycler_view);
-
-        mIsPrepared = true;
 
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
