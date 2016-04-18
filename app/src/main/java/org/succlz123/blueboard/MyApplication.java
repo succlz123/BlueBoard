@@ -29,11 +29,10 @@ public class MyApplication extends Application {
         return sInstance;
     }
 
-    private RefWatcher refWatcher;
+    protected RefWatcher refWatcher;
 
     public static RefWatcher getRefWatcher(Context context) {
         MyApplication application = (MyApplication) context.getApplicationContext();
-
         return application.refWatcher;
     }
 

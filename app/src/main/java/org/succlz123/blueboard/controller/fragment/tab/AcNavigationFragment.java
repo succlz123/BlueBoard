@@ -2,7 +2,7 @@ package org.succlz123.blueboard.controller.fragment.tab;
 
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.acfun.AcPartitionActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.base.BaseFragment;
 import org.succlz123.blueboard.view.adapter.recyclerview.tab.AcNavigationRvAdapter;
 
 import android.os.Bundle;

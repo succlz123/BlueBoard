@@ -4,9 +4,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -119,7 +119,7 @@ public class AcRankingRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2px(parent.getContext(), 8);
+            int marginRight = OkUtils.dp2px(parent.getContext(), 8);
             if (position % 2 == 0) {
                 outRect.set(0, 0, marginRight, 0);
             }

@@ -22,7 +22,7 @@ public class NewAcString {
     public static final String PRODUCTID_2000 = "2000";
 
     public static final String RESOLUTION = "resolution";
-//    public static final String RESOLUTION_WIDTH_HEIGHT = GlobalUtils.getScreenWidthxHeight(MyApplication.getInstance().getApplicationContext());
+//    public static final String RESOLUTION_WIDTH_HEIGHT = OkUtils.getScreenWxH(MyApplication.getInstance().getApplicationContext());
     public static final String RESOLUTION_WIDTH_HEIGHT = "1080x1776";
 
     public static final String UUID = "uuid";

@@ -3,7 +3,7 @@ package org.succlz123.blueboard.service;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.api.acfun.NewAcApi;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.okdownload.OkDownloadEnqueueListener;
 import org.succlz123.okdownload.OkDownloadError;
 import org.succlz123.okdownload.OkDownloadManager;
@@ -67,14 +67,6 @@ public class DownloadService extends Service {
         mListeners.put(sign, listener);
     }
 
-    public HashMap<String, OkDownloadRequest> getDownloadRequests() {
-        return mDownloadRequests;
-    }
-
-//    public void addDownloadRequest(String sign) {
-//        mDownloadRequests.put(sign, "zhuzhan");
-//    }
-
     public void toggleDownload(String sign, OkDownloadRequest request) {
         if (mDownloadRequests.get(sign) == null) {
             downloadFromZhuZhan(request);
@@ -107,6 +99,11 @@ public class DownloadService extends Service {
     }
 
     @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) {
             return Service.START_NOT_STICKY;
@@ -117,6 +114,27 @@ public class DownloadService extends Service {
         initDownload(downLoadList);
 
         return Service.START_NOT_STICKY;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+//        mOkDownloadManager.onPauseAll();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
     }
 
     private void initDownload(ArrayList<OkDownloadRequest> downLoadList) {
@@ -133,7 +151,7 @@ public class DownloadService extends Service {
 
         //查询是否已在下载队列
         if (mDownloadRequests.get(videoId) != null) {
-            GlobalUtils.showToastLong("下载任务已经在队列中");
+            OkUtils.showToastLong("下载任务已经在队列中");
             return;
         }
 
@@ -234,26 +252,4 @@ public class DownloadService extends Service {
             return DownloadService.this;
         }
     }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
-
-    @Override
-    public void onDestroy() {
-//        mOkDownloadManager.onPauseAll();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-    }
-
 }

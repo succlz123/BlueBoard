@@ -9,10 +9,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -35,7 +37,7 @@ import java.util.Iterator;
 /**
  * Created by succlz123 on 2015/7/6.
  */
-public class GlobalUtils {
+public class OkUtils {
     private static Toast toast;
 
     /**
@@ -56,7 +58,7 @@ public class GlobalUtils {
      */
     public static void showToastShort(String tip) {
         if (TextUtils.isEmpty(tip)) {
-            tip = "未知错误";
+            tip = "unknown error";
         }
 //        if (context == null) {
 //            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_SHORT);
@@ -71,7 +73,7 @@ public class GlobalUtils {
      */
     public static void showToastLong(String tip) {
         if (TextUtils.isEmpty(tip)) {
-            tip = "未知错误";
+            tip = "unknown error";
         }
 //        if (context == null) {
 //            globalToast(MyApplication.getInstance().getApplicationContext(), tip, Toast.LENGTH_LONG);
@@ -101,9 +103,9 @@ public class GlobalUtils {
     }
 
     /**
-     * 通过WINDOW_SERVICE获取display对象
+     * 通过WINDOW_SERVICE获取display对象,然后获得高宽
      */
-    public static String getScreenWidthxHeight(Context context) {
+    public static String getScreenWxH(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -115,21 +117,35 @@ public class GlobalUtils {
     }
 
     /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     * dp转px
      */
-    public static int dip2px(Context context, float dpValue) {
-        float scale = context.getResources().getDisplayMetrics().density;
-
-        return (int) (dpValue * scale + 0.5f);
+    public static int dp2px(Context context, float dpVal) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal, displayMetrics);
     }
 
     /**
-     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     * sp转px
      */
-    public static int px2dip(Context context, float pxValue) {
-        float scale = context.getResources().getDisplayMetrics().density;
+    public static int sp2px(Context context, float spVal) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spVal, displayMetrics);
+    }
 
-        return (int) (pxValue / scale + 0.5f);
+    /**
+     * px转dp
+     */
+    public static float px2dp(Context context, float pxVal) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (pxVal / scale);
+    }
+
+    /**
+     * px转sp
+     */
+    public static float px2sp(Context context, float pxVal) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return (pxVal / scaledDensity);
     }
 
     /**
@@ -150,13 +166,29 @@ public class GlobalUtils {
         }
     }
 
-    public static int getScreenHeight(Activity context) {
+    /**
+     * Activity高度
+     */
+    public static int getActivityHeight(Activity context) {
         if (context == null) {
             return 0;
         }
         return context.findViewById(android.R.id.content).getHeight();
     }
 
+    /**
+     * Activity宽度
+     */
+    public static int getActivityWidth(Activity context) {
+        if (context == null) {
+            return 0;
+        }
+        return context.findViewById(android.R.id.content).getWidth();
+    }
+
+    /**
+     * ActionBar高度
+     */
     public static int getActionBarSize(Activity context) {
         if (context == null) {
             return 0;
@@ -378,8 +410,7 @@ public class GlobalUtils {
      */
     public static int getConnectedType(Context context) {
         if (context != null) {
-            ConnectivityManager connectivityManager
-                    = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isAvailable()) {
                 return networkInfo.getType();
@@ -430,7 +461,6 @@ public class GlobalUtils {
         return baos.toString("UTF-8");
     }
 
-
     /**
      * 毫秒 转 小时:分钟:秒
      */
@@ -454,8 +484,42 @@ public class GlobalUtils {
         return minutesStr + ":" + secondsStr;
     }
 
+    /**
+     * 检查activity是否还存在
+     */
     public static boolean isActivityLive(Activity activity) {
         return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 
+    /**
+     * 检查fragment是否还存在
+     */
+    public static boolean isFragmentLive(Activity activity, Fragment fragment) {
+        return fragment.getUserVisibleHint() && OkUtils.isActivityLive(activity);
+    }
+
+    /**
+     * 获得字体
+     */
+    public static Typeface getFontRoboto(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "Roboto-Regular.ttf");
+    }
+
+    /**
+     * 判断屏幕是否是竖屏
+     */
+    public static boolean isVertical(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        if (width > height) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

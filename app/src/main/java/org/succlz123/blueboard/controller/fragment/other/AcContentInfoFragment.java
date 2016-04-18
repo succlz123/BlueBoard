@@ -5,11 +5,11 @@ import com.squareup.otto.Subscribe;
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
 import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.base.BaseFragment;
 import org.succlz123.blueboard.model.api.acfun.AcApi;
 import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
 import org.succlz123.blueboard.model.config.BusProvider;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.service.DownloadService;
 import org.succlz123.blueboard.view.adapter.recyclerview.content.AcContentInfoRvAdapter;
@@ -55,7 +55,6 @@ public class AcContentInfoFragment extends BaseFragment {
     private boolean mIsPrepared;
     private AcContentInfoRvAdapter mAdapter;
     private String mContentId;
-    private Subscription mSubscription;
 
     @Nullable
     @Override
@@ -70,7 +69,7 @@ public class AcContentInfoFragment extends BaseFragment {
         mContentId = getArguments().getString(CONTENT_ID);
 
         if (mContentId == null) {
-            GlobalUtils.showToastShort("网络异常,请重试");
+            OkUtils.showToastShort("网络异常,请重试");
             return null;
         }
 
@@ -79,47 +78,7 @@ public class AcContentInfoFragment extends BaseFragment {
         mAdapter = new AcContentInfoRvAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnVideoPlayClickListener() {
-            @Override
-            public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType, String sourceTitle) {
-                if (position == 0) {
-                    GlobalUtils.showToastShort("TODO " + userId);
-                } else {
-                    VideoPlayActivity.newInstance(getActivity(), videoId, sourceId, sourceType, sourceTitle);
-                }
-            }
-        });
-        mAdapter.setOnDownLoadClickListener(new AcContentInfoRvAdapter.OnDownLoadClickListener() {
-            @Override
-            public void onClick(View view, int position, ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
-                if (downLoadList == null || downLoadList.size() <= 0) {
-                    return;
-                }
-
-                ArrayList<OkDownloadRequest> requestList = new ArrayList<>();
-                if (requestList.size() > 5) {
-                    GlobalUtils.showToastShort("抱歉,最多只能同时下5个视频");
-                    return;
-                }
-
-                for (AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
-                    if (TextUtils.equals(videosEntity.getSourceType(), "zhuzhan")) {
-
-                        OkDownloadRequest request = new OkDownloadRequest.Builder()
-                                .title(videosEntity.getVideoTitle())
-                                .description(videosEntity.getName())
-                                .sign(videosEntity.getDanmakuId())
-                                .build();
-
-                        requestList.add(request);
-                    } else {
-                        GlobalUtils.showToastShort("非主站");
-                    }
-                }
-
-                DownloadService.startService(getActivity(), requestList);
-            }
-        });
+        setListener();
 
         mIsPrepared = true;
         lazyLoad();
@@ -146,11 +105,52 @@ public class AcContentInfoFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        BusProvider.getInstance().unregister(this);
         super.onDestroy();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    private void setListener() {
+        mAdapter.setOnVideoPlayClickListener(new AcContentInfoRvAdapter.OnVideoPlayClickListener() {
+            @Override
+            public void onClick(View view, int position, String userId, String videoId, String sourceId, String sourceType, String sourceTitle) {
+                if (position == 0) {
+                    OkUtils.showToastShort("TODO " + userId);
+                } else {
+                    VideoPlayActivity.newInstance(getActivity(), videoId, sourceId, sourceType, sourceTitle);
+                }
+            }
+        });
+        mAdapter.setOnDownLoadClickListener(new AcContentInfoRvAdapter.OnDownLoadClickListener() {
+            @Override
+            public void onClick(View view, int position, ArrayList<AcContentInfo.DataEntity.FullContentEntity.VideosEntity> downLoadList) {
+                if (downLoadList == null || downLoadList.size() <= 0) {
+                    return;
+                }
+
+                ArrayList<OkDownloadRequest> requestList = new ArrayList<>();
+                if (requestList.size() > 5) {
+                    OkUtils.showToastShort("抱歉,最多只能同时下5个视频");
+                    return;
+                }
+
+                for (AcContentInfo.DataEntity.FullContentEntity.VideosEntity videosEntity : downLoadList) {
+                    if (TextUtils.equals(videosEntity.getSourceType(), "zhuzhan")) {
+
+                        OkDownloadRequest request = new OkDownloadRequest.Builder()
+                                .title(videosEntity.getVideoTitle())
+                                .description(videosEntity.getName())
+                                .sign(videosEntity.getDanmakuId())
+                                .build();
+
+                        requestList.add(request);
+                    } else {
+                        OkUtils.showToastShort("非主站");
+                    }
+                }
+
+                DownloadService.startService(getActivity(), requestList);
+            }
+        });
     }
 
     private void sendHttpRequest() {
@@ -159,13 +159,13 @@ public class AcContentInfoFragment extends BaseFragment {
 
         Observable<AcContentInfo> observable = AcApi.getAcContentInfo().onResult(httpParameter);
 
-        mSubscription = observable.subscribeOn(Schedulers.io())
+        Subscription subscription = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AcContentInfo, Boolean>() {
                     @Override
                     public Boolean call(AcContentInfo acContentInfo) {
                         Boolean isFragmentLive = AcContentInfoFragment.this.getUserVisibleHint()
-                                && GlobalUtils.isActivityLive(getActivity());
+                                && OkUtils.isActivityLive(getActivity());
                         return isFragmentLive;
                     }
                 })
@@ -174,7 +174,7 @@ public class AcContentInfoFragment extends BaseFragment {
                     public Boolean call(AcContentInfo acContentInfo) {
                         boolean isSuccess = acContentInfo.isSuccess() && acContentInfo.getStatus() == 200;
                         if (!isSuccess) {
-                            GlobalUtils.showToastShort(acContentInfo.getMsg());
+                            OkUtils.showToastShort(acContentInfo.getMsg());
                         }
                         return isSuccess;
                     }
@@ -191,10 +191,11 @@ public class AcContentInfoFragment extends BaseFragment {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        GlobalUtils.showToastShort("网络连接异常,请重试");
+                        OkUtils.showToastShort("网络连接异常,请重试");
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
+        mCompositeSubscription.add(subscription);
     }
 
     @Subscribe

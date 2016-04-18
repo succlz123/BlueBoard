@@ -2,10 +2,10 @@ package org.succlz123.blueboard.view.adapter.recyclerview.download;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.service.DownloadService;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 import org.succlz123.okdownload.OkDownloadEnqueueListener;
 import org.succlz123.okdownload.OkDownloadError;
 import org.succlz123.okdownload.OkDownloadRequest;
@@ -202,7 +202,7 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2px(parent.getContext(), 7);
+            int marginRight = OkUtils.dp2px(parent.getContext(), 7);
             if (position == 1 | position == 3) {
                 outRect.set(0, 0, marginRight, 0);
             }
@@ -340,7 +340,7 @@ public class DownLoadRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     btnDownload.setEnabled(true);
                     btnDownload.setText("失败");
                     btnDownload.setBackgroundResource(R.color.md_red_400);
-                    GlobalUtils.showToastShort(error.getMessage());
+                    OkUtils.showToastShort(error.getMessage());
                 }
             });
         }

@@ -2,7 +2,7 @@ package org.succlz123.blueboard.controller.activity.main;
 
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.acfun.DownLoadActivity;
-import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.base.BaseActivity;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.view.adapter.fragment.AcMainFmAdapter;
 

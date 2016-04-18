@@ -4,13 +4,13 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
 import org.succlz123.blueboard.model.bean.acfun.AcReHot;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.view.adapter.AcRecommendBannerAdapter;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 import org.succlz123.blueboard.view.callback.GetAcRecommendHttpResult;
 
 import android.graphics.Canvas;
@@ -475,7 +475,7 @@ public class AcRecommendRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2px(parent.getContext(), 7);
+            int marginRight = OkUtils.dp2px(parent.getContext(), 7);
             if (position == 2 | position == 4 | position == 7 | position == 10 | position == 13
                     | position == 16 | position == 19 | position == 22 | position == 25) {
                 outRect.set(0, 0, marginRight, 0);

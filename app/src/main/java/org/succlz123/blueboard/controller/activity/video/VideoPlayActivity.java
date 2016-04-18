@@ -3,11 +3,11 @@ package org.succlz123.blueboard.controller.activity.video;
 import com.squareup.okhttp.ResponseBody;
 
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.base.BaseActivity;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.api.acfun.NewAcApi;
 import org.succlz123.blueboard.model.bean.newacfun.NewAcVideo;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.model.utils.common.SysUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.model.utils.danmaku.DanmakuHelper;
@@ -51,8 +51,9 @@ import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.ui.widget.DanmakuSurfaceView;
-import retrofit.Response;
+import retrofit2.Response;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -146,7 +147,7 @@ public class VideoPlayActivity extends BaseActivity {
         if (TextUtils.equals(mSourceType, "zhuzhan")) {
             videoFormZhuZhan();
         } else {
-            GlobalUtils.showToastShort("读取视频源出错,非主站");
+            OkUtils.showToastShort("读取视频源出错,非主站");
         }
     }
 
@@ -203,7 +204,7 @@ public class VideoPlayActivity extends BaseActivity {
         final Observable<NewAcVideo> getVideo = NewAcApi.getNewAcVideo().onResult(mVideoId);
         final Observable<Response<ResponseBody>> getDanmaku = NewAcApi.getNewAcDanmaku().onResult(mVideoId);
 
-        getDanmaku.subscribeOn(Schedulers.io())
+        Subscription subscription = getDanmaku.subscribeOn(Schedulers.io())
                 .flatMap(new Func1<Response<ResponseBody>, Observable<NewAcVideo>>() {
                     @Override
                     public Observable<NewAcVideo> call(Response<ResponseBody> response) {
@@ -229,6 +230,7 @@ public class VideoPlayActivity extends BaseActivity {
                         Log.w(TAG, "call: " + mUri.toString());
                     }
                 });
+        mCompositeSubscription.add(subscription);
     }
 
     private void danmuku(InputStream inputStream) {
@@ -237,6 +239,11 @@ public class VideoPlayActivity extends BaseActivity {
             mDanmakuView.setCallback(new DrawHandler.Callback() {
                 @Override
                 public void updateTimer(DanmakuTimer timer) {
+                }
+
+                @Override
+                public void danmakuShown(BaseDanmaku danmaku) {
+
                 }
 
                 @Override
@@ -338,8 +345,8 @@ public class VideoPlayActivity extends BaseActivity {
     }
 
     private synchronized void showPlayerTime(long duration, long currentPosition) {
-        String totalTime = GlobalUtils.getTimeFromMillisecond(duration);
-        String currentTime = GlobalUtils.getTimeFromMillisecond(currentPosition);
+        String totalTime = OkUtils.getTimeFromMillisecond(duration);
+        String currentTime = OkUtils.getTimeFromMillisecond(currentPosition);
         mTvRate.setText(currentTime + " / " + totalTime);
     }
 
@@ -354,7 +361,7 @@ public class VideoPlayActivity extends BaseActivity {
                         mHandler.postDelayed(this, 1000);
                         mCheckCount++;
                     } else {
-                        GlobalUtils.showToastShort("弹幕解析失败,请重试");
+                        OkUtils.showToastShort("弹幕解析失败,请重试");
                     }
                 }
             });
@@ -386,7 +393,7 @@ public class VideoPlayActivity extends BaseActivity {
         mIvHD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalUtils.showToastShort("啊啊啊");
+                OkUtils.showToastShort("啊啊啊");
             }
         });
         mIvDanmaku.setOnClickListener(new View.OnClickListener() {
@@ -394,10 +401,10 @@ public class VideoPlayActivity extends BaseActivity {
             public void onClick(View v) {
                 if (mDanmakuView.isShown()) {
                     mDanmakuView.hide();
-                    GlobalUtils.showToastShort("关闭弹幕");
+                    OkUtils.showToastShort("关闭弹幕");
                 } else {
                     mDanmakuView.show();
-                    GlobalUtils.showToastShort("打开弹幕");
+                    OkUtils.showToastShort("打开弹幕");
                 }
             }
         });
@@ -510,7 +517,7 @@ public class VideoPlayActivity extends BaseActivity {
 
         public CustomTouchListener() {
             super();
-            gestureStep = GlobalUtils.dip2px(VideoPlayActivity.this, 10);
+            gestureStep = OkUtils.dp2px(VideoPlayActivity.this, 10);
         }
 
         @Override

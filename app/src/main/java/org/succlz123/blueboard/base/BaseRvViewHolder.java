@@ -1,4 +1,4 @@
-package org.succlz123.blueboard.view.adapter.base;
+package org.succlz123.blueboard.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * Created by succlz123 on 15/12/20.
  */
-public class BaseRvViewHolder extends RecyclerView.ViewHolder {
+public abstract class BaseRvViewHolder extends RecyclerView.ViewHolder {
 
     public BaseRvViewHolder(View itemView) {
         super(itemView);
@@ -15,5 +15,4 @@ public class BaseRvViewHolder extends RecyclerView.ViewHolder {
     protected <T extends View> T f(View itemView, int resId) {
         return (T) itemView.findViewById(resId);
     }
-
 }

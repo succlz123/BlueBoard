@@ -19,18 +19,15 @@ public class OkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ADAPTER_MAX_TYPES = 100;
 
     private RecyclerView.Adapter mWrappedAdapter;
+    private CustomDataObserver mCustomDataObserver;
     private List<View> mHeaderViews, mFooterViews;
     private Map<Class, Integer> mItemTypesOffset;
 
-    /**
-     * Construct a new header view recycler adapter
-     *
-     * @param adapter The underlying adapter to wrap
-     */
     public OkAdapter(RecyclerView.Adapter adapter) {
-        mHeaderViews = new ArrayList<View>();
-        mFooterViews = new ArrayList<View>();
-        mItemTypesOffset = new HashMap<Class, Integer>();
+        mHeaderViews = new ArrayList<>();
+        mFooterViews = new ArrayList<>();
+        mItemTypesOffset = new HashMap<>();
+        mCustomDataObserver = new CustomDataObserver();
         setWrappedAdapter(adapter);
     }
 
@@ -50,12 +47,15 @@ public class OkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         int hCount = getHeaderCount();
-        if (position < hCount) return HEADERS_START + position;
-        else {
+        if (position < hCount) {
+            return HEADERS_START + position;
+        } else {
             int itemCount = mWrappedAdapter.getItemCount();
             if (position < hCount + itemCount) {
                 return getAdapterTypeOffset() + mWrappedAdapter.getItemViewType(position - hCount);
-            } else return FOOTERS_START + position - hCount - itemCount;
+            } else {
+                return FOOTERS_START + position - hCount - itemCount;
+            }
         }
     }
 
@@ -77,22 +77,10 @@ public class OkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mWrappedAdapter.onBindViewHolder(viewHolder, position - hCount);
     }
 
-    /**
-     * Add a static view to appear at the start of the RecyclerView. Headers are displayed in the
-     * order they were added.
-     *
-     * @param view The header view to add
-     */
     public void addHeaderView(View view) {
         mHeaderViews.add(view);
     }
 
-    /**
-     * Add a static view to appear at the end of the RecyclerView. Footers are displayed in the
-     * order they were added.
-     *
-     * @param view The footer view to add
-     */
     public void addFooterView(View view) {
         mFooterViews.add(view);
     }
@@ -124,11 +112,17 @@ public class OkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void setWrappedAdapter(RecyclerView.Adapter adapter) {
-        if (mWrappedAdapter != null) mWrappedAdapter.unregisterAdapterDataObserver(mDataObserver);
+        if (mWrappedAdapter != null) {
+            mWrappedAdapter.unregisterAdapterDataObserver(mCustomDataObserver);
+        }
+
         mWrappedAdapter = adapter;
         Class adapterClass = mWrappedAdapter.getClass();
-        if (!mItemTypesOffset.containsKey(adapterClass)) putAdapterTypeOffset(adapterClass);
-        mWrappedAdapter.registerAdapterDataObserver(mDataObserver);
+
+        if (!mItemTypesOffset.containsKey(adapterClass)) {
+            putAdapterTypeOffset(adapterClass);
+        }
+        mWrappedAdapter.registerAdapterDataObserver(mCustomDataObserver);
     }
 
     private void putAdapterTypeOffset(Class adapterClass) {
@@ -139,7 +133,7 @@ public class OkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mItemTypesOffset.get(mWrappedAdapter.getClass());
     }
 
-    private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
+    private class CustomDataObserver extends RecyclerView.AdapterDataObserver {
         @Override
         public void onChanged() {
             super.onChanged();
@@ -171,7 +165,7 @@ public class OkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // TODO: No notifyItemRangeMoved method?
             notifyItemRangeChanged(fromPosition + hCount, toPosition + hCount + itemCount);
         }
-    };
+    }
 
     private static class StaticViewHolder extends RecyclerView.ViewHolder {
 

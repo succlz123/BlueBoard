@@ -1,7 +1,7 @@
 package org.succlz123.blueboard.controller.activity.acfun;
 
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.base.BaseActivity;
 import org.succlz123.blueboard.controller.fragment.other.AcPartitionFragment;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;

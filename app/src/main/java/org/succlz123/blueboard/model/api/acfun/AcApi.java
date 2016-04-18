@@ -14,10 +14,10 @@ import org.succlz123.blueboard.model.config.RetrofitManager;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.http.GET;
-import retrofit.http.Path;
-import retrofit.http.QueryMap;
-import retrofit.http.Streaming;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
 import rx.Observable;
 
 /**

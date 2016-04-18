@@ -2,9 +2,9 @@ package org.succlz123.blueboard.view.adapter.recyclerview.tab;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.bean.acfun.AcEssay;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -87,7 +87,7 @@ public class AcEssayRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 ((CardViewHolder) holder).tvName
                         .setText(entity.getUser().getUsername());
                 ((CardViewHolder) holder).tvTime
-                        .setText(GlobalUtils.getDateToStringWithYDHM(entity.getReleaseDate()));
+                        .setText(OkUtils.getDateToStringWithYDHM(entity.getReleaseDate()));
                 ((CardViewHolder) holder).tvClick
                         .setText(MyApplication.getInstance().getApplicationContext().getString(R.string.click) + " " + entity.getViews());
                 ((CardViewHolder) holder).tvReply

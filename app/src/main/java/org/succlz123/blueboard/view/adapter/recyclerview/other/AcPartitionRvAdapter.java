@@ -4,11 +4,11 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReHot;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -178,8 +178,20 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
         } else if (holder instanceof MostPopularVH) {
             if (position == 1 | position == 2 | position == 3 | position == 4 && mAcMostPopular != null) {
+                final List<AcReOther.DataEntity.PageEntity.ListEntity> listEntities
+                        = mAcMostPopular.getData().getPage().getList();
+
+                listEntities.add(null);
+                listEntities.add(null);
+                listEntities.add(null);
+                listEntities.add(null);
+
                 final AcReOther.DataEntity.PageEntity.ListEntity entity
                         = mAcMostPopular.getData().getPage().getList().get(position - 1);
+
+                if (entity==null){
+                    return;
+                }
 
                 ((MostPopularVH) holder).imgCoverHot
                         .setImageURI(Uri.parse(entity.getCover()));
@@ -227,10 +239,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        if (mEntityList.size() != 0) {
-            return mEntityList.size() + 6;
-        }
-        return 0;
+        return mEntityList.size() + 6;
     }
 
     //根据position判断是否显示间隔标题
@@ -253,7 +262,7 @@ public class AcPartitionRvAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2px(parent.getContext(), 7);
+            int marginRight = OkUtils.dp2px(parent.getContext(), 7);
             if (position == 1 | position == 3) {
                 outRect.set(0, 0, marginRight, 0);
             }

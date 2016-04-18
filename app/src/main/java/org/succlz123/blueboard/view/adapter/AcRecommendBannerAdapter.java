@@ -7,7 +7,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.model.bean.acfun.AcReBanner;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.view.adapter.recyclerview.tab.AcRecommendRvAdapter;
 
 import android.content.Context;
@@ -35,13 +35,12 @@ public class AcRecommendBannerAdapter extends PagerAdapter {
     private int mVpTotalNum;
     private int mVpNum;
 
-
     public AcRecommendBannerAdapter(AcReBanner acReBanner, ViewPager viewPager, LinearLayout dots, final AcRecommendRvAdapter.OnClickListener onClickListener) {
         super();
         final List<AcReBanner.DataEntity.ListEntity> bannerInfo = acReBanner.getData().getList();
         mVpTotalNum = bannerInfo.size();
 
-        int dotsPx = GlobalUtils.dip2px(mContext, 7f);
+        int dotsPx = OkUtils.dp2px(mContext, 7f);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dotsPx, dotsPx);
         layoutParams.setMargins(dotsPx / 2, dotsPx, dotsPx, dotsPx);
 

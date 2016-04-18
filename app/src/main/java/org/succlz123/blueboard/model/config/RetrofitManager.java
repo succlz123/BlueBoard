@@ -3,9 +3,10 @@ package org.succlz123.blueboard.model.config;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.api.acfun.NewAcString;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 /**
  * Created by succlz123 on 15/8/14.
@@ -26,7 +27,7 @@ public class RetrofitManager {
 
     private static Retrofit getRetrofit(String url) {
         Retrofit retrofit = RetrofitManager.getInstance()
-                .client(OkHttpClientManager.getInstance())
+                .client(OkHttpClientManager.getInstance().okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(url)

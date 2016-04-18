@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swipe_fresh_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ac_fragment_content_reply_recycler_view"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_fresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/rv_bottom"
-        android:paddingLeft="@dimen/rv_margin"
-        android:paddingRight="@dimen/rv_margin"/>
+        android:layout_height="match_parent">
+
+    <org.succlz123.blueboard.model.utils.okrecycler.OkRecyclerView
+            android:id="@+id/ac_fragment_content_reply_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            android:paddingBottom="@dimen/rv_bottom"
+            android:paddingLeft="@dimen/rv_margin"
+            android:paddingRight="@dimen/rv_margin"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

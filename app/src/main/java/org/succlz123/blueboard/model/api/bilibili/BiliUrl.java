@@ -1,7 +1,7 @@
 package org.succlz123.blueboard.model.api.bilibili;
 
 import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -17,7 +17,7 @@ public class BiliUrl {
 
 
 	public static String get(int module) {
-		String androidId = GlobalUtils.getAndroidId(MyApplication.getInstance().getApplicationContext());
+		String androidId = OkUtils.getAndroidId(MyApplication.getInstance().getApplicationContext());
 		String ts = String.valueOf(System.currentTimeMillis());
 
 		StringBuilder sb = new StringBuilder();

@@ -1,7 +1,7 @@
 package org.succlz123.blueboard.model.api.acfun;
 
 import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 /**
  * Created by succlz123 on 2015/7/27.
@@ -242,7 +242,7 @@ public class AcString {
     public static final String MARKET_NAME = "m360";
     /*请求响应的设备分辨率 resolution=1080x1776*/
     public static final String RESOLUTION = "resolution";
-    public static final String RESOLUTION_WIDTH_HEIGHT = GlobalUtils.getScreenWidthxHeight(MyApplication.getInstance().getApplicationContext());
+    public static final String RESOLUTION_WIDTH_HEIGHT = OkUtils.getScreenWxH(MyApplication.getInstance().getApplicationContext());
     /*请求页数 pageSize=10*/
     public static final String PAGE_SIZE = "pageSize";
     public static final String PAGE_SIZE_NUM_10 = "10";

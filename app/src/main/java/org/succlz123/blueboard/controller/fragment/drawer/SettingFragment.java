@@ -1,18 +1,13 @@
-import android.app.DownloadManager;
+package org.succlz123.blueboard.controller.fragment.drawer;
+
+import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseFragment;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.succlz123.blueboard.MyApplication;
-import org.succlz123.blueboard.R;
-
-
-
-import org.succlz123.blueboard.controller.base.BaseFragment;
-
 
 /**
  * Created by succlz123 on 2015/8/20.

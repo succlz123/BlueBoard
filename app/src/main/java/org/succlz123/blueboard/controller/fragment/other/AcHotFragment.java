@@ -2,11 +2,11 @@ package org.succlz123.blueboard.controller.fragment.other;
 
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.base.BaseFragment;
 import org.succlz123.blueboard.model.api.acfun.AcApi;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReHot;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.view.adapter.recyclerview.other.AcHotRvAdapter;
 
@@ -46,7 +46,6 @@ public class AcHotFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private Subscription mSubscription;
 
     @Nullable
     @Override
@@ -117,9 +116,6 @@ public class AcHotFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
         super.onDestroy();
     }
 
@@ -129,14 +125,15 @@ public class AcHotFragment extends BaseFragment {
 
         Observable<AcReHot> observable = AcApi.getAcRecommend().onAcReHotResult(httpParameter);
 
-        mSubscription = observable.subscribeOn(Schedulers.io())
+        Subscription subscription = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AcReHot, Boolean>() {
                     @Override
                     public Boolean call(AcReHot acReHot) {
                         Boolean isFragmentLive = AcHotFragment.this.getUserVisibleHint()
-                                && GlobalUtils.isActivityLive(getActivity());
-                        return isFragmentLive;                    }
+                                && OkUtils.isActivityLive(getActivity());
+                        return isFragmentLive;
+                    }
                 })
                 .filter(new Func1<AcReHot, Boolean>() {
                     @Override
@@ -168,6 +165,7 @@ public class AcHotFragment extends BaseFragment {
                         mSwipeRefreshLayout.setEnabled(true);
                     }
                 });
+        mCompositeSubscription.add(subscription);
     }
 }
 

@@ -5,7 +5,7 @@ import com.squareup.otto.Subscribe;
 
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.video.VideoPlayActivity;
-import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.base.BaseActivity;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
 import org.succlz123.blueboard.model.config.BusProvider;

@@ -3,9 +3,9 @@ package org.succlz123.blueboard.view.adapter.recyclerview.tab;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.bean.acfun.AcBangumi;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -41,27 +41,9 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    public class CardViewHolder extends BaseRvViewHolder {
-        private SimpleDraweeView imgBangumi;
-        private TextView tvTitle;
-        private TextView tvNum;
-        private CardView cvBangumi;
-
-        public CardViewHolder(View itemView) {
-            super(itemView);
-            imgBangumi = f(itemView, R.id.ac_rv_bangumi_img);
-            tvTitle = f(itemView, R.id.ac_rv_bangumi_title_tv);
-            tvNum = f(itemView, R.id.ac_rv_bangumi_num_tv);
-            cvBangumi = f(itemView, R.id.cv_bangumi);
-        }
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View cardView
-                = LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_bangumi, parent, false);
-
-        return new CardViewHolder(cardView);
+        return CardViewHolder.create(parent);
     }
 
     @Override
@@ -69,10 +51,10 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (mAcBangumi != null) {
             final AcBangumi.DataEntity.ListEntity entity = mAcBangumi.getData().getList().get(position);
             if (holder instanceof CardViewHolder) {
-                ((CardViewHolder) holder).imgBangumi.setImageURI(Uri.parse(entity.getCover()));
-                ((CardViewHolder) holder).tvTitle.setText(entity.getTitle());
-                ((CardViewHolder) holder).tvNum.setText("更新至 " + entity.getLastVideoName());
-                ((CardViewHolder) holder).cvBangumi.setOnClickListener(new View.OnClickListener() {
+                ((CardViewHolder) holder).mImgBangumi.setImageURI(Uri.parse(entity.getCover()));
+                ((CardViewHolder) holder).mTvTitle.setText(entity.getTitle());
+                ((CardViewHolder) holder).mTvNum.setText("更新至 " + entity.getLastVideoName());
+                ((CardViewHolder) holder).mCvBangumi.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mOnClickListener.onClick(v, position, entity.getId());
@@ -84,10 +66,26 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        if (mAcBangumi != null) {
-            return mAcBangumi.getData().getPageSize();
+        return mAcBangumi != null ? mAcBangumi.getData().getPageSize() : 0;
+    }
+
+    private static class CardViewHolder extends BaseRvViewHolder {
+        private SimpleDraweeView mImgBangumi;
+        private TextView mTvTitle;
+        private TextView mTvNum;
+        private CardView mCvBangumi;
+
+        private CardViewHolder(View itemView) {
+            super(itemView);
+            mImgBangumi = f(itemView, R.id.ac_rv_bangumi_img);
+            mTvTitle = f(itemView, R.id.ac_rv_bangumi_title_tv);
+            mTvNum = f(itemView, R.id.ac_rv_bangumi_num_tv);
+            mCvBangumi = f(itemView, R.id.cv_bangumi);
         }
-        return 0;
+
+        private static CardViewHolder create(ViewGroup parent) {
+            return new CardViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.ac_rv_bangumi, parent, false));
+        }
     }
 
     public static class MyDecoration extends RecyclerView.ItemDecoration {
@@ -100,7 +98,7 @@ public class AcBangumiRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2px(parent.getContext(), 8f);
+            int marginRight = OkUtils.dp2px(parent.getContext(), 8f);
             if (position % 2 == 0) {
                 outRect.set(0, 0, marginRight, 0);
             } else if (position == 1) {

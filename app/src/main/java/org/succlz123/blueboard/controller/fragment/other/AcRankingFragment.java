@@ -2,11 +2,11 @@ package org.succlz123.blueboard.controller.fragment.other;
 
 import org.succlz123.blueboard.R;
 import org.succlz123.blueboard.controller.activity.acfun.AcContentActivity;
-import org.succlz123.blueboard.controller.base.BaseFragment;
+import org.succlz123.blueboard.base.BaseFragment;
 import org.succlz123.blueboard.model.api.acfun.AcApi;
 import org.succlz123.blueboard.model.api.acfun.AcString;
 import org.succlz123.blueboard.model.bean.acfun.AcReOther;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.view.adapter.recyclerview.other.AcRankingRvAdapter;
 
@@ -50,7 +50,6 @@ public class AcRankingFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private Subscription mSubscription;
 
     @Nullable
     @Override
@@ -123,9 +122,6 @@ public class AcRankingFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
         super.onDestroy();
     }
 
@@ -135,13 +131,13 @@ public class AcRankingFragment extends BaseFragment {
 
         Observable<AcReOther> observable = AcApi.getAcRanking().onRankingResult(httpParameter);
 
-        mSubscription = observable.subscribeOn(Schedulers.io())
+        Subscription subscription = observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AcReOther, Boolean>() {
                     @Override
                     public Boolean call(AcReOther acReOther) {
                         Boolean isFragmentLive = AcRankingFragment.this.getUserVisibleHint()
-                                && GlobalUtils.isActivityLive(getActivity());
+                                && OkUtils.isActivityLive(getActivity());
                         return isFragmentLive;
                     }
                 })
@@ -152,7 +148,7 @@ public class AcRankingFragment extends BaseFragment {
                         if (isSuccess) {
                             isSuccess = (acReOther.getData().getPage().getList().size()) > 0;
                         } else {
-                            GlobalUtils.showToastShort("没有更多了 (´･ω･｀)");
+                            OkUtils.showToastShort("没有更多了 (´･ω･｀)");
                         }
                         return isSuccess;
                     }
@@ -172,11 +168,12 @@ public class AcRankingFragment extends BaseFragment {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        GlobalUtils.showToastShort("刷新过快或者网络连接异常");
+                        OkUtils.showToastShort("刷新过快或者网络连接异常");
 
                         mSwipeRefreshLayout.setRefreshing(false);
                         mSwipeRefreshLayout.setEnabled(true);
                     }
                 });
+        mCompositeSubscription.add(subscription);
     }
 }

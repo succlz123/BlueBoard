@@ -2,7 +2,7 @@ package org.succlz123.blueboard.controller.activity.acfun;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
-import org.succlz123.blueboard.controller.base.BaseActivity;
+import org.succlz123.blueboard.base.BaseActivity;
 import org.succlz123.blueboard.model.utils.common.ViewUtils;
 import org.succlz123.blueboard.service.DownloadService;
 import org.succlz123.blueboard.view.adapter.recyclerview.download.DownLoadRvAdapter;

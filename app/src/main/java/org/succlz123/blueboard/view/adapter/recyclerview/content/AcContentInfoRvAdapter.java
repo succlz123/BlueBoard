@@ -4,8 +4,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.bean.acfun.AcContentInfo;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
 
 import android.net.Uri;
 import android.support.v7.widget.CardView;

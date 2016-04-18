@@ -2,9 +2,9 @@ package org.succlz123.blueboard.view.adapter.recyclerview.tab;
 
 import org.succlz123.blueboard.MyApplication;
 import org.succlz123.blueboard.R;
+import org.succlz123.blueboard.base.BaseRvViewHolder;
 import org.succlz123.blueboard.model.api.acfun.AcString;
-import org.succlz123.blueboard.model.utils.common.GlobalUtils;
-import org.succlz123.blueboard.view.adapter.base.BaseRvViewHolder;
+import org.succlz123.blueboard.model.utils.common.OkUtils;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -204,7 +204,7 @@ public class AcNavigationRvAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
-            int marginRight = GlobalUtils.dip2px(parent.getContext(), 10f);
+            int marginRight = OkUtils.dp2px(parent.getContext(), 10f);
             if (position == 1 | position == 4 | position == 6 | position == 8 | position == 10) {
                 outRect.set(0, 0, marginRight, 0);
             }
